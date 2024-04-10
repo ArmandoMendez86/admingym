@@ -481,6 +481,8 @@
     let precioFormateado = precioConDescuento.toLocaleString('es-MX', { style: 'currency', currency: 'MXN' });
 
     $('#totalPrecio').text(precioFormateado);
+    $('#aplicarDescuento').attr('disabled', true);
+
 
   });
 
@@ -496,6 +498,8 @@
 
     listaCompra = [];
     totalPrecio = 0;
+
+    $('#aplicarDescuento').attr('disabled', false);
 
     if (listaCompra.length == 0) {
 
