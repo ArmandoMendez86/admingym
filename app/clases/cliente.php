@@ -80,4 +80,13 @@ class Cliente extends Model
             return null;
         }
     }
+
+    public function getCliente()
+    {
+        $sql = "SELECT * FROM {$this->table} LIMIT 10";
+        $stmt = $this->conection->prepare($sql);
+        $stmt->execute();
+        $results = $stmt->get_result();
+        return $results->fetch_all(MYSQLI_ASSOC);
+    }
 }

@@ -2,4 +2,4 @@
 require '../clases/cliente.php';
 
 $clientes = new Cliente;
-echo json_encode($clientes->getAll());
+echo json_encode($clientes->getCliente());

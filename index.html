@@ -423,8 +423,8 @@
 
     <!-- Lista de compras -->
 
-    <div class="d-flex justify-content-end">
-      <div class="offcanvas offcanvas text-bg-dark" data-bs-scroll="true" data-bs-backdrop="false" tabindex="-1"
+    <div class="d-flex justify-content-end overflow-auto">
+      <div class="offcanvas offcanvas text-bg-dark  h-75" data-bs-scroll="true" data-bs-backdrop="false" tabindex="-1"
         id="offcanvasScrolling" aria-labelledby="offcanvasScrollingLabel">
         <div class="offcanvas-header">
           <h5 class="offcanvas-title" id="offcanvasScrollingLabel">Lista de venta</h5>
@@ -432,23 +432,36 @@
             aria-label="Close"></button>
         </div>
         <div class="offcanvas-body" id="offcanvas-body">
+          <div class="mb-3 d-flex justify-content-between align-items-center">
+            <div class="input-group input-group-sm w-50">
+              <input type="number" min="1" class="form-control fs-5 text-center text-danger" aria-label="Descuento"
+                value="0" id="descuento">
+              <span class="input-group-text">%</span>
+            </div>
+            <button class="btn btn-sm btn-danger" id="aplicarDescuento">
+              Aplicar
+            </button>
+          </div>
           <table class="table table-sm">
             <thead>
               <tr>
                 <th scope="col" class="d-none">Id</th>
-                <th scope="col">nombre</th>
-                <th scope="col">Unidad</th>
-                <th scope="col">Precio</th>
-                <th scope="col">Acción</th>
+                <th scope="col">Producto</th>
+                <th class="text-center" scope="col">Unidad</th>
+                <th class="text-center" scope="col">Precio</th>
+                <th class="text-center" scope="col">Acción</th>
               </tr>
             </thead>
             <tbody id="listaVenta"></tbody>
-            <tfoot id="total">
+            <tfoot>
               <td colspan="2" class="text-end">Total</td>
-              <td>$0.00</td>
+              <td id="totalPrecio">$0.00</td>
               <td></td>
             </tfoot>
           </table>
+          <div class="btnCobrar text-center">
+            <button class="btn btn-sm btn-success" id="cobrar">Cobrar</button>
+          </div>
         </div>
       </div>
     </div>

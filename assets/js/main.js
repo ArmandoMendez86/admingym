@@ -404,38 +404,87 @@
     $(this).addClass("check").siblings().removeClass("check");
   });
 
-  let fila = ``;
   let listaCompra = [];
+  let filasProductos = {}; // Objeto para almacenar las filas de cada producto
+  let totalPrecio = 0; // Variable para almacenar la suma de precios
 
   $(document).on('click', '.box-img', function () {
-    $('#listaVenta').html("");
+    $('#listaVenta').html(""); // Limpiar la tabla antes de agregar filas
+
     let producto = $(this).data('producto');
     listaCompra.push(producto.id);
-    let unidad = producto.unidad != null ? producto.unidad : "Servicio";
-    fila += `
-    <tr>
-      <td class="d-none">${producto.id}</td>
-      <td>${producto.pro_serv}</td>
-      <td>${unidad}</td>
-      <td>${producto.precio}</td>
-      <td><button type="button" class="btn btn-sm btn-outline-danger removeProduct">X</button></td>
-    </tr>
-    `;
-    // Agregar la fila a la tabla
-    $('#listaVenta').append(fila);
 
-    console.log(listaCompra)
+    let unidad = producto.unidad != null ? producto.unidad : "Servicio";
+    let fila = `
+      <tr>
+        <td class="d-none">${producto.id}</td>
+        <td>${producto.pro_serv}</td>
+        <td class="text-center">${unidad}</td>
+        <td class="text-center">${producto.precio}</td>
+        <td class="text-center"><button type="button" class="btn btn-sm btn-outline-danger removeProduct">X</button></td>
+      </tr>
+      `;
+
+    // Agregar la fila al objeto de filas de productos
+    filasProductos[producto.id] = fila;
+
+    // Actualizar el total de precios
+    totalPrecio += parseFloat(producto.precio);
+
+    // Mostrar todas las filas en la tabla
+    for (const id of listaCompra) {
+      $('#listaVenta').append(filasProductos[id]);
+    }
+
+    // Formatear el precio con el formato regional en pesos mexicanos
+    let precioFormateado = totalPrecio.toLocaleString('es-MX', { style: 'currency', currency: 'MXN' });
+
+    $('#totalPrecio').text(precioFormateado);
 
     if (listaCompra.length > 0) {
       $('#offcanvasScrolling').offcanvas('show');
-
     }
 
   });
-  $(document).on('click', '.removeProduct', function () {
-    // Encuentra la fila más cercana al botón que se hizo clic y la elimina
-    $(this).closest('tr').remove();
 
+  $(document).on('click', '.removeProduct', function () {
+    let idProducto = parseInt($(this).closest('tr').find('td:first').text());
+    let indice = listaCompra.indexOf(idProducto);
+    if (indice !== -1) {
+      listaCompra.splice(indice, 1); // Eliminar el producto de la lista
+    }
+
+    $(this).closest('tr').remove(); // Eliminar la fila de la tabla
+
+    // Actualizar el total de precios
+    let productoEliminado = filasProductos[idProducto];
+    let precioEliminado = $(productoEliminado).find('td:eq(3)').text();
+
+    totalPrecio -= parseFloat(precioEliminado);
+    let precioFormateado = totalPrecio.toLocaleString('es-MX', { style: 'currency', currency: 'MXN' });
+
+    // Mostrar el total de precios actualizado
+    $('#totalPrecio').text(precioFormateado);
+
+    if (listaCompra.length == 0) {
+      $('#offcanvasScrolling').offcanvas('hide');
+    }
+  });
+
+
+  //Aplicar descuento
+
+  $("#aplicarDescuento").click(function (e) {
+    e.preventDefault();
+    let porcentajeDescuento = $("#descuento").val();
+    let factor = 1 - (parseFloat(porcentajeDescuento) / 100)
+
+    let precioConDescuento = totalPrecio * factor;
+
+    let precioFormateado = precioConDescuento.toLocaleString('es-MX', { style: 'currency', currency: 'MXN' });
+
+    // Mostrar el total de precios actualizado
+    $('#totalPrecio').text(precioFormateado);
 
   });
 
