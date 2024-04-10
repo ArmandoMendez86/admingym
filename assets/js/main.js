@@ -404,12 +404,14 @@
     $(this).addClass("check").siblings().removeClass("check");
   });
 
+
+  //Agregar productos a lista de compras
   let listaCompra = [];
-  let filasProductos = {}; // Objeto para almacenar las filas de cada producto
-  let totalPrecio = 0; // Variable para almacenar la suma de precios
+  let filasProductos = {};
+  let totalPrecio = 0;
 
   $(document).on('click', '.box-img', function () {
-    $('#listaVenta').html(""); // Limpiar la tabla antes de agregar filas
+    $('#listaVenta').html("");
 
     let producto = $(this).data('producto');
     listaCompra.push(producto.id);
@@ -425,18 +427,14 @@
       </tr>
       `;
 
-    // Agregar la fila al objeto de filas de productos
     filasProductos[producto.id] = fila;
 
-    // Actualizar el total de precios
     totalPrecio += parseFloat(producto.precio);
 
-    // Mostrar todas las filas en la tabla
     for (const id of listaCompra) {
       $('#listaVenta').append(filasProductos[id]);
     }
 
-    // Formatear el precio con el formato regional en pesos mexicanos
     let precioFormateado = totalPrecio.toLocaleString('es-MX', { style: 'currency', currency: 'MXN' });
 
     $('#totalPrecio').text(precioFormateado);
@@ -447,23 +445,22 @@
 
   });
 
+  //Remover productos 
   $(document).on('click', '.removeProduct', function () {
     let idProducto = parseInt($(this).closest('tr').find('td:first').text());
     let indice = listaCompra.indexOf(idProducto);
     if (indice !== -1) {
-      listaCompra.splice(indice, 1); // Eliminar el producto de la lista
+      listaCompra.splice(indice, 1);
     }
 
-    $(this).closest('tr').remove(); // Eliminar la fila de la tabla
+    $(this).closest('tr').remove();
 
-    // Actualizar el total de precios
     let productoEliminado = filasProductos[idProducto];
     let precioEliminado = $(productoEliminado).find('td:eq(3)').text();
 
     totalPrecio -= parseFloat(precioEliminado);
     let precioFormateado = totalPrecio.toLocaleString('es-MX', { style: 'currency', currency: 'MXN' });
 
-    // Mostrar el total de precios actualizado
     $('#totalPrecio').text(precioFormateado);
 
     if (listaCompra.length == 0) {
@@ -483,10 +480,36 @@
 
     let precioFormateado = precioConDescuento.toLocaleString('es-MX', { style: 'currency', currency: 'MXN' });
 
-    // Mostrar el total de precios actualizado
     $('#totalPrecio').text(precioFormateado);
 
   });
+
+  //Hacer el cobro
+
+  $("#cobrar").click(function (e) {
+    e.preventDefault();
+
+    $("#listaVenta").html('');
+    $("#totalPrecio").text('');
+    $("#descuento").val(0);
+    $("#ventaRealizada").toggleClass("d-none");
+
+    listaCompra = [];
+    totalPrecio = 0;
+
+    if (listaCompra.length == 0) {
+
+      setTimeout(() => {
+        $('#offcanvasScrolling').offcanvas('hide');
+        $("#ventaRealizada").toggleClass("d-none");
+      }, 2500);
+    }
+
+
+
+
+  });
+
 
 
 
