@@ -555,19 +555,29 @@
         if (busquedaCliente.length > 0) {
           $("#mensaje").html(`
           <div class="alert alert-danger text-center" role="alert">
-             El usuario ya existe!
+             El usuario ${email} ya existe!
           </div>
           `);
+          $('#registrarCliente').attr('disabled', true);
         } else {
           $("#mensaje").html("");
+          $('#registrarCliente').attr('disabled', false);
         }
 
-      },
+      }
     });
+  });
+
+  $("#registrarCliente").click(function (e) {
+    e.preventDefault();
+    let nombre = $("#nombre").val();
+    let apellido = $("#apellido").val();
+    let email = $("#email").val();
+    let tipoMembresia = $("#tipoMembresia").val();
+    let coach = $("#coach").val();
 
 
   });
-
 
 
 

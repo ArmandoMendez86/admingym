@@ -89,4 +89,15 @@ class Cliente extends Model
         $results = $stmt->get_result();
         return $results->fetch_all(MYSQLI_ASSOC);
     }
+
+    public function buscarXemail($email)
+    {
+
+        $sql = "SELECT * FROM {$this->table} WHERE email = ?";
+        $stmt = $this->conection->prepare($sql);
+        $stmt->bind_param('s', $email);
+        $stmt->execute();
+        $results = $stmt->get_result();
+        return $results->fetch_all(MYSQLI_ASSOC);
+    }
 }
