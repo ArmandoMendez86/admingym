@@ -269,6 +269,7 @@
 
   let tarjetas = document.getElementById("tarjetaClientes");
   let catalogoProductos = document.getElementById("catalogoProductos");
+  let tipoMembresia = document.getElementById("tipoMembresia");
 
   function cargarClientes() {
     $.ajax({
@@ -308,21 +309,33 @@
       type: "GET",
       success: function (response) {
         let productos = JSON.parse(response);
-        let template = ``;
+        let templateProductos = ``;
+        let templateServicios = `
+        <option selected value="">Selecciona el servicio</option>
+        `;
         productos.forEach((element) => {
 
           let unidad = element.unidad != null ? element.unidad : "";
 
-          template += `
-      <div class="box-img ${element.categoria}" data-producto='${JSON.stringify(element)}'>
-        <img src="assets/img/nodis.png" alt="">
-        <div class="description-box">
-          <p class="m-0">${element.pro_serv}</p>
-          <span class="badge text-bg-danger">${unidad}</span>
-        </div>
-      </div>`;
+          if (element.categoria != 'servicios') {
+            templateProductos += `
+            <div class="box-img ${element.categoria}" data-producto='${JSON.stringify(element)}'>
+              <img src="assets/img/nodis.png" alt="">
+              <div class="description-box">
+                <p class="m-0">${element.pro_serv}</p>
+                <span class="badge text-bg-danger">${unidad}</span>
+              </div>
+            </div>`;
+          } else {
+
+            templateServicios += `
+            <option value="${element.id}">${element.pro_serv}</option>
+            `;
+
+          }
         })
-        catalogoProductos.innerHTML = template;
+        catalogoProductos.innerHTML = templateProductos;
+        tipoMembresia.innerHTML = templateServicios;
       },
     });
 
@@ -486,6 +499,17 @@
 
   });
 
+  //Resetar descuento
+  $("#reset").click(function (e) {
+    e.preventDefault();
+    let precioFormateado = totalPrecio.toLocaleString('es-MX', { style: 'currency', currency: 'MXN' });
+
+    $('#totalPrecio').text(precioFormateado);
+    $('#aplicarDescuento').attr('disabled', false);
+
+
+  });
+
   //Hacer el cobro
 
   $("#cobrar").click(function (e) {
@@ -509,12 +533,40 @@
       }, 2500);
     }
 
-
-
-
   });
 
 
+  //Registro de clientes
+
+  /* function validateEmail(email) {
+    var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-]+)\.[a-zA-Z]{2,}))$/;
+    return re.test(email);
+  } */
+
+
+  $("#email").blur(function () {
+    let email = $("#email").val();
+    $.ajax({
+      url: "app/clientes/buscarXemail.php",
+      type: "GET",
+      data: { email },
+      success: function (response) {
+        let busquedaCliente = JSON.parse(response);
+        if (busquedaCliente.length > 0) {
+          $("#mensaje").html(`
+          <div class="alert alert-danger text-center" role="alert">
+             El usuario ya existe!
+          </div>
+          `);
+        } else {
+          $("#mensaje").html("");
+        }
+
+      },
+    });
+
+
+  });
 
 
 

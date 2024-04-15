@@ -398,10 +398,10 @@
             <label class="badge text-bg-light "><span class="btn-menu p-3"
                 data-filter="servicios">Servicios</span></label>
           </div>
-          <div class="text-center mt-4">
+          <!--   <div class="text-center mt-4">
             <button class="btn btn-outline-dark" type="button" data-bs-toggle="offcanvas"
               data-bs-target="#offcanvasScrolling" aria-controls="offcanvasScrolling">Caja</button>
-          </div>
+          </div> -->
 
           <div class="galeria">
             <!--  <div class="title-img">
@@ -425,7 +425,7 @@
     <!-- Lista de compras -->
 
     <div class="d-flex justify-content-end overflow-auto">
-      <div class="offcanvas offcanvas text-bg-dark  h-75" data-bs-scroll="true" data-bs-backdrop="false" tabindex="-1"
+      <div class="offcanvas offcanvas text-bg-dark  mh-100" data-bs-scroll="true" data-bs-backdrop="false" tabindex="-1"
         id="offcanvasScrolling" aria-labelledby="offcanvasScrollingLabel">
         <div class="offcanvas-header">
           <h5 class="offcanvas-title" id="offcanvasScrollingLabel">Lista de venta</h5>
@@ -439,6 +439,9 @@
                 value="0" id="descuento">
               <span class="input-group-text">%</span>
             </div>
+            <button class="btn btn-sm btn-info" id="reset">
+              Resetear
+            </button>
             <button class="btn btn-sm btn-danger" id="aplicarDescuento">
               Aplicar
             </button>
@@ -463,7 +466,7 @@
           <div class="btnCobrar text-center">
             <button class="btn btn-sm btn-success" id="cobrar">Cobrar</button>
           </div>
-          <div class="alert alert-success d-none text-center mt-5" role="alert" id="ventaRealizada">
+          <div class="alert alert-info d-none text-center mt-5" role="alert" id="ventaRealizada">
             Venta realizada!
           </div>
         </div>
@@ -652,8 +655,8 @@
       <div class="container" data-aos="fade-up">
 
         <div class="section-title">
-          <h2>Registro de cliente</h2>
-          <p>Ingresa los datos requeridos para dar de alta a un nuevo cliente, todos los datos son requeridos.</p>
+          <h2>Nueva membresía</h2>
+          <p>Ingresa los datos requeridos para dar de alta a un nuevo cliente, todos los datos son obligatorios.</p>
         </div>
 
         <div class="row">
@@ -697,9 +700,24 @@
                   <input type="text" class="form-control" name="subject" id="subject" required>
                 </div>
               </div>
+              <div class="row">
+                <div class="form-group col-md-6">
+                  <label for="name">Correo</label>
+                  <input type="email" class="form-control" name="email" id="email" required>
+                </div>
+                <div class="form-group col-md-6">
+                  <label for="name">Membresía</label>
+                  <select class="form-control serviciosSelect" style="width: 100%" id="tipoMembresia"></select>
+                </div>
+              </div>
               <div class="form-group">
-                <label for="name">Correo</label>
-                <input type="email" class="form-control" name="email" id="email" required>
+                <label for="name">Personalizado</label>
+                <select class="form-control serviciosCoach" style="width: 100%" id="coach">
+                  <option selected value="">Elige coach</option>
+                  <option value="">Ninguno</option>
+                  <option value="armando">Armando</option>
+                  <option value="grecia">Grecia</option>
+                </select>
               </div>
 
               <!-- <div class="form-group">
@@ -707,6 +725,7 @@
                 <textarea class="form-control" name="message" rows="10" required></textarea>
               </div> -->
               <div class="my-3">
+                <div id="mensaje"></div>
                 <div class="loading">Loading</div>
                 <div class="error-message"></div>
                 <div class="sent-message">Your message has been sent. Thank you!</div>

@@ -161,9 +161,9 @@ class Model
     public function buscarCliente($buscar)
     {
         $buscar = "%$buscar%";
-        $sql = "SELECT * FROM {$this->table} WHERE nombre LIKE ? OR ap LIKE ?";
+        $sql = "SELECT * FROM {$this->table} WHERE nombre LIKE ? OR ap LIKE ? OR email LIKE ?";
         $stmt = $this->conection->prepare($sql);
-        $stmt->bind_param('ss', $buscar, $buscar);
+        $stmt->bind_param('sss', $buscar, $buscar, $buscar);
         $stmt->execute();
         $results = $stmt->get_result();
         return $results->fetch_all(MYSQLI_ASSOC);
