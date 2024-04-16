@@ -688,8 +688,8 @@
 
           </div> -->
 
-          <div class="col-lg-6 mt-5 mt-lg-0 d-flex align-items-stretch m-auto">
-            <form action="#" method="post" role="form" class="php-email-form">
+          <div class="col-lg-6 mt-5 mt-lg-0 d-flex align-items-stretch m-auto" style="position: relative;">
+            <form action="#" method="post" role="form" class="php-email-form" id="formRegistrar">
               <div class="row">
                 <div class="form-group col-md-6">
                   <label for="name">Nombre</label>
@@ -743,7 +743,12 @@
               <div class="text-center">
                 <button type="submit" id="registrarCliente">Registrar</button>
               </div>
+              <div class="alert alert-success d-none" role="alert" id="registroExitoso">
+                Cliente registrado!
+              </div>
             </form>
+
+            
           </div>
 
         </div>

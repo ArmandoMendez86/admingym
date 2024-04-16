@@ -277,12 +277,13 @@
 
   function cargarClientes() {
     $.ajax({
-      url: "app/clientes/obtener.php",
+      url: "app/clientes/obtener_venta_servicios.php",
       type: "GET",
       success: function (response) {
         let clientes = JSON.parse(response);
         let template = ``;
         clientes.forEach((element) => {
+          let fecha = moment(element.vence).format('LLL');
           template += `
         <div class="col-lg-4 mt-3" data-aos="zoom-in" data-aos-delay="100">
           <div class="member d-flex align-items-start">
@@ -290,12 +291,16 @@
             <div class="member-info">
               <h4>${element.nombre} ${element.ap}</h4>
               <span>${element.email}</span>
-              <p>Explicabo voluptatem mollitia </p>
+              <div class="d-flex align-items-center gap-2">
+                <label>Servicio:</label>
+                <label class="badge text-bg-success">${element.servicio}</label>
+              </div>
+              <label>Caduca: ${fecha} </label>
               <div class="social">
-                <a href=""><i class="ri-twitter-fill"></i></a>
-                <a href=""><i class="ri-facebook-fill"></i></a>
+                <a href=""><i class="ri-edit-fill"></i></a>
+                <a href=""><i class="ri-close-fill"></i></a>
                 <a href=""><i class="ri-instagram-fill"></i></a>
-                <a href=""> <i class="ri-linkedin-box-fill"></i> </a>
+                <a href="" class="bg-info"></a>
               </div>
             </div>
           </div>
@@ -585,13 +590,17 @@
     let coach = $("#coach").val();
 
 
-    if (nombre == '' || apellido == '' || email == '' || gen == '' || tipoMembresia == '' || coach == '') return;
+    if (nombre == '' || apellido == '' || email == '' || gen == '' || tipoMembresia == '') return;
 
     const fechaActual = moment(); // Obtiene la fecha y hora actual
-    const fechaFormateada = fechaActual.format('YYYY-MM-DD H:mm:ss');
+    const fechaActualFormateada = fechaActual.format('YYYY-MM-DD H:mm:ss');
 
-    let vence = fechaActual.add(1, 'months');
-    let venceFormat = vence.format('YYYY-MM-DD H:mm:ss');
+    let vence = '';
+    let fechaPersonalizado = '';
+    let iniciaPersonalizadoFormat = '';
+    let finPersonalizado = '';
+    let finPersonalizadoFormat = '';
+    //let venceFormat = vence.format('YYYY-MM-DD H:mm:ss');
     //console.log(fechaActual.format('L')); // Muestra la fecha con formato local (DD/MM/YYYY)
 
     /* console.log(venceFormat)
@@ -599,6 +608,27 @@
 
     /*   let agregandoDias = fechaActual.add(10, 'days');
       console.log(agregandoDias.format('LL')) */
+
+    if (tipoMembresia == 24 || tipoMembresia == 70 || tipoMembresia == 71 || tipoMembresia == 75 || tipoMembresia == 80) {
+      vence = fechaActual.add(1, 'months');
+    }
+    if (tipoMembresia == 25 || tipoMembresia == 69) {
+      vence = fechaActual;
+    }
+    if (tipoMembresia == 26) {
+      vence = fechaActual.add(7, 'days');
+    }
+    if (tipoMembresia == 27) {
+      vence = fechaActual.add(15, 'days');
+    }
+    if (coach != '') {
+      fechaPersonalizado = moment();
+      iniciaPersonalizadoFormat = fechaPersonalizado.format('YYYY-MM-DD H:mm:ss');
+      finPersonalizado = moment().add(1, 'months');
+      finPersonalizadoFormat = finPersonalizado.format('YYYY-MM-DD H:mm:ss');
+    }
+
+    let venceFormat = vence.format('YYYY-MM-DD H:mm:ss');
 
     $.ajax({
       url: "app/clientes/venta_servicio_cliente.php",
@@ -611,18 +641,19 @@
         gen: gen,
         p_s: tipoMembresia,
         cantidad: 1,
-        fecha: fechaFormateada,
+        fecha: fechaActualFormateada,
         idempleado: 2,
         vence: venceFormat,
         couch: coach,
-        fventa: fechaFormateada,
-        /*   fperso: fechaPersonalizado,
-          finperso: fechaFinPersonalizado */
+        fventa: fechaActualFormateada,
+        fperso: iniciaPersonalizadoFormat,
+        finperso: finPersonalizadoFormat
       },
 
       success: function (response) {
-        console.log(response)
-
+        $('#formRegistrar')[0].reset();
+        $("#registroExitoso").toggleClass("d-none");
+        setTimeout(() => $("#registroExitoso").toggleClass("d-none"), 1700)
       },
     });
 

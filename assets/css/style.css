@@ -1176,6 +1176,11 @@ section {
   background: #eff2f8;
 }
 
+.team .member .social a:last-child {
+  width: 25px;
+  height: 25px;
+}
+
 .team .member .social a i {
   color: #37517e;
   font-size: 16px;
@@ -1948,6 +1953,17 @@ section {
 }
 
 #tipoMembresia option{
+  font-size: small;
+}
+
+#registroExitoso{
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.member-info label{
   font-size: small;
 }
 

@@ -23,6 +23,8 @@ $servicio = [
     'vence' => $data['vence'],
     'couch' => $data['couch'],
     'fventa' => $data['fventa'],
+    'fperso' => $data['fperso'],
+    'finperso' => $data['finperso'],
 ];
 
 $cliente->venderservicioAcliente($servicio);
