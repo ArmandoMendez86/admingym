@@ -689,15 +689,15 @@
           </div> -->
 
           <div class="col-lg-6 mt-5 mt-lg-0 d-flex align-items-stretch m-auto">
-            <form action="forms/contact.php" method="post" role="form" class="php-email-form">
+            <form action="#" method="post" role="form" class="php-email-form">
               <div class="row">
                 <div class="form-group col-md-6">
                   <label for="name">Nombre</label>
                   <input type="text" name="name" class="form-control" id="nombre" required>
                 </div>
                 <div class="form-group col-md-6">
-                  <label for="name">Apellido</label>
-                  <input type="text" class="form-control" name="apellido" id="subject" required>
+                  <label for="name">Nick</label>
+                  <input type="text" class="form-control" name="apellido" id="apellido" required>
                 </div>
               </div>
               <div class="row">
@@ -706,18 +706,28 @@
                   <input type="email" class="form-control" name="email" id="email" required>
                 </div>
                 <div class="form-group col-md-6">
-                  <label for="name">Membresía</label>
-                  <select class="form-control serviciosSelect" style="width: 100%" id="tipoMembresia"></select>
+                  <label for="name">Sexo</label>
+                  <select class="form-control" style="width: 100%" id="genero" required>
+                    <option selected value="">Tipo de sexo</option>
+                    <option value="h">Hombre</option>
+                    <option value="m">Mujer</option>
+                  </select>
                 </div>
               </div>
-              <div class="form-group">
-                <label for="name">Personalizado</label>
-                <select class="form-control serviciosCoach" style="width: 100%" id="coach">
-                  <option selected value="">Elige coach</option>
-                  <option value="">Ninguno</option>
-                  <option value="armando">Armando</option>
-                  <option value="grecia">Grecia</option>
-                </select>
+              <div class="row">
+                <div class="form-group col-md-6">
+                  <label for="name">Personalizado</label>
+                  <select class="form-control serviciosCoach" style="width: 100%" id="coach" required>
+                    <option selected value="">Elige coach</option>
+                    <option value="">Ninguno</option>
+                    <option value="armando">Armando</option>
+                    <option value="grecia">Grecia</option>
+                  </select>
+                </div>
+                <div class="form-group col-md-6">
+                  <label for="name">Membresía</label>
+                  <select class="form-control serviciosSelect" style="width: 100%" id="tipoMembresia" required></select>
+                </div>
               </div>
 
               <!-- <div class="form-group">
@@ -839,10 +849,17 @@
   <script src="assets/vendor/swiper/swiper-bundle.min.js"></script>
   <script src="assets/vendor/waypoints/noframework.waypoints.js"></script>
   <script src="assets/vendor/php-email-form/validate.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment-with-locales.min.js"></script>
+
+
 
   <!-- Template Main JS File -->
   <script src="assets/js/jquery-3.7.1.min.js"></script>
   <script src="assets/js/main.js"></script>
+
+
+
+
 
 </body>
 

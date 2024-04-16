@@ -7,6 +7,9 @@
 */
 
 (function () {
+
+  moment.locale('es-mx');
+
   "use strict";
 
   /* Usar los tooltips para indicar tipo de membresia o detalles de insignias */
@@ -261,6 +264,7 @@
 
     cargarClientes();
     cargarProductos();
+
   });
 
   /* ######################## AGREGADO POR MI ######################## */
@@ -358,6 +362,7 @@
   $("#btnBuscarCliente").click(function (e) {
     e.preventDefault();
     let nombreCliente = $("#nombreCliente").val();
+    if (nombreCliente == '') return;
     $.ajax({
       url: "app/clientes/buscarXnombre.php",
       type: "GET",
@@ -545,7 +550,9 @@
 
 
   $("#email").blur(function () {
+
     let email = $("#email").val();
+    if (email == '') return;
     $.ajax({
       url: "app/clientes/buscarXemail.php",
       type: "GET",
@@ -573,8 +580,52 @@
     let nombre = $("#nombre").val();
     let apellido = $("#apellido").val();
     let email = $("#email").val();
+    let gen = $("#genero").val();
     let tipoMembresia = $("#tipoMembresia").val();
     let coach = $("#coach").val();
+
+
+    if (nombre == '' || apellido == '' || email == '' || gen == '' || tipoMembresia == '' || coach == '') return;
+
+    const fechaActual = moment(); // Obtiene la fecha y hora actual
+    const fechaFormateada = fechaActual.format('YYYY-MM-DD H:mm:ss');
+
+    let vence = fechaActual.add(1, 'months');
+    let venceFormat = vence.format('YYYY-MM-DD H:mm:ss');
+    //console.log(fechaActual.format('L')); // Muestra la fecha con formato local (DD/MM/YYYY)
+
+    /* console.log(venceFormat)
+    return; */
+
+    /*   let agregandoDias = fechaActual.add(10, 'days');
+      console.log(agregandoDias.format('LL')) */
+
+    $.ajax({
+      url: "app/clientes/venta_servicio_cliente.php",
+      type: "POST",
+      datatype: "json",
+      data: {
+        nombre: nombre,
+        ap: apellido,
+        email: email,
+        gen: gen,
+        p_s: tipoMembresia,
+        cantidad: 1,
+        fecha: fechaFormateada,
+        idempleado: 2,
+        vence: venceFormat,
+        couch: coach,
+        fventa: fechaFormateada,
+        /*   fperso: fechaPersonalizado,
+          finperso: fechaFinPersonalizado */
+      },
+
+      success: function (response) {
+        console.log(response)
+
+      },
+    });
+
 
 
   });
