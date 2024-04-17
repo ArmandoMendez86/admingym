@@ -12,9 +12,6 @@
 
   "use strict";
 
-  /* Usar los tooltips para indicar tipo de membresia o detalles de insignias */
-  const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
-  const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
 
   /**
    * Easy selector helper function
@@ -283,30 +280,49 @@
         let clientes = JSON.parse(response);
         let template = ``;
         clientes.forEach((element) => {
-          let fecha = moment(element.vence).format('LLL');
+          let inicia = element.servicio == 'VISITA' ? 'Hoy' : moment(element.fecha).format('D MMM YY');
+          let termina = element.servicio == 'VISITA' ? '' : moment(element.vence).format('D MMM YY');
+          let email = element.email != '' ? element.email : 'Pendiente';
+          let status = '';
+          if (moment().isSame(moment(element.vence), 'day')) {
+            status = 'warning'; // Due date is today
+          } else if (moment().isBefore(moment(element.vence))) {
+            status = 'success'; // Due date is in the future
+          } else {
+            status = 'danger'; // Due date has passed
+          }
+
           template += `
         <div class="col-lg-4 mt-3" data-aos="zoom-in" data-aos-delay="100">
           <div class="member d-flex align-items-start">
             <div class="pic"><img src="assets/img/team/team-1.jpg" class="img-fluid" alt=""></div>
             <div class="member-info">
-              <h4>${element.nombre} ${element.ap}</h4>
-              <span>${element.email}</span>
+              <h4>${element.nombre}</h4>
+              <label>${email}</label>
               <div class="d-flex align-items-center gap-2">
                 <label>Servicio:</label>
-                <label class="badge text-bg-success">${element.servicio}</label>
+                <label class="badge text-bg-info text-white">${element.servicio}</label>
               </div>
-              <label>Caduca: ${fecha} </label>
+              <div class="d-flex justify-content-start gap-2">
+                <label>${inicia} </label>
+                <label>-</label>
+                <label>${termina} </label>
+              </div>
               <div class="social">
-                <a href=""><i class="ri-edit-fill"></i></a>
-                <a href=""><i class="ri-close-fill"></i></a>
-                <a href=""><i class="ri-instagram-fill"></i></a>
-                <a href="" class="bg-info"></a>
+                <a data-bs-toggle="tooltip" data-bs-title="Editar"><i class="ri-edit-fill btnEdit" data-info='${JSON.stringify(element)}'></i></a>
+                <a data-bs-toggle="tooltip" data-bs-title="Renovar servicio"><i class="ri-loop-left-fill"></i></a>
+                <a data-bs-toggle="tooltip" data-bs-title="Eliminar usuario"><i class="ri-close-fill"></i></a>
+                <a data-bs-toggle="tooltip" data-bs-title="Estatus" class="bg-${status}"></a>
               </div>
+
             </div>
           </div>
         </div>`;
         })
         tarjetas.innerHTML = template;
+        /* Usar los tooltips para indicar tipo de membresia o detalles de insignias */
+        const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+        const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
       },
     });
 
@@ -661,8 +677,11 @@
 
   });
 
-
-
+  $(document).on('click', '.btnEdit', function (e) {
+    e.preventDefault();
+    const memberDataString = $(this).data('info');
+    console.log(memberDataString);
+  });
 
 
 

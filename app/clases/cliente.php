@@ -135,11 +135,11 @@ class Cliente extends Model
 
     public function ventaDeServicios()
     {
-        $sql = "SELECT producto.pro_serv AS servicio, cliente.nombre, cliente.email, venta_servicio.fecha, venta_servicio.vence, venta_servicio.couch, venta_servicio.fperso, venta_servicio.finperso, empleado.nombre AS registro FROM venta_servicio
+        $sql = "SELECT venta_servicio.id, producto.pro_serv AS servicio, cliente.nombre, cliente.email, venta_servicio.fecha, venta_servicio.vence, venta_servicio.couch, venta_servicio.fperso, venta_servicio.finperso, empleado.nombre AS registro FROM venta_servicio
         INNER JOIN producto ON producto.id = venta_servicio.p_s
         INNER JOIN cliente ON cliente.id = venta_servicio.idcliente
         INNER JOIN empleado ON empleado.id = venta_servicio.idempleado
-        LIMIT 10;";
+        LIMIT 9;";
         $stmt = $this->conection->prepare($sql);
         $stmt->execute();
         $results = $stmt->get_result();
