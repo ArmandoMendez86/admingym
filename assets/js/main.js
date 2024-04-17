@@ -281,15 +281,21 @@
         let template = ``;
         clientes.forEach((element) => {
           let inicia = element.servicio == 'VISITA' ? 'Hoy' : moment(element.fecha).format('D MMM YY');
-          let termina = element.servicio == 'VISITA' ? '' : moment(element.vence).format('D MMM YY');
+          let termina = element.servicio == 'VISITA' ? moment(element.vence).format('D MMM YY') : moment(element.vence).format('D MMM YY');
           let email = element.email != '' ? element.email : 'Pendiente';
           let status = '';
+          let coach = element.couch != '' ? element.couch.substring(0, 2).toUpperCase() : 'N';
+          let validarServicio = '';
+
           if (moment().isSame(moment(element.vence), 'day')) {
-            status = 'warning'; // Due date is today
+            status = 'warning';
+            validarServicio = 'Termina hoy';
           } else if (moment().isBefore(moment(element.vence))) {
-            status = 'success'; // Due date is in the future
+            status = 'success';
+            validarServicio = 'Servicio activo';
           } else {
-            status = 'danger'; // Due date has passed
+            status = 'danger';
+            validarServicio = 'Servicio concluido';
           }
 
           template += `
@@ -299,20 +305,21 @@
             <div class="member-info">
               <h4>${element.nombre}</h4>
               <label>${email}</label>
-              <div class="d-flex align-items-center gap-2">
+              <div class="d-flex align-items-center gap-2 mt-1">
                 <label>Servicio:</label>
-                <label class="badge text-bg-info text-white">${element.servicio}</label>
+                <label class="badge text-bg-secondary text-white">${element.servicio}</label>
               </div>
-              <div class="d-flex justify-content-start gap-2">
-                <label>${inicia} </label>
-                <label>-</label>
-                <label>${termina} </label>
+              <div class="d-flex justify-content-start gap-1 mt-1">
+                <label class="text-success inicia">${inicia} </label>
+                <label><i class="ri-arrow-right-fill"></i></label>
+                <label class="text-danger termina"> ${termina} </label>
               </div>
               <div class="social">
                 <a data-bs-toggle="tooltip" data-bs-title="Editar"><i class="ri-edit-fill btnEdit" data-info='${JSON.stringify(element)}'></i></a>
-                <a data-bs-toggle="tooltip" data-bs-title="Renovar servicio"><i class="ri-loop-left-fill"></i></a>
+                <a data-bs-toggle="tooltip" data-bs-title="Renovar servicio"><i class="ri-loop-left-fill btnRenovar"></i></a>
                 <a data-bs-toggle="tooltip" data-bs-title="Eliminar usuario"><i class="ri-close-fill"></i></a>
-                <a data-bs-toggle="tooltip" data-bs-title="Estatus" class="bg-${status}"></a>
+                <a data-bs-toggle="tooltip" data-bs-title="Instructor ${element.couch}">${coach}</i></a>
+                <a data-bs-toggle="tooltip" data-bs-title="${validarServicio}" class="bg-${status}"></a>
               </div>
 
             </div>
@@ -405,20 +412,40 @@
   function filtrarClientes(clientes) {
     let template = ``;
     clientes.forEach((element) => {
+      let inicia = element.servicio == 'VISITA' ? '' : moment(element.fecha).format('D MMM YY');
+      let termina = element.servicio == 'VISITA' ? moment(element.vence).format('D MMM YY') : moment(element.vence).format('D MMM YY');
+      let email = element.email != '' ? element.email : 'Pendiente';
+      let status = '';
+      if (moment().isSame(moment(element.vence), 'day')) {
+        status = 'warning'; // Due date is today
+      } else if (moment().isBefore(moment(element.vence))) {
+        status = 'success'; // Due date is in the future
+      } else {
+        status = 'danger'; // Due date has passed
+      }
       template += `
         <div class="col-lg-4 mt-3" data-aos="zoom-in" data-aos-delay="100">
           <div class="member d-flex align-items-start">
             <div class="pic"><img src="assets/img/team/team-1.jpg" class="img-fluid" alt=""></div>
             <div class="member-info">
-              <h4>${element.nombre} ${element.ap}</h4>
-              <span>${element.email}</span>
-              <p>Explicabo voluptatem mollitia et repellat qui dolorum quasi</p>
-              <div class="social">
-                <a href=""><i class="ri-twitter-fill"></i></a>
-                <a href=""><i class="ri-facebook-fill"></i></a>
-                <a href=""><i class="ri-instagram-fill"></i></a>
-                <a href=""> <i class="ri-linkedin-box-fill"></i> </a>
+              <h4>${element.nombre}</h4>
+              <label>${email}</label>
+              <div class="d-flex align-items-center gap-2">
+                <label>Servicio:</label>
+                <label class="badge text-bg-info text-white">${element.servicio}</label>
               </div>
+              <div class="d-flex justify-content-start gap-2">
+                <label>${inicia} </label>
+                <label>-</label>
+                <label>${termina} </label>
+              </div>
+              <div class="social">
+                <a data-bs-toggle="tooltip" data-bs-title="Editar"><i class="ri-edit-fill btnEdit" data-info='${JSON.stringify(element)}'></i></a>
+                <a data-bs-toggle="tooltip" data-bs-title="Renovar servicio"><i class="ri-loop-left-fill"></i></a>
+                <a data-bs-toggle="tooltip" data-bs-title="Eliminar usuario"><i class="ri-close-fill"></i></a>
+                <a data-bs-toggle="tooltip" data-bs-title="Estatus" class="bg-${status}"></a>
+              </div>
+
             </div>
           </div>
         </div>`;
@@ -681,6 +708,17 @@
     e.preventDefault();
     const memberDataString = $(this).data('info');
     console.log(memberDataString);
+  });
+
+  $(document).on('click', '.btnRenovar', function (e) {
+    e.preventDefault();
+
+    let fechaActual = moment().format('D MMM YY');
+
+    // Accede al elemento de fecha asociado al botón clicado y actualiza su contenido con la nueva fecha
+    let elementoFecha = $(this).closest(".member-info").find(".inicia");
+    console.log(elementoFecha.text())
+    //elementoFecha.text(nuevaFechaInicio);
   });
 
 

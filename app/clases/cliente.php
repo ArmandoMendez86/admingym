@@ -145,4 +145,29 @@ class Cliente extends Model
         $results = $stmt->get_result();
         return $results->fetch_all(MYSQLI_ASSOC);
     }
+
+    /*  public function buscarCliente($buscar)
+    {
+        $buscar = "%$buscar%";
+        $sql = "SELECT * FROM {$this->table} WHERE nombre LIKE ? OR ap LIKE ? OR email LIKE ?";
+        $stmt = $this->conection->prepare($sql);
+        $stmt->bind_param('sss', $buscar, $buscar, $buscar);
+        $stmt->execute();
+        $results = $stmt->get_result();
+        return $results->fetch_all(MYSQLI_ASSOC);
+    } */
+    public function buscarCliente($buscar)
+    {
+        $buscar = "%$buscar%";
+        $sql = "SELECT venta_servicio.id, producto.pro_serv AS servicio, cliente.nombre, cliente.email, venta_servicio.fecha, venta_servicio.vence, venta_servicio.couch, venta_servicio.fperso, venta_servicio.finperso, empleado.nombre AS registro FROM venta_servicio
+        INNER JOIN producto ON producto.id = venta_servicio.p_s
+        INNER JOIN cliente ON cliente.id = venta_servicio.idcliente
+        INNER JOIN empleado ON empleado.id = venta_servicio.idempleado
+        WHERE cliente.nombre LIKE ?;";
+        $stmt = $this->conection->prepare($sql);
+        $stmt->bind_param('s', $buscar);
+        $stmt->execute();
+        $results = $stmt->get_result();
+        return $results->fetch_all(MYSQLI_ASSOC);
+    }
 }
