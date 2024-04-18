@@ -8,9 +8,9 @@
 
 (function () {
 
-  moment.locale('es-mx');
-
   "use strict";
+
+  moment.locale('es-mx');
 
 
   /**
@@ -259,8 +259,18 @@
       mirror: false
     });
 
-    cargarClientes();
+    cargarListaClientes();
+    cargarVentaServicios();
     cargarProductos();
+
+    // Selecciona el campo de entrada y aplica Flatpickr
+    flatpickr("#fecha", {
+      dateFormat: "d-m-Y", // Formato de fecha (día-mes-año)
+      minDate: "today", // La fecha mínima permitida es hoy
+      maxDate: new Date().fp_incr(30), // La fecha máxima permitida es hoy + 30 días
+      locale: "es", // Configura el idioma a español
+    });
+
 
   });
 
@@ -268,11 +278,45 @@
 
   //Cargando usuarios
 
-  let tarjetas = document.getElementById("tarjetaClientes");
-  let catalogoProductos = document.getElementById("catalogoProductos");
-  let tipoMembresia = document.getElementById("tipoMembresia");
 
-  function cargarClientes() {
+
+  function cargarListaClientes() {
+    $.ajax({
+      url: "app/clientes/lista_clientes.php",
+      method: 'GET',
+      dataType: 'json',
+      success: function (datos) {
+        $('#nombre').selectize({
+          create: true,
+          sortField: 'text',
+          persist: false,
+          placeholder: 'Ingresar nombre',
+          allowEmptyOption: true,
+          addPrecedence: true,
+          options: datos.map(function (dato) {
+            return {
+              value: dato.id,
+              text: dato.nombre + ' ' + dato.ap
+            };
+          }),
+          create: function (input) {
+            return {
+              value: input,
+              text: input
+            };
+          },
+          render: {
+            option_create: function (data, escape) {
+              return '<div class="create">Agregar <strong>' + escape(data.input) + '</strong>&hellip;</div>';
+            }
+          },
+        });
+      },
+    });
+
+  }
+
+  function cargarVentaServicios() {
     $.ajax({
       url: "app/clientes/obtener_venta_servicios.php",
       type: "GET",
@@ -314,6 +358,7 @@
                 <label><i class="ri-arrow-right-fill"></i></label>
                 <label class="text-danger termina"> ${termina} </label>
               </div>
+              <input type="text" id="fecha" placeholder="Selecciona una fecha">
               <div class="social">
                 <a data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Editar"><i class="ri-edit-fill btnEdit" data-info='${JSON.stringify(element)}'></i></a>
                 <a data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Renovar servicio"><i class="ri-loop-left-fill btnRenovar" data-info='${JSON.stringify(element)}'></i></a>
@@ -326,8 +371,8 @@
           </div>
         </div>`;
         })
-        tarjetas.innerHTML = template;
-        /* Usar los tooltips para indicar tipo de membresia o detalles de insignias */
+
+        $("#tarjetaClientes").html(template);
         const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
         const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
       },
@@ -366,8 +411,9 @@
 
           }
         })
-        catalogoProductos.innerHTML = templateProductos;
-        tipoMembresia.innerHTML = templateServicios;
+
+        $("#catalogoProductos").html(templateProductos);
+        $("#tipoMembresia").html(templateServicios);
       },
     });
 
@@ -379,7 +425,7 @@
        type: "GET",
        success: function (response) {
          let datos = JSON.parse(response);
-         let template = cargarClientes(datos);
+         let template = cargarVentaServicios(datos);
          tarjetas.innerHTML = template;
        },
      });
@@ -398,10 +444,13 @@
       success: function (response) {
         let busquedaCliente = JSON.parse(response);
         if (busquedaCliente.length > 0) {
-          tarjetas.innerHTML = filtrarClientes(busquedaCliente);
+          $("#tarjetaClientes").html(filtrarVentaServicios(busquedaCliente));
+          /* Usar los tooltips para indicar tipo de membresia o detalles de insignias */
+          const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+          const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
 
         } else {
-          tarjetas.innerHTML = '<div class="alert alert-warning text-center" role="alert">No existen registros!</div>';
+          alertify.error('No existe registro del usuario.')
         }
 
       },
@@ -409,46 +458,54 @@
 
   })
 
-  function filtrarClientes(clientes) {
+  function filtrarVentaServicios(clientes) {
     let template = ``;
     clientes.forEach((element) => {
-      let inicia = element.servicio == 'VISITA' ? '' : moment(element.fecha).format('D MMM YY');
+      let inicia = element.servicio == 'VISITA' ? 'Hoy' : moment(element.fecha).format('D MMM YY');
       let termina = element.servicio == 'VISITA' ? moment(element.vence).format('D MMM YY') : moment(element.vence).format('D MMM YY');
       let email = element.email != '' ? element.email : 'Pendiente';
       let status = '';
-      if (moment().isSame(moment(element.vence), 'day')) {
-        status = 'warning'; // Due date is today
-      } else if (moment().isBefore(moment(element.vence))) {
-        status = 'success'; // Due date is in the future
-      } else {
-        status = 'danger'; // Due date has passed
-      }
-      template += `
-        <div class="col-lg-4 mt-3" data-aos="zoom-in" data-aos-delay="100">
-          <div class="member d-flex align-items-start">
-            <div class="pic"><img src="assets/img/team/team-1.jpg" class="img-fluid" alt=""></div>
-            <div class="member-info">
-              <h4>${element.nombre}</h4>
-              <label>${email}</label>
-              <div class="d-flex align-items-center gap-2">
-                <label>Servicio:</label>
-                <label class="badge text-bg-info text-white">${element.servicio}</label>
-              </div>
-              <div class="d-flex justify-content-start gap-2">
-                <label>${inicia} </label>
-                <label>-</label>
-                <label>${termina} </label>
-              </div>
-              <div class="social">
-                <a data-bs-toggle="tooltip" data-bs-title="Editar"><i class="ri-edit-fill btnEdit" data-info='${JSON.stringify(element)}'></i></a>
-                <a data-bs-toggle="tooltip" data-bs-title="Renovar servicio"><i class="ri-loop-left-fill"></i></a>
-                <a data-bs-toggle="tooltip" data-bs-title="Eliminar usuario"><i class="ri-close-fill"></i></a>
-                <a data-bs-toggle="tooltip" data-bs-title="Estatus" class="bg-${status}"></a>
-              </div>
+      let coach = element.couch != '' ? element.couch.substring(0, 2).toUpperCase() : 'N';
+      let validarServicio = '';
 
-            </div>
+      if (moment().isSame(moment(element.vence), 'day')) {
+        status = 'warning';
+        validarServicio = 'Termina hoy';
+      } else if (moment().isBefore(moment(element.vence))) {
+        status = 'success';
+        validarServicio = 'Servicio activo';
+      } else {
+        status = 'danger';
+        validarServicio = 'Servicio concluido';
+      }
+
+      template += `
+    <div class="col-lg-4 mt-3" data-aos="zoom-in" data-aos-delay="100">
+      <div class="member d-flex align-items-start">
+        <div class="pic"><img src="assets/img/team/team-1.jpg" class="img-fluid" alt=""></div>
+        <div class="member-info">
+          <h4>${element.nombre}</h4>
+          <label>${email}</label>
+          <div class="d-flex align-items-center gap-2 mt-1">
+            <label>Servicio:</label>
+            <label class="badge text-bg-secondary text-white servicio">${element.servicio}</label>
           </div>
-        </div>`;
+          <div class="d-flex justify-content-start gap-1 mt-1">
+            <label class="text-success inicia">${inicia} </label>
+            <label><i class="ri-arrow-right-fill"></i></label>
+            <label class="text-danger termina"> ${termina} </label>
+          </div>
+          <div class="social">
+            <a data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Editar"><i class="ri-edit-fill btnEdit" data-info='${JSON.stringify(element)}'></i></a>
+            <a data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Renovar servicio"><i class="ri-loop-left-fill btnRenovar" data-info='${JSON.stringify(element)}'></i></a>
+            <a data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Eliminar usuario"><i class="ri-close-fill btnDelet" data-id='${element.id}'></i></a>
+            <a data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Instructor ${element.couch}">${coach}</i></a>
+            <a data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="${validarServicio}" class="bg-${status}"></a>
+          </div>
+
+        </div>
+      </div>
+    </div>`;
     })
     return template;
   }
@@ -608,14 +665,9 @@
       success: function (response) {
         let busquedaCliente = JSON.parse(response);
         if (busquedaCliente.length > 0) {
-          $("#mensaje").html(`
-          <div class="alert alert-danger text-center" role="alert">
-             El usuario ${email} ya existe!
-          </div>
-          `);
+          alertify.error('El usuario ya esta registrado.');
           $('#registrarCliente').attr('disabled', true);
         } else {
-          $("#mensaje").html("");
           $('#registrarCliente').attr('disabled', false);
         }
 
@@ -623,6 +675,7 @@
     });
   });
 
+  //Registrar cliente
   $("#registrarCliente").click(function (e) {
     e.preventDefault();
     let nombre = $("#nombre").val();
@@ -695,8 +748,9 @@
 
       success: function (response) {
         $('#formRegistrar')[0].reset();
-        $("#registroExitoso").toggleClass("d-none");
-        setTimeout(() => $("#registroExitoso").toggleClass("d-none"), 1700)
+        alertify.success("Usuario registrado.");
+        let selectize = $('#nombre')[0].selectize;
+        selectize.clear();
       },
     });
 
@@ -704,18 +758,16 @@
 
   });
 
+  //Editar servicio
   $(document).on('click', '.btnEdit', function (e) {
     e.preventDefault();
     const memberDataString = $(this).data('info');
-    console.log(memberDataString);
   });
 
+  //Renovar servicio
   $(document).on('click', '.btnRenovar', function (e) {
     e.preventDefault();
-
-    //let fechaActual = moment().format('D MMM YY');
     const renovarUsuario = $(this).data('info');
-
 
     let fechaInicia = $(this).closest(".member-info").find(".inicia");
     let fechaTermina = $(this).closest(".member-info").find(".termina");
@@ -724,9 +776,6 @@
     let idServicio = renovarUsuario.id;
     let mandarInicio = moment().format('YYYY-MM-DD H:mm:ss');
     let mandarFin = '';
-
-    /* console.log(idServicio)
-    return */
 
     if (tipoServicio.text() == 'VISITA' || tipoServicio.text() == 'VISITA ESTUDIANTE') {
       fechaTermina.text(moment().format('D MMM YY'));
@@ -760,20 +809,34 @@
 
       success: function (response) {
         alertify.success("Servicio renovado.");
-
-        console.log('renovado')
       },
     });
 
-
-
   });
+
+  //Eliminar servicio
 
   $(document).on('click', '.btnDelet', function (e) {
     e.preventDefault();
     const idUsuario = $(this).data('id');
-    console.log(idUsuario);
+    $.ajax({
+      url: "app/clientes/eliminar_servicio.php",
+      type: "POST",
+      datatype: "json",
+      data: {
+        id: idUsuario
+      },
+
+      success: function (response) {
+        alertify.error("Servicio eliminado.");
+        setTimeout(() => {
+          cargarVentaServicios();
+        }, 1000);
+      },
+    });
   });
+
+
 
 
 

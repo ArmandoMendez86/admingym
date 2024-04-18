@@ -107,6 +107,14 @@ class Cliente extends Model
         $results = $stmt->get_result();
         return $results->fetch_all(MYSQLI_ASSOC);
     }
+    public function listaClientes()
+    {
+        $sql = "SELECT * FROM {$this->table}";
+        $stmt = $this->conection->prepare($sql);
+        $stmt->execute();
+        $results = $stmt->get_result();
+        return $results->fetch_all(MYSQLI_ASSOC);
+    }
 
     public function buscarXemail($email)
     {
@@ -201,6 +209,23 @@ class Cliente extends Model
         } else {
             error_log("Error de preparación de la consulta: " . $this->conection->error);
             return null;
+        }
+    }
+
+    public function eliminarCliente($id)
+    {
+
+        $sql = "DELETE FROM venta_servicio WHERE id = ?";
+        $stmt = $this->conection->prepare($sql);
+
+        if ($stmt) {
+            $stmt->bind_param("i", $id);
+            $stmt->execute();
+            $stmt->close();
+        } else {
+            // Manejar el error de preparación de la consulta
+            // Puedes lanzar una excepción, loguear el error, etc.
+            // Ejemplo: throw new Exception($this->conection->error);
         }
     }
 }
