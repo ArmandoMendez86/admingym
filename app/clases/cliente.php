@@ -170,4 +170,37 @@ class Cliente extends Model
         $results = $stmt->get_result();
         return $results->fetch_all(MYSQLI_ASSOC);
     }
+
+    public function actualizarCliente($data)
+    {
+
+        $columns = array_keys($data);
+        $columns = implode(', ', $columns);
+
+        $fields = [];
+        $params = [];
+
+        foreach ($data as $key => $value) {
+            $fields[] = "{$key} = ?";
+            $params[] = $value;
+        }
+
+        $id = $data['id'];
+        $params[] = intval($id);
+
+        $fields = implode(', ', $fields);
+
+        $sql = "UPDATE venta_servicio SET {$fields} WHERE id = ?";
+        $stmt = $this->conection->prepare($sql);
+
+        if ($stmt) {
+            $types = str_repeat('s', count($params) - 1) . 'i';
+            $stmt->bind_param($types, ...$params);
+            $stmt->execute();
+            $stmt->close();
+        } else {
+            error_log("Error de preparación de la consulta: " . $this->conection->error);
+            return null;
+        }
+    }
 }

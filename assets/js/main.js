@@ -307,7 +307,7 @@
               <label>${email}</label>
               <div class="d-flex align-items-center gap-2 mt-1">
                 <label>Servicio:</label>
-                <label class="badge text-bg-secondary text-white">${element.servicio}</label>
+                <label class="badge text-bg-secondary text-white servicio">${element.servicio}</label>
               </div>
               <div class="d-flex justify-content-start gap-1 mt-1">
                 <label class="text-success inicia">${inicia} </label>
@@ -315,11 +315,11 @@
                 <label class="text-danger termina"> ${termina} </label>
               </div>
               <div class="social">
-                <a data-bs-toggle="tooltip" data-bs-title="Editar"><i class="ri-edit-fill btnEdit" data-info='${JSON.stringify(element)}'></i></a>
-                <a data-bs-toggle="tooltip" data-bs-title="Renovar servicio"><i class="ri-loop-left-fill btnRenovar"></i></a>
-                <a data-bs-toggle="tooltip" data-bs-title="Eliminar usuario"><i class="ri-close-fill"></i></a>
-                <a data-bs-toggle="tooltip" data-bs-title="Instructor ${element.couch}">${coach}</i></a>
-                <a data-bs-toggle="tooltip" data-bs-title="${validarServicio}" class="bg-${status}"></a>
+                <a data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Editar"><i class="ri-edit-fill btnEdit" data-info='${JSON.stringify(element)}'></i></a>
+                <a data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Renovar servicio"><i class="ri-loop-left-fill btnRenovar" data-info='${JSON.stringify(element)}'></i></a>
+                <a data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Eliminar usuario"><i class="ri-close-fill btnDelet" data-id='${element.id}'></i></a>
+                <a data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Instructor ${element.couch}">${coach}</i></a>
+                <a data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="${validarServicio}" class="bg-${status}"></a>
               </div>
 
             </div>
@@ -713,13 +713,69 @@
   $(document).on('click', '.btnRenovar', function (e) {
     e.preventDefault();
 
-    let fechaActual = moment().format('D MMM YY');
+    //let fechaActual = moment().format('D MMM YY');
+    const renovarUsuario = $(this).data('info');
 
-    // Accede al elemento de fecha asociado al botón clicado y actualiza su contenido con la nueva fecha
-    let elementoFecha = $(this).closest(".member-info").find(".inicia");
-    console.log(elementoFecha.text())
-    //elementoFecha.text(nuevaFechaInicio);
+
+    let fechaInicia = $(this).closest(".member-info").find(".inicia");
+    let fechaTermina = $(this).closest(".member-info").find(".termina");
+    let tipoServicio = $(this).closest(".member-info").find(".servicio");
+
+    let idServicio = renovarUsuario.id;
+    let mandarInicio = moment().format('YYYY-MM-DD H:mm:ss');
+    let mandarFin = '';
+
+    /* console.log(idServicio)
+    return */
+
+    if (tipoServicio.text() == 'VISITA' || tipoServicio.text() == 'VISITA ESTUDIANTE') {
+      fechaTermina.text(moment().format('D MMM YY'));
+      mandarFin = moment().format('YYYY-MM-DD H:mm:ss');
+    }
+    if (tipoServicio.text() == 'SEMANA') {
+      fechaInicia.text(moment().format('D MMM YY'));
+      fechaTermina.text(moment().add(7, 'days').format('D MMM YY'));
+      mandarFin = moment().add(7, 'days').format('YYYY-MM-DD H:mm:ss');
+    }
+    if (tipoServicio.text() == 'QUINCENA') {
+      fechaInicia.text(moment().format('D MMM YY'));
+      fechaTermina.text(moment().add(15, 'days').format('D MMM YY'));
+      mandarFin = moment().add(15, 'days').format('YYYY-MM-DD H:mm:ss');
+    }
+    if (tipoServicio.text() == 'MES' || tipoServicio.text() == 'MES ESTUDIANTE') {
+      fechaInicia.text(moment().format('D MMM YY'));
+      fechaTermina.text(moment().add(1, 'M').format('D MMM YY'));
+      mandarFin = moment().add(1, 'M').format('YYYY-MM-DD H:mm:ss');
+    }
+
+    $.ajax({
+      url: "app/clientes/renovar_servicio.php",
+      type: "POST",
+      datatype: "json",
+      data: {
+        id: idServicio,
+        fecha: mandarInicio,
+        vence: mandarFin
+      },
+
+      success: function (response) {
+        alertify.success("Servicio renovado.");
+
+        console.log('renovado')
+      },
+    });
+
+
+
   });
+
+  $(document).on('click', '.btnDelet', function (e) {
+    e.preventDefault();
+    const idUsuario = $(this).data('id');
+    console.log(idUsuario);
+  });
+
+
 
 
 
