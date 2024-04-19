@@ -228,4 +228,22 @@ class Cliente extends Model
             // Ejemplo: throw new Exception($this->conection->error);
         }
     }
+
+    public function cambiarServicio($data)
+    {
+        $sql = "UPDATE venta_servicio SET p_s = ?, fecha = ?, idempleado = ?, vence = ?, couch = ?, fperso= ?, finperso= ? WHERE id = ?";
+        $stmt = $this->conection->prepare($sql);
+        $fecha = $data['fecha'];
+        $idempleado = $data['idempleado'];
+        $vence = $data['vence'];
+        $couch = $data['couch'];
+        $fperso = $data['fperso'];
+        $finperso = $data['finperso'];
+        $p_s = $data['p_s'];
+        $id = $data['id'];
+        $stmt->bind_param('isisssssi', $p_s, $fecha, $idempleado, $vence, $couch, $fperso, $finperso, $id);
+        $stmt->execute();
+        $stmt->close();
+        return true;
+    }
 }
