@@ -261,7 +261,7 @@
 
     cargarListaClientes();
     cargarVentaServicios();
-    cargarProductos();
+
 
   });
 
@@ -358,6 +358,11 @@
                 <a data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="${validarServicio}" class="bg-${status}"></a>
               </div>
               <select class="form-select form-select-sm actualizarServicio mt-1 d-none"></select>
+              <select class="form-select form-select-sm coach mt-1 d-none">
+              <option value="">Elije instructor</option>
+              <option value="grecia">Grecia</option>
+              <option value="armando">Armando</option>
+              </select>
             </div>
           </div>
         </div>`;
@@ -366,37 +371,35 @@
         $("#tarjetaClientes").html(template);
         const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
         const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
-
+        cargarProductos();
       },
     });
 
-
-    $.ajax({
-      url: "app/productos/obtener.php",
-      type: "GET",
-      success: function (response) {
-        let productos = JSON.parse(response);
-        let templateServicios = `
-          <option selected value="">Selecciona el servicio</option>
-          `;
-        productos.forEach((element) => {
-
-          let unidad = element.unidad != null ? element.unidad : "";
-          if (element.categoria == 'servicios') {
-
-            templateServicios += `
-            <option value="${element.id}">${element.pro_serv}</option>
-            `;
-
-          }
-
-        })
-
-        /*  $("#catalogoProductos").html(templateProductos);
-         $("#tipoMembresia").html(templateServicios); */
-        $(".actualizarServicio").html(templateServicios);
-      },
-    });
+    /* 
+        $.ajax({
+          url: "app/productos/obtener.php",
+          type: "GET",
+          success: function (response) {
+            let productos = JSON.parse(response);
+            let templateServicios = `
+              <option selected value="">Escoge el servicio</option>
+              `;
+            productos.forEach((element) => {
+    
+              let unidad = element.unidad != null ? element.unidad : "";
+              if (element.categoria == 'servicios') {
+    
+                templateServicios += `
+                <option value="${element.id}">${element.pro_serv}</option>
+                `;
+    
+              }
+    
+            })
+    
+            $(".actualizarServicio").html(templateServicios);
+          },
+        }); */
 
 
 
@@ -410,8 +413,9 @@
       success: function (response) {
         let productos = JSON.parse(response);
         let templateProductos = ``;
+        let copiaServicios = "";
         let templateServicios = `
-        <option selected value="">Selecciona el servicio</option>
+        <option selected value="">Elije servicio</option>
         `;
         productos.forEach((element) => {
 
@@ -434,9 +438,11 @@
 
           }
         })
+        copiaServicios = templateServicios
 
         $("#catalogoProductos").html(templateProductos);
         $("#tipoMembresia").html(templateServicios);
+        $(".actualizarServicio").html(copiaServicios);
       },
     });
 
@@ -519,17 +525,24 @@
             <label class="text-danger termina"> ${termina} </label>
           </div>
           <div class="social">
-            <a data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Editar"><i class="ri-edit-fill btnEdit" data-info='${JSON.stringify(element)}'></i></a>
+            <a class="btnEdit" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Editar"><i class="ri-edit-fill"></i></a>
+            <a class="cambiarServicio d-none" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Cambiar servicio" data-info='${JSON.stringify(element)}'><i class="ri-arrow-left-right-fill"></i></a>
             <a data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Renovar servicio"><i class="ri-loop-left-fill btnRenovar" data-info='${JSON.stringify(element)}'></i></a>
             <a data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Eliminar usuario"><i class="ri-close-fill btnDelet" data-id='${element.id}'></i></a>
             <a data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Instructor ${element.couch}">${coach}</i></a>
             <a data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="${validarServicio}" class="bg-${status}"></a>
           </div>
-
+          <select class="form-select form-select-sm actualizarServicio mt-1 d-none"></select>
+          <select class="form-select form-select-sm coach mt-1 d-none">
+          <option value="">Elije instructor</option>
+          <option value="grecia">Grecia</option>
+          <option value="armando">Armando</option>
+          </select>
         </div>
       </div>
     </div>`;
     })
+    cargarProductos();
     return template;
   }
 
@@ -788,6 +801,7 @@
     $(this).closest(".member-info").find(".btnEdit").toggleClass('d-none');
     $(this).closest(".member-info").find(".cambiarServicio").toggleClass('d-none');
     $(this).closest(".member-info").find(".actualizarServicio").toggleClass('d-none');
+    $(this).closest(".member-info").find(".coach").toggleClass('d-none');
 
   });
 
@@ -795,14 +809,16 @@
   $(document).on('click', '.cambiarServicio', function (e) {
     e.preventDefault();
     const datosServicio = $(this).data('info');
-    console.log(datosServicio)
     $(this).closest(".member-info").find(".btnEdit").toggleClass('d-none');
     $(this).closest(".member-info").find(".cambiarServicio").toggleClass('d-none');
     $(this).closest(".member-info").find(".actualizarServicio").toggleClass('d-none');
+    $(this).closest(".member-info").find(".coach").toggleClass('d-none');
 
     let tipoMembresia = $(this).closest(".member-info").find(".actualizarServicio").val();
 
     //Datos a mandar
+
+    let fechaActual = moment().format('YYYY-MM-DD H:mm:ss')
 
     let idServicioActual = datosServicio.id;
     let idEmplado = 2;
@@ -812,6 +828,9 @@
     let iniciaPersonalizadoFormat = '';
     let finPersonalizado = '';
     let finPersonalizadoFormat = '';
+    let coach = $(this).closest(".member-info").find(".coach").val();
+
+
     //let venceFormat = vence.format('YYYY-MM-DD H:mm:ss');
     //console.log(fechaActual.format('L')); // Muestra la fecha con formato local (DD/MM/YYYY)
 
@@ -822,16 +841,16 @@
       console.log(agregandoDias.format('LL')) */
 
     if (tipoMembresia == 24 || tipoMembresia == 70 || tipoMembresia == 71 || tipoMembresia == 75 || tipoMembresia == 80) {
-      vence = fechaActual.add(1, 'months');
+      vence = moment().add(1, 'months');
     }
     if (tipoMembresia == 25 || tipoMembresia == 69) {
-      vence = fechaActual;
+      vence = moment();
     }
     if (tipoMembresia == 26) {
-      vence = fechaActual.add(7, 'days');
+      vence = moment().add(7, 'days');
     }
     if (tipoMembresia == 27) {
-      vence = fechaActual.add(15, 'days');
+      vence = moment().add(15, 'days');
     }
     if (coach != '') {
       fechaPersonalizado = moment();
@@ -840,28 +859,34 @@
       finPersonalizadoFormat = finPersonalizado.format('YYYY-MM-DD H:mm:ss');
     }
 
+    if (vence == '') return;
     let venceFormat = vence.format('YYYY-MM-DD H:mm:ss');
 
 
-    return;
     $.ajax({
       url: "app/clientes/cambiar_servicio.php",
       type: "POST",
-      datatype: "json",
+      dataType: "json",
       data: {
+        id: idServicioActual,
         p_s: tipoMembresia,
         cantidad: 1,
-        fecha: fechaActualFormateada,
-        idempleado: 2,
+        fecha: fechaActual,
+        idempleado: idEmplado,
         vence: venceFormat,
         couch: coach,
-        fventa: fechaActualFormateada,
         fperso: iniciaPersonalizadoFormat,
         finperso: finPersonalizadoFormat
       },
 
       success: function (response) {
-        alertify.success("Servicio renovado.");
+        if (response === true) {
+          alertify.success("Servicio cambiado.");
+
+          setTimeout(() => {
+            cargarVentaServicios();
+          }, 1100);
+        }
       },
     });
 

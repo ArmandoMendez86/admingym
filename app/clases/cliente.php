@@ -241,7 +241,7 @@ class Cliente extends Model
         $finperso = $data['finperso'];
         $p_s = $data['p_s'];
         $id = $data['id'];
-        $stmt->bind_param('isisssssi', $p_s, $fecha, $idempleado, $vence, $couch, $fperso, $finperso, $id);
+        $stmt->bind_param('isissssi', $p_s, $fecha, $idempleado, $vence, $couch, $fperso, $finperso, $id);
         $stmt->execute();
         $stmt->close();
         return true;

@@ -1,5 +1,8 @@
 <?php
 require '../clases/cliente.php';
 $data = $_POST;
+
+/* echo json_encode($data);
+return; */
 $cambiarServicio = new Cliente;
-$cambiarServicio->cambiarServicio($data);
+echo json_encode($cambiarServicio->cambiarServicio($data));
