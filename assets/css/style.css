@@ -119,13 +119,15 @@ h6 {
 }
 
 #header .logo {
-  font-size: 30px;
-  margin: 0;
-  padding: 0;
-  line-height: 1;
-  font-weight: 500;
-  letter-spacing: 2px;
-  text-transform: uppercase;
+  width: 10rem;
+  height: 4rem;
+  background-image: url(../img/log.png);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+
+
+
 }
 
 #header .logo a {
@@ -133,7 +135,9 @@ h6 {
 }
 
 #header .logo img {
-  max-height: 40px;
+  /*  width: 100px;
+  height: 60px; */
+
 }
 
 /*--------------------------------------------------------------
@@ -1906,14 +1910,23 @@ section {
 
 .galeria .box-img {
   position: relative;
-  width: calc(100px * 1.3);
+  width: calc(100px * 2);
+  height: calc(100px * 1.5);
   margin: 10px;
   border-radius: 2px;
   box-shadow: 0 0 7px 0 rgba(72, 140, 228, 0.6);
   overflow: hidden;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+  transition: transform 0.3s ease;
 }
 
-.galeria .box-img img {
+.galeria .box-img:hover {
+  transform: scale(1.1);
+}
+
+/* .galeria .box-img img {
   width: 100%;
   vertical-align: top;
   cursor: pointer;
@@ -1922,7 +1935,7 @@ section {
 
 .galeria .box-img img:hover {
   transform: scale(1.1);
-}
+} */
 
 .description-box {
   position: absolute;
@@ -1949,28 +1962,26 @@ section {
 }
 
 
-#listaVenta{
+#listaVenta {
   font-size: small;
 }
 
-#tipoMembresia option{
+#tipoMembresia option {
   font-size: small;
 }
 
-#registroExitoso{
+#registroExitoso {
   position: absolute;
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
 }
 
-.member-info label{
+.member-info label {
   font-size: small;
 }
 
-.servicio{
+.servicio {
   font-size: .6rem !important;
-  
+
 }
-
-

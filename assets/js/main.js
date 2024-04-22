@@ -423,8 +423,9 @@
 
           if (element.categoria != 'servicios') {
             templateProductos += `
-            <div class="box-img ${element.categoria}" data-producto='${JSON.stringify(element)}'>
-              <img src="assets/img/nodis.png" alt="">
+            <div class="box-img ${element.categoria}" 
+            data-producto='${JSON.stringify(element)}' 
+            style="background-image:url(assets/img/products/${element.img})">
               <div class="description-box">
                 <p class="m-0">${element.pro_serv}</p>
                 <span class="badge text-bg-danger">${unidad}</span>
@@ -664,7 +665,7 @@
     $("#listaVenta").html('');
     $("#totalPrecio").text('');
     $("#descuento").val(0);
-    $("#ventaRealizada").toggleClass("d-none");
+    /* $("#ventaRealizada").toggleClass("d-none"); */
 
     listaCompra = [];
     totalPrecio = 0;
@@ -672,12 +673,10 @@
     $('#aplicarDescuento').attr('disabled', false);
 
     if (listaCompra.length == 0) {
-
-      setTimeout(() => {
-        $('#offcanvasScrolling').offcanvas('hide');
-        $("#ventaRealizada").toggleClass("d-none");
-      }, 2500);
+      $('#offcanvasScrolling').offcanvas('hide');
     }
+
+    alertify.success("Venta realizada.")
 
   });
 
