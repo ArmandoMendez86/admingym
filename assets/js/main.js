@@ -270,6 +270,18 @@
   //Cargando usuarios
 
 
+  function cargarGrafica() {
+    $.ajax({
+      url: "app/clientes/lista_clientes.php",
+      method: 'GET',
+      dataType: 'json',
+      success: function (datos) {
+        
+      },
+    });
+
+  }
+
 
   function cargarListaClientes() {
     $.ajax({
