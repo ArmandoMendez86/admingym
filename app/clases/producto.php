@@ -254,4 +254,28 @@ class Producto extends Model
         $results = $stmt->get_result();
         return $results->fetch_all(MYSQLI_ASSOC);
     }
+
+
+    public function ventasXdiaGrafica()
+    {
+        $fechaHoy = date("Y-m-d");
+        /* $fechaHoy = '2023-12-14'; */
+        $sql = " SELECT 
+        producto.pro_serv, 
+        producto.unidad, 
+        producto.p_d AS precio, 
+        SUM(vp.cantidad) AS total_cantidad, 
+        SUM(producto.p_d * vp.cantidad) AS total_subtotal,
+        vp.fecha
+        FROM ( 
+        SELECT p_s, cantidad, fecha FROM venta_producto 
+        UNION ALL SELECT p_s, cantidad, fecha FROM venta_servicio ) AS vp 
+        INNER JOIN producto ON vp.p_s = producto.id 
+        WHERE DATE(vp.fecha) = '2023-11-28'
+        GROUP BY producto.pro_serv, producto.unidad, producto.precio ";
+        $stmt = $this->conection->prepare($sql);
+        $stmt->execute();
+        $results = $stmt->get_result();
+        return $results->fetch_all(MYSQLI_ASSOC);
+    }
 }

@@ -261,7 +261,7 @@
 
     cargarListaClientes();
     cargarVentaServicios();
-
+    cargarGrafica();
 
   });
 
@@ -272,11 +272,74 @@
 
   function cargarGrafica() {
     $.ajax({
-      url: "app/clientes/lista_clientes.php",
+      url: "app/productos/grafica_ventas_x_dia.php",
       method: 'GET',
       dataType: 'json',
       success: function (datos) {
-        
+        console.log(datos)
+
+        // Paso 1: Preparación de datos
+        const etiquetas = [];
+        const totalCantidad = [];
+        const totalSubtotal = [];
+
+        // Iterar sobre cada objeto en el array y extraer los datos necesarios
+        datos.forEach(item => {
+          etiquetas.push(item.pro_serv); // Nombre del producto o servicio
+          totalCantidad.push(parseInt(item.total_cantidad)); // Total de cantidad vendida (convertido a entero)
+          totalSubtotal.push(parseInt(item.total_subtotal)); // Total de subtotal (convertido a entero)
+        });
+
+        // Paso 2: Configuración del lienzo del gráfico (en tu HTML)
+        // <canvas id="myChart" width="400" height="400"></canvas>
+
+        // Paso 3: Inicialización de Chart.js
+        const ctx = document.getElementById('myChart').getContext('2d');
+
+        // Paso 4: Definición de conjuntos de datos
+        const myChart = new Chart(ctx, {
+          type: 'bar',
+          data: {
+            labels: etiquetas, // Nombres de los productos o servicios
+            datasets: [{
+              label: 'Cantidad',
+              data: totalCantidad, // Total de cantidad vendida
+              backgroundColor: 'rgba(113, 125, 126)', // Color de fondo de las barras
+              /* borderColor: 'rgba(255, 99, 132, 1)', */ // Color del borde de las barras
+              borderWidth: 1
+            }, {
+              label: 'Monto',
+              data: totalSubtotal, // Total de subtotal
+              backgroundColor: 'rgba(69, 179, 157 )', // Color de fondo de las barras
+              /* borderColor: 'rgba(54, 162, 235, 1)', */ // Color del borde de las barras
+              borderWidth: 1
+            }]
+          },
+          options: {
+            scales: {
+              y: {
+                grid: {
+                  display: false // Oculta las líneas de la cuadrícula en el eje Y
+                },
+                beginAtZero: true, // Empieza en cero en el eje Y
+              
+              },
+
+              x: {
+                grid: {
+                  display: false // Oculta las líneas de la cuadrícula en el eje Y
+                }
+              }
+            }
+          }
+        });
+
+
+
+
+
+
+
       },
     });
 
