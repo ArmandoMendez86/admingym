@@ -269,66 +269,53 @@
 
   //Cargando usuarios
 
-
   function cargarGrafica() {
     $.ajax({
       url: "app/productos/grafica_ventas_x_dia.php",
       method: 'GET',
       dataType: 'json',
       success: function (datos) {
-        console.log(datos);
 
-        // Paso 1: Preparación de datos
         const etiquetas = [];
         const totalCantidad = [];
         const totalSubtotal = [];
 
-        // Iterar sobre cada objeto en el array y extraer los datos necesarios
         datos.forEach(item => {
-          etiquetas.push(item.pro_serv); // Nombre del producto o servicio
-          totalCantidad.push(parseInt(item.total_cantidad)); // Total de cantidad vendida (convertido a entero)
-          totalSubtotal.push(parseInt(item.total_subtotal)); // Total de subtotal (convertido a entero)
+          etiquetas.push(item.pro_serv);
+          totalCantidad.push(parseInt(item.total_cantidad));
+          totalSubtotal.push(parseInt(item.total_subtotal));
         });
 
-        // Paso 2: Calcular la suma total de los subtotales
         const sumaTotalSubtotal = totalSubtotal.reduce((acc, subtotal) => acc + subtotal, 0);
-
-        // Paso 3: Configuración del lienzo del gráfico (en tu HTML)
-        // <canvas id="myChart" width="400" height="400"></canvas>
-
-        // Paso 4: Inicialización de Chart.js
         const ctx = document.getElementById('myChart').getContext('2d');
 
-        // Paso 5: Definición de conjuntos de datos
         const myChart = new Chart(ctx, {
           type: 'bar',
           data: {
-            labels: etiquetas, // Nombres de los productos o servicios
+            labels: etiquetas,
             datasets: [{
               label: 'Vendidos',
-              data: totalCantidad, // Total de cantidad vendida
-              backgroundColor: 'rgba(113, 125, 126)', // Color de fondo de las barras
+              data: totalCantidad,
+              backgroundColor: 'rgba(113, 125, 126)',
               borderWidth: 1
             }, {
               label: 'Monto',
-              data: totalSubtotal, // Total de subtotal
-              backgroundColor: 'rgba(69, 179, 157)', // Color de fondo de las barras
+              data: totalSubtotal,
+              backgroundColor: 'rgba(40, 58, 90, 0.9)',
               borderWidth: 1
             }]
           },
+
         });
 
-        // Paso adicional: Mostrar la suma total debajo del gráfico
         const sumaTotalDiv = document.getElementById('sumaTotal');
-
-        // Paso adicional: Formatear la suma total como moneda mexicana
         const sumaTotalFormateada = sumaTotalSubtotal.toLocaleString('es-MX', { style: 'currency', currency: 'MXN' });
-        sumaTotalDiv.innerHTML = `Total: <span class="badge text-bg-dark p-2 fs-4">${sumaTotalFormateada}</span>
+        sumaTotalDiv.innerHTML = `Total: <span class="badge text-bg-dark p-1 fs-4">${sumaTotalFormateada}</span>
         `;
 
 
 
-        
+
       }
     });
   }
