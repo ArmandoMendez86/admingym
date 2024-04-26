@@ -276,7 +276,7 @@
       method: 'GET',
       dataType: 'json',
       success: function (datos) {
-        console.log(datos)
+        console.log(datos);
 
         // Paso 1: Preparación de datos
         const etiquetas = [];
@@ -290,60 +290,49 @@
           totalSubtotal.push(parseInt(item.total_subtotal)); // Total de subtotal (convertido a entero)
         });
 
-        // Paso 2: Configuración del lienzo del gráfico (en tu HTML)
+        // Paso 2: Calcular la suma total de los subtotales
+        const sumaTotalSubtotal = totalSubtotal.reduce((acc, subtotal) => acc + subtotal, 0);
+
+        // Paso 3: Configuración del lienzo del gráfico (en tu HTML)
         // <canvas id="myChart" width="400" height="400"></canvas>
 
-        // Paso 3: Inicialización de Chart.js
+        // Paso 4: Inicialización de Chart.js
         const ctx = document.getElementById('myChart').getContext('2d');
 
-        // Paso 4: Definición de conjuntos de datos
+        // Paso 5: Definición de conjuntos de datos
         const myChart = new Chart(ctx, {
           type: 'bar',
           data: {
             labels: etiquetas, // Nombres de los productos o servicios
             datasets: [{
-              label: 'Cantidad',
+              label: 'Vendidos',
               data: totalCantidad, // Total de cantidad vendida
               backgroundColor: 'rgba(113, 125, 126)', // Color de fondo de las barras
-              /* borderColor: 'rgba(255, 99, 132, 1)', */ // Color del borde de las barras
               borderWidth: 1
             }, {
               label: 'Monto',
               data: totalSubtotal, // Total de subtotal
-              backgroundColor: 'rgba(69, 179, 157 )', // Color de fondo de las barras
-              /* borderColor: 'rgba(54, 162, 235, 1)', */ // Color del borde de las barras
+              backgroundColor: 'rgba(69, 179, 157)', // Color de fondo de las barras
               borderWidth: 1
             }]
           },
-          options: {
-            scales: {
-              y: {
-                grid: {
-                  display: false // Oculta las líneas de la cuadrícula en el eje Y
-                },
-                beginAtZero: true, // Empieza en cero en el eje Y
-              
-              },
-
-              x: {
-                grid: {
-                  display: false // Oculta las líneas de la cuadrícula en el eje Y
-                }
-              }
-            }
-          }
         });
 
+        // Paso adicional: Mostrar la suma total debajo del gráfico
+        const sumaTotalDiv = document.getElementById('sumaTotal');
+
+        // Paso adicional: Formatear la suma total como moneda mexicana
+        const sumaTotalFormateada = sumaTotalSubtotal.toLocaleString('es-MX', { style: 'currency', currency: 'MXN' });
+        sumaTotalDiv.innerHTML = `Total: <span class="badge text-bg-dark p-2 fs-4">${sumaTotalFormateada}</span>
+        `;
 
 
 
-
-
-
-      },
+        
+      }
     });
-
   }
+
 
 
   function cargarListaClientes() {
