@@ -401,10 +401,10 @@
                 <label class="text-danger termina"> ${termina} </label>
               </div>
               <div class="social">
-                <a class="btnEdit" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Editar"><i class="ri-edit-fill"></i></a>
+                <a class="btnEdit" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Editar" data-info='${JSON.stringify(element)}'><i class="ri-edit-fill"></i></a>
                 <a class="cambiarServicio d-none" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Cambiar servicio" data-info='${JSON.stringify(element)}'><i class="ri-arrow-left-right-fill"></i></a>
-                <a data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Renovar servicio"><i class="ri-loop-left-fill btnRenovar" data-info='${JSON.stringify(element)}'></i></a>
-                <a data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Eliminar usuario"><i class="ri-close-fill btnDelet" data-id='${element.id}'></i></a>
+                <a class="btnRenovar" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Renovar servicio" data-info='${JSON.stringify(element)}'><i class="ri-loop-left-fill" ></i></a>
+                <a class="btnDelet" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Eliminar usuario" data-id='${element.id}'><i class="ri-close-fill"></i></a>
                 <a data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Instructor ${element.couch}">${coach}</i></a>
                 <a data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="${validarServicio}" class="bg-${status}"></a>
               </div>
@@ -847,11 +847,17 @@
   //Editar servicio
   $(document).on('click', '.btnEdit', function (e) {
     e.preventDefault();
-    //const memberDataString = $(this).data('info');
+    const datosUsuario = $(this).data('info');
     $(this).closest(".member-info").find(".btnEdit").toggleClass('d-none');
     $(this).closest(".member-info").find(".cambiarServicio").toggleClass('d-none');
     $(this).closest(".member-info").find(".actualizarServicio").toggleClass('d-none');
     $(this).closest(".member-info").find(".coach").toggleClass('d-none');
+    $(this).closest(".member-info").find(".btnRenovar").toggleClass('d-none');
+    $(this).closest(".member-info").find(".btnDelet").toggleClass('d-none');
+
+    //let servicioActual = $(this).closest(".member-info").find(".actualizarServicio").val(datosUsuario.servicio);
+
+
 
   });
 
@@ -859,10 +865,13 @@
   $(document).on('click', '.cambiarServicio', function (e) {
     e.preventDefault();
     const datosServicio = $(this).data('info');
+    console.log(datosServicio)
     $(this).closest(".member-info").find(".btnEdit").toggleClass('d-none');
     $(this).closest(".member-info").find(".cambiarServicio").toggleClass('d-none');
     $(this).closest(".member-info").find(".actualizarServicio").toggleClass('d-none');
     $(this).closest(".member-info").find(".coach").toggleClass('d-none');
+    $(this).closest(".member-info").find(".btnRenovar").toggleClass('d-none');
+    $(this).closest(".member-info").find(".btnDelet").toggleClass('d-none');
 
     let tipoMembresia = $(this).closest(".member-info").find(".actualizarServicio").val();
 
@@ -879,16 +888,6 @@
     let finPersonalizado = '';
     let finPersonalizadoFormat = '';
     let coach = $(this).closest(".member-info").find(".coach").val();
-
-
-    //let venceFormat = vence.format('YYYY-MM-DD H:mm:ss');
-    //console.log(fechaActual.format('L')); // Muestra la fecha con formato local (DD/MM/YYYY)
-
-    /* console.log(venceFormat)
-    return; */
-
-    /*   let agregandoDias = fechaActual.add(10, 'days');
-      console.log(agregandoDias.format('LL')) */
 
     if (tipoMembresia == 24 || tipoMembresia == 70 || tipoMembresia == 71 || tipoMembresia == 75 || tipoMembresia == 80) {
       vence = moment().add(1, 'months');
@@ -909,7 +908,7 @@
       finPersonalizadoFormat = finPersonalizado.format('YYYY-MM-DD H:mm:ss');
     }
 
-    if (vence == '') return;
+    if (vence == '' && coach == '') return;
     let venceFormat = vence.format('YYYY-MM-DD H:mm:ss');
 
 
