@@ -372,6 +372,8 @@
           let status = '';
           let coach = element.couch != '' ? element.couch.substring(0, 2).toUpperCase() : 'N';
           let validarServicio = '';
+          let iniciaPersonalizado = element.fperson != '' ? moment(element.fperso).format('D MMM YY') : 'Sin personalizado';
+          let finalizaPersonalizado = iniciaPersonalizado != '' ? moment(element.finperso).format('D MMM YY') : '';
 
           if (moment().isSame(moment(element.vence), 'day')) {
             status = 'warning';
@@ -405,7 +407,7 @@
                 <a class="cambiarServicio d-none" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Cambiar servicio" data-info='${JSON.stringify(element)}'><i class="ri-arrow-left-right-fill"></i></a>
                 <a class="btnRenovar" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Renovar servicio" data-info='${JSON.stringify(element)}'><i class="ri-loop-left-fill" ></i></a>
                 <a class="btnDelet" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Eliminar usuario" data-id='${element.id}'><i class="ri-close-fill"></i></a>
-                <a data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Instructor ${element.couch}">${coach}</i></a>
+                <a data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="${iniciaPersonalizado} - ${finalizaPersonalizado}">${coach}</i></a>
                 <a data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="${validarServicio}" class="bg-${status}"></a>
               </div>
               <select class="form-select form-select-sm actualizarServicio mt-1 d-none"></select>
@@ -848,6 +850,7 @@
   $(document).on('click', '.btnEdit', function (e) {
     e.preventDefault();
     const datosUsuario = $(this).data('info');
+    //console.log(datosUsuario)
     $(this).closest(".member-info").find(".btnEdit").toggleClass('d-none');
     $(this).closest(".member-info").find(".cambiarServicio").toggleClass('d-none');
     $(this).closest(".member-info").find(".actualizarServicio").toggleClass('d-none');
@@ -855,17 +858,15 @@
     $(this).closest(".member-info").find(".btnRenovar").toggleClass('d-none');
     $(this).closest(".member-info").find(".btnDelet").toggleClass('d-none');
 
-    //let servicioActual = $(this).closest(".member-info").find(".actualizarServicio").val(datosUsuario.servicio);
-
-
+    $(this).closest(".member-info").find(".actualizarServicio").val(datosUsuario.p_s);
+    $(this).closest(".member-info").find(".coach").val(datosUsuario.couch);
 
   });
 
   //Cambiar servicio
   $(document).on('click', '.cambiarServicio', function (e) {
     e.preventDefault();
-    const datosServicio = $(this).data('info');
-    console.log(datosServicio)
+    const datosUsuario = $(this).data('info');
     $(this).closest(".member-info").find(".btnEdit").toggleClass('d-none');
     $(this).closest(".member-info").find(".cambiarServicio").toggleClass('d-none');
     $(this).closest(".member-info").find(".actualizarServicio").toggleClass('d-none');
@@ -875,11 +876,16 @@
 
     let tipoMembresia = $(this).closest(".member-info").find(".actualizarServicio").val();
 
+    let coachActual = $(this).closest(".member-info").find(".coach").val();
+    let servicioActual = $(this).closest(".member-info").find(".actualizarServicio").val();
+
+    if (datosUsuario.couch == coachActual && datosUsuario.p_s == servicioActual) return;
+
     //Datos a mandar
 
     let fechaActual = moment().format('YYYY-MM-DD H:mm:ss')
 
-    let idServicioActual = datosServicio.id;
+    let idServicioActual = datosUsuario.id;
     let idEmplado = 2;
 
     let vence = '';
@@ -930,11 +936,11 @@
 
       success: function (response) {
         if (response === true) {
-          alertify.success("Servicio cambiado.");
+          alertify.success("Servicio actualizado.");
 
           setTimeout(() => {
             cargarVentaServicios();
-          }, 1100);
+          }, 1000);
         }
       },
     });
