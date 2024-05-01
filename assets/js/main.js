@@ -372,10 +372,15 @@
           let status = '';
           let coach = element.couch != '' ? element.couch.substring(0, 2).toUpperCase() : 'N';
           let validarServicio = '';
-          let iniciaPersonalizado = 'Sin personalizado';
+          let iniciaPersonalizado = '';
           let finalizaPersonalizado = '';
 
-          if (element.fperso != null || element.fperso != '') {
+
+
+          if (element.fperso == null || element.fperso == '0000-00-00 00:00:00') {
+            iniciaPersonalizado = 'Sin personalizado';
+            finalizaPersonalizado = '';
+          } else {
             iniciaPersonalizado = moment(element.fperso).format('D MMM YY');
             finalizaPersonalizado = moment(element.finperso).format('D MMM YY');
           }
@@ -413,7 +418,7 @@
                 <a class="btnRenovar" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Renovar" data-info='${JSON.stringify(element)}'><i class="ri-loop-left-fill" ></i></a>
                 <a class="btnDelet" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Eliminar" data-id='${element.id}'><i class="ri-close-fill"></i></a>
                 <a data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="${iniciaPersonalizado} - ${finalizaPersonalizado}">${coach}</i></a>
-                <a data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="${validarServicio}" class="bg-${status}"></a>
+                <a data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="${validarServicio}" class="bg-${status} indicador"></a>
               </div>
               <div class="d-flex justify-content-between gap-1">
                 <select class="form-select form-select-sm actualizarServicio mt-1 d-none"></select>
@@ -557,6 +562,16 @@
       let status = '';
       let coach = element.couch != '' ? element.couch.substring(0, 2).toUpperCase() : 'N';
       let validarServicio = '';
+      let iniciaPersonalizado = '';
+      let finalizaPersonalizado = '';
+
+      if (element.fperso == null || element.fperso == '0000-00-00 00:00:00') {
+        iniciaPersonalizado = 'Sin personalizado';
+        finalizaPersonalizado = '';
+      } else {
+        iniciaPersonalizado = moment(element.fperso).format('D MMM YY');
+        finalizaPersonalizado = moment(element.finperso).format('D MMM YY');
+      }
 
       if (moment().isSame(moment(element.vence), 'day')) {
         status = 'warning';
@@ -586,19 +601,21 @@
             <label class="text-danger termina"> ${termina} </label>
           </div>
           <div class="social">
-            <a class="btnEdit" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Editar"><i class="ri-edit-fill"></i></a>
-            <a class="cambiarServicio d-none" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Cambiar servicio" data-info='${JSON.stringify(element)}'><i class="ri-arrow-left-right-fill"></i></a>
-            <a data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Renovar servicio"><i class="ri-loop-left-fill btnRenovar" data-info='${JSON.stringify(element)}'></i></a>
-            <a data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Eliminar usuario"><i class="ri-close-fill btnDelet" data-id='${element.id}'></i></a>
-            <a data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Instructor ${element.couch}">${coach}</i></a>
-            <a data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="${validarServicio}" class="bg-${status}"></a>
+            <a class="btnEdit" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Editar" data-info='${JSON.stringify(element)}'><i class="ri-edit-fill"></i></a>
+            <a class="cambiarServicio d-none" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Cambiar" data-info='${JSON.stringify(element)}'><i class="ri-arrow-left-right-fill"></i></a>
+            <a class="btnRenovar" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Renovar" data-info='${JSON.stringify(element)}'><i class="ri-loop-left-fill" ></i></a>
+            <a class="btnDelet" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Eliminar" data-id='${element.id}'><i class="ri-close-fill"></i></a>
+            <a data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="${iniciaPersonalizado} - ${finalizaPersonalizado}">${coach}</i></a>
+            <a data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="${validarServicio}" class="bg-${status} indicador"></a>
           </div>
-          <select class="form-select form-select-sm actualizarServicio mt-1 d-none"></select>
-          <select class="form-select form-select-sm coach mt-1 d-none">
-          <option value="">Elije instructor</option>
-          <option value="grecia">Grecia</option>
-          <option value="armando">Armando</option>
-          </select>
+          <div class="d-flex justify-content-between gap-1">
+            <select class="form-select form-select-sm actualizarServicio mt-1 d-none"></select>
+            <select class="form-select form-select-sm coach mt-1 d-none">
+            <option value="">Ninguno</option>
+            <option value="grecia">Grecia</option>
+            <option value="armando">Armando</option>
+            </select>
+          </div>
         </div>
       </div>
     </div>`;
@@ -726,6 +743,12 @@
     $("#totalPrecio").text('');
     $("#descuento").val(0);
     /* $("#ventaRealizada").toggleClass("d-none"); */
+
+    console.log(listaCompra);
+
+    return;
+
+    
 
     listaCompra = [];
     totalPrecio = 0;
@@ -921,7 +944,7 @@
       finPersonalizadoFormat = finPersonalizado.format('YYYY-MM-DD H:mm:ss');
     }
 
-    if (vence == '' && coach == '') return;
+    if (vence == '' && coach == '' || vence == '' && coach != '') return;
     let venceFormat = vence.format('YYYY-MM-DD H:mm:ss');
 
     $.ajax({
@@ -962,6 +985,7 @@
     let fechaTermina = $(this).closest(".member-info").find(".termina");
     let tipoServicio = $(this).closest(".member-info").find(".servicio");
 
+
     let idServicio = renovarUsuario.id;
     let mandarInicio = moment().format('YYYY-MM-DD H:mm:ss');
     let mandarFin = '';
@@ -969,6 +993,8 @@
     if (tipoServicio.text() == 'VISITA' || tipoServicio.text() == 'VISITA ESTUDIANTE') {
       fechaTermina.text(moment().format('D MMM YY'));
       mandarFin = moment().format('YYYY-MM-DD H:mm:ss');
+      $(this).closest(".member-info").find(".indicador").toggleClass('bg-danger');
+      $(this).closest(".member-info").find(".indicador").toggleClass('bg-warning');
     }
     if (tipoServicio.text() == 'SEMANA') {
       fechaInicia.text(moment().format('D MMM YY'));
@@ -1017,7 +1043,7 @@
       },
 
       success: function (response) {
-        alertify.error("Servicio eliminado.");
+        alertify.error("Membresía eliminada.");
         setTimeout(() => {
           cargarVentaServicios();
         }, 1000);
