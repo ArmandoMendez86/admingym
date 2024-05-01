@@ -372,8 +372,13 @@
           let status = '';
           let coach = element.couch != '' ? element.couch.substring(0, 2).toUpperCase() : 'N';
           let validarServicio = '';
-          let iniciaPersonalizado = element.fperson != '' ? moment(element.fperso).format('D MMM YY') : 'Sin personalizado';
-          let finalizaPersonalizado = iniciaPersonalizado != '' ? moment(element.finperso).format('D MMM YY') : '';
+          let iniciaPersonalizado = 'Sin personalizado';
+          let finalizaPersonalizado = '';
+
+          if (element.fperso != null || element.fperso != '') {
+            iniciaPersonalizado = moment(element.fperso).format('D MMM YY');
+            finalizaPersonalizado = moment(element.finperso).format('D MMM YY');
+          }
 
           if (moment().isSame(moment(element.vence), 'day')) {
             status = 'warning';
@@ -404,18 +409,20 @@
               </div>
               <div class="social">
                 <a class="btnEdit" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Editar" data-info='${JSON.stringify(element)}'><i class="ri-edit-fill"></i></a>
-                <a class="cambiarServicio d-none" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Cambiar servicio" data-info='${JSON.stringify(element)}'><i class="ri-arrow-left-right-fill"></i></a>
-                <a class="btnRenovar" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Renovar servicio" data-info='${JSON.stringify(element)}'><i class="ri-loop-left-fill" ></i></a>
-                <a class="btnDelet" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Eliminar usuario" data-id='${element.id}'><i class="ri-close-fill"></i></a>
+                <a class="cambiarServicio d-none" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Cambiar" data-info='${JSON.stringify(element)}'><i class="ri-arrow-left-right-fill"></i></a>
+                <a class="btnRenovar" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Renovar" data-info='${JSON.stringify(element)}'><i class="ri-loop-left-fill" ></i></a>
+                <a class="btnDelet" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Eliminar" data-id='${element.id}'><i class="ri-close-fill"></i></a>
                 <a data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="${iniciaPersonalizado} - ${finalizaPersonalizado}">${coach}</i></a>
                 <a data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="${validarServicio}" class="bg-${status}"></a>
               </div>
-              <select class="form-select form-select-sm actualizarServicio mt-1 d-none"></select>
-              <select class="form-select form-select-sm coach mt-1 d-none">
-              <option value="">Elije instructor</option>
-              <option value="grecia">Grecia</option>
-              <option value="armando">Armando</option>
-              </select>
+              <div class="d-flex justify-content-between gap-1">
+                <select class="form-select form-select-sm actualizarServicio mt-1 d-none"></select>
+                <select class="form-select form-select-sm coach mt-1 d-none">
+                <option value="">Ninguno</option>
+                <option value="grecia">Grecia</option>
+                <option value="armando">Armando</option>
+                </select>
+              </div>
             </div>
           </div>
         </div>`;
@@ -890,9 +897,9 @@
 
     let vence = '';
     let fechaPersonalizado = '';
-    let iniciaPersonalizadoFormat = '';
+    let iniciaPersonalizadoFormat = null;
     let finPersonalizado = '';
-    let finPersonalizadoFormat = '';
+    let finPersonalizadoFormat = null;
     let coach = $(this).closest(".member-info").find(".coach").val();
 
     if (tipoMembresia == 24 || tipoMembresia == 70 || tipoMembresia == 71 || tipoMembresia == 75 || tipoMembresia == 80) {
@@ -916,7 +923,6 @@
 
     if (vence == '' && coach == '') return;
     let venceFormat = vence.format('YYYY-MM-DD H:mm:ss');
-
 
     $.ajax({
       url: "app/clientes/cambiar_servicio.php",
