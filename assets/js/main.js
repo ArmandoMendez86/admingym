@@ -269,61 +269,72 @@
 
   //Cargando usuarios
 
+
+  let myChart; // Variable global para almacenar la referencia a la instancia de la gráfica
+
   function cargarGrafica() {
+    // Verificar si ya existe una instancia de la gráfica y destruirla si es necesario
+    if (myChart) {
+      myChart.destroy();
+    }
+
     $.ajax({
       url: "app/productos/grafica_ventas_x_dia.php",
       method: 'GET',
       dataType: 'json',
       success: function (datos) {
-
         const etiquetas = [];
         const totalCantidad = [];
         const totalSubtotal = [];
+        const cantidadAlmacen = [];
 
         datos.forEach(item => {
           etiquetas.push(item.pro_serv);
           totalCantidad.push(parseInt(item.total_cantidad));
           totalSubtotal.push(parseInt(item.total_subtotal));
+          cantidadAlmacen.push(parseInt(item.cantidad));
         });
 
         const sumaTotalSubtotal = totalSubtotal.reduce((acc, subtotal) => acc + subtotal, 0);
         const ctx = document.getElementById('myChart').getContext('2d');
 
-        const myChart = new Chart(ctx, {
+        myChart = new Chart(ctx, {
           type: 'bar',
           data: {
             labels: etiquetas,
             datasets: [{
               label: 'Vendidos',
               data: totalCantidad,
-              backgroundColor: 'rgba(113, 125, 126)',
+              backgroundColor: 'rgba(169, 50, 38, 0.7)',
               borderWidth: 1
-            }, {
+            },
+            {
+              label: 'Almacén',
+              data: cantidadAlmacen,
+              backgroundColor: 'rgba(40, 55, 71, 0.7)',
+              borderWidth: 1
+            },
+             {
               label: 'Monto',
               data: totalSubtotal,
-              backgroundColor: 'rgba(40, 58, 90, 0.9)',
+              backgroundColor: 'rgba(14, 102, 85, 0.7)',
               borderWidth: 1
-            }]
+            },
+            ]
           },
           options: {
             scales: {
               y: {
                 min: 0, // Valor mínimo del eje Y
-                max: 50, // Valor máximo del eje Y (ajústalo según tus necesidades)
+                max: 20, // Valor máximo del eje Y (ajústalo según tus necesidades)
               }
             }
           }
-
         });
 
         const sumaTotalDiv = document.getElementById('sumaTotal');
         const sumaTotalFormateada = sumaTotalSubtotal.toLocaleString('es-MX', { style: 'currency', currency: 'MXN' });
-        sumaTotalDiv.innerHTML = `Total: <span class="badge text-bg-dark p-1 fs-4">${sumaTotalFormateada}</span>
-        `;
-
-
-
-
+        sumaTotalDiv.innerHTML = `Total: <span class="badge text-bg-dark p-1 fs-4">${sumaTotalFormateada}</span>`;
       }
     });
   }
@@ -749,7 +760,7 @@
 
     $("#listaVenta").html('');
     $("#totalPrecio").text('');
-    $("#descuento").val(0);
+
 
     const productosArray = [];
 
@@ -758,7 +769,8 @@
         p_s: elemento,
         cantidad: 1,
         fecha: moment().format('YYYY-MM-DD H:mm:ss'),
-        idempleado: 2
+        idempleado: 2,
+        descuento: $("#descuento").val()
 
       };
 
@@ -780,11 +792,13 @@
         totalPrecio = 0;
 
         $('#aplicarDescuento').attr('disabled', false);
+        $("#descuento").val(0);
         if (listaCompra.length == 0) {
           $('#offcanvasScrolling').offcanvas('hide');
         }
 
-        alertify.success("Venta realizada.")
+        alertify.success("Venta realizada.");
+        cargarGrafica();
 
       },
     });
@@ -923,6 +937,7 @@
 
   //Cambiar servicio
   $(document).on('click', '.cambiarServicio', function (e) {
+    // checar cuando asigno solo a instructor, tambien se modifica la fecha de la membresía
     e.preventDefault();
     const datosUsuario = $(this).data('info');
     $(this).closest(".member-info").find(".btnEdit").toggleClass('d-none');

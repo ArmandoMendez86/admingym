@@ -266,7 +266,8 @@ class Producto extends Model
         producto.p_d AS precio, 
         SUM(vp.cantidad) AS total_cantidad, 
         SUM(producto.p_d * vp.cantidad) AS total_subtotal,
-        vp.fecha
+        vp.fecha,
+        producto.cantidad
         FROM ( 
         SELECT p_s, cantidad, fecha FROM venta_producto 
         UNION ALL SELECT p_s, cantidad, fecha FROM venta_servicio ) AS vp 
