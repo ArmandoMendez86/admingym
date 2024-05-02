@@ -305,6 +305,14 @@
               borderWidth: 1
             }]
           },
+          options: {
+            scales: {
+              y: {
+                min: 0, // Valor mínimo del eje Y
+                max: 50, // Valor máximo del eje Y (ajústalo según tus necesidades)
+              }
+            }
+          }
 
         });
 
@@ -653,7 +661,7 @@
     let producto = $(this).data('producto');
     listaCompra.push(producto.id);
 
-    let unidad = producto.unidad != null ? producto.unidad : "Servicio";
+    let unidad = producto.unidad;
     let fila = `
       <tr>
         <td class="d-none">${producto.id}</td>
@@ -742,24 +750,44 @@
     $("#listaVenta").html('');
     $("#totalPrecio").text('');
     $("#descuento").val(0);
-    /* $("#ventaRealizada").toggleClass("d-none"); */
 
-    console.log(listaCompra);
+    const productosArray = [];
 
-    return;
+    listaCompra.forEach((elemento) => {
+      const producto = {
+        p_s: elemento,
+        cantidad: 1,
+        fecha: moment().format('YYYY-MM-DD H:mm:ss'),
+        idempleado: 2
 
-    
+      };
 
-    listaCompra = [];
-    totalPrecio = 0;
+      // Agregar el producto al nuevo array
+      productosArray.push(producto);
+    });
 
-    $('#aplicarDescuento').attr('disabled', false);
 
-    if (listaCompra.length == 0) {
-      $('#offcanvasScrolling').offcanvas('hide');
-    }
+    $.ajax({
+      url: "app/productos/venta_producto.php",
+      type: "POST",
+      datatype: "json",
+      data: {
+        productosArray
+      },
+      success: function (response) {
 
-    alertify.success("Venta realizada.")
+        listaCompra = [];
+        totalPrecio = 0;
+
+        $('#aplicarDescuento').attr('disabled', false);
+        if (listaCompra.length == 0) {
+          $('#offcanvasScrolling').offcanvas('hide');
+        }
+
+        alertify.success("Venta realizada.")
+
+      },
+    });
 
   });
 

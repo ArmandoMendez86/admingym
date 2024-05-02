@@ -1,7 +1,7 @@
 <?php
 require '../clases/producto.php';
 
-$data = $_POST['datosArray'];
+$data = $_POST['productosArray'];
 $venta = new Producto;
 $venta->venderproductos($data);
 

@@ -271,7 +271,7 @@ class Producto extends Model
         SELECT p_s, cantidad, fecha FROM venta_producto 
         UNION ALL SELECT p_s, cantidad, fecha FROM venta_servicio ) AS vp 
         INNER JOIN producto ON vp.p_s = producto.id 
-        WHERE DATE(vp.fecha) = '2023-11-28'
+        WHERE DATE(vp.fecha) = '$fechaHoy'
         GROUP BY producto.pro_serv, producto.unidad, producto.precio ";
         $stmt = $this->conection->prepare($sql);
         $stmt->execute();
