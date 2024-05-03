@@ -262,18 +262,53 @@
     cargarListaClientes();
     cargarVentaServicios();
     cargarGrafica();
+    realizarLlamadas();
 
   });
 
   /* ######################## AGREGADO POR MI ######################## */
 
+
+  async function realizarLlamadas() {
+    try {
+      // Lista de productos
+      const productos = await fetch('app/productos/obtener.php');
+      if (!productos.ok) {
+        throw new Error('Error en la primera llamada AJAX');
+      }
+      const listaProductos = await productos.json();
+      console.log(listaProductos);
+
+      // Lista clientes
+      const clientes = await fetch('app/clientes/obtener.php');
+      if (!clientes.ok) {
+        throw new Error('Error en la segunda llamada AJAX');
+      }
+      const listaClientes = await clientes.json();
+      console.log(listaClientes);
+
+      // Lista empleados
+      const empleados = await fetch('app/empleados/obtener.php');
+      if (!empleados.ok) {
+        throw new Error('Error en la tercera llamada AJAX');
+      }
+      const listaEmpleados = await empleados.json();
+      console.log(listaEmpleados);
+
+      // Y así sucesivamente...
+    } catch (error) {
+      console.error('Error en la llamada AJAX:', error);
+    }
+  }
+  
+
+
   //Cargando usuarios
 
 
-  let myChart; // Variable global para almacenar la referencia a la instancia de la gráfica
+  let myChart;
 
   function cargarGrafica() {
-    // Verificar si ya existe una instancia de la gráfica y destruirla si es necesario
     if (myChart) {
       myChart.destroy();
     }
@@ -314,7 +349,7 @@
               backgroundColor: 'rgba(40, 55, 71, 0.7)',
               borderWidth: 1
             },
-             {
+            {
               label: 'Monto',
               data: totalSubtotal,
               backgroundColor: 'rgba(14, 102, 85, 0.7)',
