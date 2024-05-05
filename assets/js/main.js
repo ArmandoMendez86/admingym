@@ -262,7 +262,7 @@
     cargarListaClientes();
     cargarVentaServicios();
     cargarGrafica();
-    realizarLlamadas();
+    //realizarLlamadas();
 
   });
 
@@ -300,7 +300,7 @@
       console.error('Error en la llamada AJAX:', error);
     }
   }
-  
+
 
 
   //Cargando usuarios
@@ -1131,7 +1131,471 @@
 
 
 
+  //Llamadas para llenar tablas de datos
 
+  let filaProducto = null;
+  let idProducto = null;
+  let tablaProductos = $("#productosCat").DataTable({
+    language: {
+      decimal: ',',
+      emptyTable: 'No hay datos',
+      info: 'Mostrando _START_ a _END_ de _TOTAL_ registros',
+      infoEmpty: 'Mostrando 0 a 0 de 0 registros',
+      infoFiltered: '(filtrado de un total de _MAX_ registros)',
+      lengthMenu: 'Mostrar _MENU_ registros',
+      loadingRecords: 'Cargando...',
+      paginate: {
+        first: 'Primero',
+        last: 'Último',
+        next: '>',
+        previous: '<'
+      },
+      processing: 'Procesando...',
+      search: 'Buscar:'
+    },
+    lengthMenu: [
+      [5, 10, 15, -1],
+      [5, 10, 15, 'Todos']
+    ],
+
+    ajax: {
+      url: "app/productos/obtener.php",
+      method: "GET",
+      dataSrc: "",
+    },
+    columns: [{
+      data: "id"
+    },
+    {
+      data: "codigo"
+    },
+    {
+      data: "pro_serv"
+    },
+    {
+      data: "descripcion"
+    },
+    {
+      data: "unidad"
+    },
+    {
+      data: "compra"
+    },
+    {
+      data: "precio"
+    },
+    {
+      data: "cantidad"
+    },
+    {
+      data: "categoria"
+    },
+    {
+      data: "img",
+      render: function (data, type, row) {
+        if (data == null) {
+          return `<div class="image-container"><img src="assets/img/nodis.png" alt="Imagen"></div>`;
+        } else {
+          return `<div class="image-container"><img src="assets/img/products/${data}" alt="Imagen"></div>`;
+        }
+      }
+    },
+    {
+      defaultContent: "<div class='d-flex'><button class='btnEditar btn'><i class='bi bi-pen'></i></button><button class='btnBorrar btn '><i class='bi bi-trash'></i></button></div>",
+    },
+    ],
+    columnDefs: [{
+      targets: [0, 4, 5, 6, 7, 8],
+      className: 'text-center'
+    },
+    {
+      targets: [0],
+      className: 'ocultar-columna'
+    },
+    ],
+
+    rowCallback: function (row, data) {
+
+      $($(row).find("td")[5]).css("color", "#DF3816");
+      $($(row).find("td")[5]).css("font-weight", "500");
+      $($(row).find("td")[6]).css("color", "#1BA354");
+      $($(row).find("td")[6]).css("font-weight", "500");
+
+      if (data['cantidad'] <= 3 && data['categoria'] != 'SERVICIO') {
+        $($(row).find("td")[7]).css("background-color", "#F5B7B1");
+        $($(row).find("td")[7]).css("color", "#B72949");
+        $($(row).find("td")[7]).css("font-weight", "500");
+      } else if (data['cantidad'] >= 4 && data['categoria'] != 'SERVICIO') {
+        //$($(row).find("td")[6]).css("background-color", "#D0ECE7");
+        $($(row).find("td")[7]).css("color", "#2980B9");
+        $($(row).find("td")[7]).css("font-weight", "500");
+      }
+
+    },
+  });
+
+  //Controles para productos
+
+  $("#abrirModal").click(function () {
+    $("#actualizarProducto").addClass('d-none');
+    $("#agregarProducto").removeClass('d-none');
+    $('.imagen-cliente').attr('src', 'assets/img/products/muestra.png');
+  })
+
+  // Añadir evento change para cargar la imagen desde el input file
+  $('#imagen').change(function () {
+    const input = this;
+    if (input.files && input.files[0]) {
+      const reader = new FileReader();
+      reader.onload = function (e) {
+        $('.imagen-cliente').attr('src', e.target.result);
+      }
+      reader.readAsDataURL(input.files[0]);
+
+    }
+  });
+
+  // Función para comprimir la imagen usando el elemento canvas
+  function compressImage(image, callback) {
+    let canvas = document.createElement('canvas');
+    let ctx = canvas.getContext('2d');
+    let maxWidth = 800; // Ancho máximo deseado
+    let maxHeight = 600; // Alto máximo deseado
+
+    let img = new Image();
+    img.onload = function () {
+      let width = img.width;
+      let height = img.height;
+
+      // Comprobar si es necesario redimensionar
+      if (width > maxWidth || height > maxHeight) {
+        let ratio = Math.min(maxWidth / width, maxHeight / height);
+        width *= ratio;
+        height *= ratio;
+      }
+
+      canvas.width = width;
+      canvas.height = height;
+
+      ctx.drawImage(img, 0, 0, width, height);
+
+      // Obtener el Blob de la imagen comprimida desde el canvas
+      canvas.toBlob(function (blob) {
+        callback(blob);
+      }, 'image/jpeg', 0.7); // Calidad de compresión JPEG
+    }
+    img.src = URL.createObjectURL(image);
+  }
+
+  $("#agregarProducto").click(function (e) {
+    e.preventDefault();
+    let codigo = $.trim($("#codigo").val()).toUpperCase();
+    let nombre = $.trim($("#producto").val()).toUpperCase();
+    let descripcion = $.trim($("#des").val()).toUpperCase();
+    let unidad = $.trim($("#unidad").val()).toUpperCase();
+    let compra = $("#compra").val();
+    let precio = $("#precio").val();
+    let cantidad = $("#cantidad").val();
+    let categoria = $.trim($("#categoria").val()).toUpperCase();
+    let imagenInput = document.getElementById('imagen');
+    let imagen = imagenInput.files[0];
+
+    if (codigo == '' || nombre == '' || unidad == '' || compra == '' || precio == '' || cantidad == '' || categoria == '') {
+      return;
+    }
+
+    // Crea un objeto FormData para enviar la imagen correctamente
+    let formData = new FormData();
+    formData.append('codigo', codigo);
+    formData.append('pro_serv', nombre);
+    formData.append('descripcion', descripcion);
+    formData.append('unidad', unidad);
+    formData.append('compra', compra);
+    formData.append('precio', precio);
+    formData.append('cantidad', cantidad);
+    formData.append('categoria', categoria);
+
+    // Comprimir la imagen antes de agregarla al formData
+    compressImage(imagen, function (compressedImageBlob) {
+      // Obtener el nombre original del archivo
+      let fileName = imagen.name;
+      // Agregar la imagen comprimida al formData con el nombre original
+      formData.append('img', compressedImageBlob, fileName);
+
+      $.ajax({
+        url: "app/productos/agregar_producto.php",
+        type: "POST",
+        data: formData, // Usa el objeto FormData en lugar de un objeto plano
+        processData: false, // Evita que jQuery procese los datos
+        contentType: false, // Evita que jQuery establezca el tipo de contenido
+        success: function (response) {
+          tablaProductos.ajax.reload(null, false);
+          $("#staticBackdrop").modal("hide");
+          $("#formProductos").trigger("reset");
+
+        },
+        error: function (error) {
+          console.error('Error al enviar la imagen:', error);
+        }
+      });
+    });
+
+
+  });
+
+
+  $("#cancelar").click(() => {
+    idProducto = null;
+    filaProducto = null;
+    $("#formProductos").trigger("reset");
+  })
+
+
+  $(document).on("click", ".btnEditar", function () {
+    filaProducto = $(this).closest("tr");
+    idProducto = parseInt(filaProducto.find("td:eq(0)").text());
+    let codigo = filaProducto.find("td:eq(1)").text();
+    let nombre = filaProducto.find("td:eq(2)").text();
+    let descripcion = filaProducto.find("td:eq(3)").text();
+    let unidad = filaProducto.find("td:eq(4)").text();
+    let compra = filaProducto.find("td:eq(5)").text();
+    let precio = filaProducto.find("td:eq(6)").text();
+    /* let ingreso = parseInt(filaProducto.find("td:eq(8)").text());
+    let fechaIngreso = filaProducto.find("td:eq(9)").text(); 
+    let almacen = parseInt(filaProducto.find("td:eq(10)").text());
+    */
+    let cantidad = filaProducto.find("td:eq(7)").text();
+    let categoria = filaProducto.find("td:eq(8)").text();
+    /*  let precioNumber = parseInt(precio.replace(/[^\d.-]/g, ''));
+ 
+     let fecha = moment(fechaIngreso, "DD/MM/YYYY");
+     let fechaFormateada = fecha.format("YYYY-MM-DD"); */
+
+    let imagen = filaProducto.find("td:eq(9) img");
+    let src = imagen.attr("src");
+
+    $("#codigo").val(codigo);
+    $("#producto").val(nombre);
+    $("#des").val(descripcion);
+    $("#unidad").val(unidad);
+    $("#compra").val(compra);
+    $("#precio").val(precio);
+    $("#cantidad").val(cantidad);
+    $("#categoria").val(categoria);
+    $('.imagen-cliente').attr('src', src).css({
+      'width': '80',
+      'height': '80'
+    });
+    $("#staticBackdrop").modal("show");
+    $("#actualizarProducto").removeClass('d-none');
+    $("#agregarProducto").addClass('d-none');
+
+    $("#actualizarProducto").click(function () {
+      let codigo = $("#codigo").val().toUpperCase();
+      let nombre = $("#producto").val().toUpperCase();
+      let descripcion = $("#des").val().toUpperCase();
+      let unidad = $("#unidad").val().toUpperCase();
+      let compra = $("#compra").val();
+      let precio = $("#precio").val();
+      let cantidad = $("#cantidad").val();
+      let categoria = $("#categoria").val().toUpperCase();
+      let imagenInput = document.getElementById('imagen');
+      let nuevaImagen = imagenInput.files[0];
+
+      if (codigo == '' || nombre == '' || unidad == '' || compra == '' || precio == '' || cantidad == '' || categoria == '') {
+        return;
+      }
+
+      // Crea un objeto FormData para enviar la imagen correctamente
+      let formData = new FormData();
+      formData.append('id', idProducto);
+      formData.append('codigo', codigo);
+      formData.append('pro_serv', nombre);
+      formData.append('descripcion', descripcion);
+      formData.append('unidad', unidad);
+      formData.append('compra', compra);
+      formData.append('precio', precio);
+      formData.append('cantidad', cantidad);
+      formData.append('categoria', categoria);
+
+
+      compressImage(nuevaImagen, function (compressedImageBlob) {
+        let fileName = nuevaImagen.name;
+        formData.append('img', compressedImageBlob, fileName);
+
+        $.ajax({
+          url: "app/productos/actualizar_producto.php",
+          type: "POST",
+          data: formData,
+          processData: false,
+          contentType: false,
+          success: function (response) {
+            tablaProductos.ajax.reload(null, false);
+            $("#staticBackdrop").modal("hide");
+            $("#formProductos").trigger("reset");
+
+          },
+          error: function (error) {
+            console.error('Error al enviar la imagen:', error);
+          }
+        });
+      });
+
+
+
+    })
+
+  });
+
+  $(document).on("click", ".btnBorrar", function () {
+    let fila = $(this).closest("tr");
+    let id = parseInt($(this).closest("tr").find("td:eq(0)").text());
+
+    $.ajax({
+      url: "app/productos/eliminar_producto.php",
+      type: "POST",
+      datatype: "json",
+      data: {
+        id: id
+      },
+      success: function () {
+        tablaProductos.ajax.reload(null, false);
+        alertify.error('Producto eliminado.')
+      }
+    })
+
+  })
+
+
+
+
+
+
+
+
+  let tablaClientes = $("#clientes").DataTable({
+
+    language: {
+      decimal: ',',
+      emptyTable: 'No hay datos',
+      info: 'Mostrando _START_ a _END_ de _TOTAL_ registros',
+      infoEmpty: 'Mostrando 0 a 0 de 0 registros',
+      infoFiltered: '(filtrado de un total de _MAX_ registros)',
+      lengthMenu: 'Mostrar _MENU_ registros',
+      loadingRecords: 'Cargando...',
+      paginate: {
+        first: 'Primero',
+        last: 'Último',
+        next: '>',
+        previous: '<'
+      },
+      processing: 'Procesando...',
+      search: 'Buscar:'
+    },
+    lengthMenu: [
+      [5, 10, 15, -1],
+      [5, 10, 15, 'Todos']
+    ],
+    ajax: {
+      url: "app/clientes/lista_clientes.php",
+      method: "GET",
+      dataSrc: "",
+    },
+    columns: [{
+      data: "id"
+    },
+    {
+      data: "nombre"
+    },
+    {
+      data: "ap"
+    },
+    {
+      data: "gen"
+    },
+    {
+      data: "email"
+    },
+    {
+      defaultContent: "<div class='d-flex justify-content-center'><button class='btnEditar btn'><i class='bi bi-pen'></i></button><button class='btnBorrar btn'><i class='bi bi-trash'></i></button><button class='btn enviarCredencial'><i class='bi bi-send-check'></i></button></div>"
+
+    },
+    ],
+    columnDefs: [{
+      targets: [0, 3, 5],
+      className: 'text-center'
+    },
+    {
+      targets: [0],
+      className: 'ocultar-columna'
+    },
+    ],
+
+    rowCallback: function (row, data) {
+      if (data['email'] == '') {
+        $($(row).find("td")[4]).css("background-color", "#F2D7D5");
+      }
+    },
+  });
+
+
+  let tablaEmpleados = $("#empleados").DataTable({
+    language: {
+      decimal: ',',
+      emptyTable: 'No hay datos',
+      info: 'Mostrando _START_ a _END_ de _TOTAL_ registros',
+      infoEmpty: 'Mostrando 0 a 0 de 0 registros',
+      infoFiltered: '(filtrado de un total de _MAX_ registros)',
+      lengthMenu: 'Mostrar _MENU_ registros',
+      loadingRecords: 'Cargando...',
+      paginate: {
+        first: 'Primero',
+        last: 'Último',
+        next: '>',
+        previous: '<'
+      },
+      processing: 'Procesando...',
+      search: 'Buscar:'
+    },
+    lengthMenu: [
+      [5, 10, 15, -1],
+      [5, 10, 15, 'Todos']
+    ],
+    ajax: {
+      url: "app/empleados/obtener.php",
+      method: "GET",
+      dataSrc: "",
+    },
+    columns: [{
+      data: "id"
+    },
+    {
+      data: "nombre"
+    },
+    {
+      data: "ap"
+    },
+    {
+      data: "role"
+    },
+    {
+      data: "password"
+    },
+    {
+      defaultContent: "<div class='d-flex'><button class='btnEditar btn'><i class='bi bi-pen'></i></button><button class='btnBorrar btn '><i class='bi bi-trash'></i></button></div>",
+    },
+    ],
+    columnDefs: [{
+      targets: [0, 5],
+      className: 'text-center'
+    },
+    {
+      targets: [0],
+      className: 'ocultar-columna'
+    },
+    ],
+
+  });
 
 
 

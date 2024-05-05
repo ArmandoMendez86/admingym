@@ -9,6 +9,68 @@ class Producto extends Model
 
     protected $table = 'producto';
 
+
+    public function crearProducto($data)
+    {
+
+        $uploadDir = '../../assets/img/products/';
+        $uploadFile = $uploadDir . basename($data['img']['name']);
+        move_uploaded_file($data['img']['tmp_name'], $uploadFile);
+        $data['img'] = basename($data['img']['name']);
+
+
+        $columns = array_keys($data);
+        $columns = implode(', ', $columns);
+        $escaped_values = array_map(function ($value) {
+            return mysqli_real_escape_string($this->conection, $value);
+        }, $data);
+        $values = "'" . implode("', '", $escaped_values) . "'";
+        $sql = "INSERT INTO {$this->table} ({$columns}) VALUES ({$values})";
+        $this->conection->query($sql);
+        $ultimo = $this->conection->insert_id;
+        return $this->findById($ultimo);
+    }
+
+    public function actualizarProducto($data)
+    {
+
+        if (!empty($data['img'])) {
+            $uploadDir = '../../assets/img/products/';
+            $uploadFile = $uploadDir . basename($data['img']['name']);
+            move_uploaded_file($data['img']['tmp_name'], $uploadFile);
+            $data['img'] = basename($data['img']['name']);
+        }
+        if ($data['img'] == null) {
+            unset($data['img']);
+        }
+        $fields = [];
+        $params = [];
+
+        $id = $data['id'];
+        unset($data['id']);
+
+        foreach ($data as $key => $value) {
+            $fields[] = "{$key} = ?";
+            $params[] = $value;
+        }
+
+        $params[] = intval($id);
+        $fields = implode(', ', $fields);
+        $sql = "UPDATE {$this->table} SET {$fields} WHERE id = ?";
+        $stmt = $this->conection->prepare($sql);
+
+        if ($stmt) {
+            $types = str_repeat('s', count($params) - 1) . 'i'; // 'i' representa un entero (integer)
+            $stmt->bind_param($types, ...$params);
+            $stmt->execute();
+            $stmt->close();
+        } else {
+            // Maneja el error de preparación de la consulta
+            error_log("Error de preparación de la consulta: " . $this->conection->error);
+            return null;
+        }
+    }
+
     public function venderproductos($data)
     {
         $columns = array_keys($data[0]);
@@ -260,7 +322,7 @@ class Producto extends Model
     {
         $fechaHoy = date("Y-m-d");
         /* $fechaHoy = '2023-12-14'; */
-        $sql = " SELECT 
+        $sql = "SELECT 
         producto.pro_serv, 
         producto.unidad, 
         producto.p_d AS precio, 
@@ -272,8 +334,8 @@ class Producto extends Model
         SELECT p_s, cantidad, fecha FROM venta_producto 
         UNION ALL SELECT p_s, cantidad, fecha FROM venta_servicio ) AS vp 
         INNER JOIN producto ON vp.p_s = producto.id 
-        WHERE DATE(vp.fecha) = '$fechaHoy'
-        GROUP BY producto.pro_serv, producto.unidad, producto.precio ";
+        WHERE DATE(vp.fecha) = '2024-04-29'
+        GROUP BY producto.pro_serv, producto.unidad, producto.precio";
         $stmt = $this->conection->prepare($sql);
         $stmt->execute();
         $results = $stmt->get_result();

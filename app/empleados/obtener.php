@@ -2,4 +2,4 @@
 require '../clases/empleado.php';
 
 $obtenerEmpleados = new Empleado;
-echo json_encode($obtenerEmpleados->getAll());
+echo json_encode($obtenerEmpleados->listaEmpleados());

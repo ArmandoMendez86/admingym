@@ -122,20 +122,11 @@ class Model
 
     public function delete($id)
     {
-        // Preparar la consulta con un marcador de posición
         $sql = "DELETE FROM {$this->table} WHERE id = ?";
-
-        // Preparar la sentencia
         $stmt = $this->conection->prepare($sql);
-
         if ($stmt) {
-            // Enlazar el parámetro
-            $stmt->bind_param("i", $id); // "i" indica que el parámetro es de tipo entero
-
-            // Ejecutar la consulta preparada
+            $stmt->bind_param("i", $id);
             $stmt->execute();
-
-            // Cerrar la consulta preparada
             $stmt->close();
         } else {
             // Manejar el error de preparación de la consulta
@@ -157,6 +148,4 @@ class Model
         // Devuelve los resultados
         return $results->fetch_assoc()['total'];
     }
-
-   
 }

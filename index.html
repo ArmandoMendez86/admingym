@@ -32,6 +32,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.13.3/css/selectize.min.css">
   <link rel="stylesheet" href="assets/css/themes/alertify.core.css" />
   <link rel="stylesheet" href="assets/css/themes/alertify.default.css" id="toggleCSS" />
+  <link rel="stylesheet" href="https://cdn.datatables.net/2.0.6/css/dataTables.bootstrap5.min.css">
   <link href="assets/css/style.css" rel="stylesheet">
 </head>
 
@@ -66,9 +67,9 @@
           </li>
           <li class="dropdown"><a href="#"><span>Administración</span> <i class="bi bi-chevron-down"></i></a>
             <ul>
-              <li><a class="nav-link scrollto" href="#">Productos</a></li>
-              <li><a class="nav-link scrollto" href="#">Clientes</a></li>
-              <li><a class="nav-link scrollto" href="#">Empleados</a></li>
+              <li><a class="nav-link scrollto" href="#productos">Productos</a></li>
+              <li><a class="nav-link scrollto" href="#tabClientes">Clientes</a></li>
+              <li><a class="nav-link scrollto" href="#tabEmpleados">Empleados</a></li>
             </ul>
           </li>
           <li><a class="nav-link scrollto" href="#">Caja</a></li>
@@ -450,68 +451,184 @@
       </div>
     </section><!-- End Team Section -->
 
-    <!-- ======= Pricing Section ======= -->
-    <section id="pricing" class="pricing">
+    <!-- ======= Productos Section ======= -->
+    <section id="productos" class="pricing">
       <div class="container" data-aos="fade-up">
-
         <div class="section-title">
-          <h2>Pricing</h2>
-          <p>Magnam dolores commodi suscipit. Necessitatibus eius consequatur ex aliquid fuga eum quidem. Sit sint
+          <h2>Productos y Servicios</h2>
+          <!--  <p>Magnam dolores commodi suscipit. Necessitatibus eius consequatur ex aliquid fuga eum quidem. Sit sint
             consectetur velit. Quisquam quos quisquam cupiditate. Et nemo qui impedit suscipit alias ea. Quia fugiat sit
-            in iste officiis commodi quidem hic quas.</p>
+            in iste officiis commodi quidem hic quas.</p> -->
         </div>
 
-        <div class="row">
+        <!--  <div class="btn_nuevo text-center">
+          <i id="abrirModal" class="bi bi-bag-plus fs-2" data-bs-toggle="modal" data-bs-target="#staticBackdrop"></i>
+        </div> -->
 
-          <div class="col-lg-4" data-aos="fade-up" data-aos-delay="100">
-            <div class="box">
-              <h3>Free Plan</h3>
-              <h4><sup>$</sup>0<span>per month</span></h4>
-              <ul>
-                <li><i class="bx bx-check"></i> Quam adipiscing vitae proin</li>
-                <li><i class="bx bx-check"></i> Nec feugiat nisl pretium</li>
-                <li><i class="bx bx-check"></i> Nulla at volutpat diam uteera</li>
-                <li class="na"><i class="bx bx-x"></i> <span>Pharetra massa massa ultricies</span></li>
-                <li class="na"><i class="bx bx-x"></i> <span>Massa ultricies mi quis hendrerit</span></li>
-              </ul>
-              <a href="#" class="buy-btn">Get Started</a>
-            </div>
-          </div>
-
-          <div class="col-lg-4 mt-4 mt-lg-0" data-aos="fade-up" data-aos-delay="200">
-            <div class="box featured">
-              <h3>Business Plan</h3>
-              <h4><sup>$</sup>29<span>per month</span></h4>
-              <ul>
-                <li><i class="bx bx-check"></i> Quam adipiscing vitae proin</li>
-                <li><i class="bx bx-check"></i> Nec feugiat nisl pretium</li>
-                <li><i class="bx bx-check"></i> Nulla at volutpat diam uteera</li>
-                <li><i class="bx bx-check"></i> Pharetra massa massa ultricies</li>
-                <li><i class="bx bx-check"></i> Massa ultricies mi quis hendrerit</li>
-              </ul>
-              <a href="#" class="buy-btn">Get Started</a>
-            </div>
-          </div>
-
-          <div class="col-lg-4 mt-4 mt-lg-0" data-aos="fade-up" data-aos-delay="300">
-            <div class="box">
-              <h3>Developer Plan</h3>
-              <h4><sup>$</sup>49<span>per month</span></h4>
-              <ul>
-                <li><i class="bx bx-check"></i> Quam adipiscing vitae proin</li>
-                <li><i class="bx bx-check"></i> Nec feugiat nisl pretium</li>
-                <li><i class="bx bx-check"></i> Nulla at volutpat diam uteera</li>
-                <li><i class="bx bx-check"></i> Pharetra massa massa ultricies</li>
-                <li><i class="bx bx-check"></i> Massa ultricies mi quis hendrerit</li>
-              </ul>
-              <a href="#" class="buy-btn">Get Started</a>
-            </div>
-          </div>
-
+        <!-- Button trigger modal -->
+        <div class="text-center">
+          <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop"
+            id="abrirModal">
+            <i class="bi bi-bag-plus-fill fs-2"></i>
+          </button>
         </div>
-
+        <div class="table-responsive">
+          <table id="productosCat" class="table table-hover display" style="width: 100%;">
+            <thead class="text-uppercase">
+              <tr>
+                <th>Id</th>
+                <th>Codigo</th>
+                <th>Producto</th>
+                <th>Descripción</th>
+                <th>Unidad</th>
+                <th>Compra</th>
+                <th>Venta</th>
+                <th>Almacén</th>
+                <th>Categoria</th>
+                <th>Imagen</th>
+                <th>Acción</th>
+              </tr>
+            </thead>
+            <tbody class="align-middle"></tbody>
+          </table>
+        </div>
       </div>
-    </section><!-- End Pricing Section -->
+    </section><!-- End Productos Section -->
+
+
+    <!-- Modal -->
+    <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+      aria-labelledby="staticBackdropLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5" id="staticBackdropLabel">Producto</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <form id="formProductos">
+              <div class="row mb-3">
+                <label for="codigo" class="col-sm-3 col-form-label">Codigo</label>
+                <div class="col-sm-9">
+                  <input type="text" class="form-control" id="codigo" placeholder="Codigo">
+                </div>
+              </div>
+              <div class="row mb-3">
+                <label for="producto" class="col-sm-3 col-form-label">Producto</label>
+                <div class="col-sm-9">
+                  <input type="text" class="form-control" id="producto" placeholder="Producto">
+                </div>
+              </div>
+              <div class="row mb-3">
+                <label for="des" class="col-sm-3 col-form-label">Descripción</label>
+                <div class="col-sm-9">
+                  <input type="text" class="form-control" id="des" placeholder="Descripción del producto">
+                </div>
+              </div>
+              <div class="row mb-3">
+                <label for="unidad" class="col-sm-3 col-form-label">Unidad</label>
+                <div class="col-sm-9">
+                  <input type="text" class="form-control" id="unidad" placeholder="pza, lt, ml">
+                </div>
+              </div>
+              <div class="row mb-3">
+                <label for="compra" class="col-sm-3 col-form-label">Compra</label>
+                <div class="col-sm-9">
+                  <input type="number" class="form-control" id="compra" placeholder="Precio de compra">
+                </div>
+              </div>
+              <div class="row mb-3">
+                <label for="precio" class="col-sm-3 col-form-label">Venta</label>
+                <div class="col-sm-9">
+                  <input type="number" class="form-control" id="precio" placeholder="Precio de venta">
+                </div>
+              </div>
+              <div class="row mb-3">
+                <label for="cantidad" class="col-sm-3 col-form-label">Cantidad</label>
+                <div class="col-sm-9">
+                  <input type="number" class="form-control" id="cantidad" placeholder="cantidad en almacén" min="1">
+                </div>
+              </div>
+              <div class="row mb-3">
+                <label for="categoria" class="col-sm-3 col-form-label">Categoria</label>
+                <div class="col-sm-9">
+                  <input type="text" class="form-control" id="categoria" placeholder="Suplementos, Accesorios, Bebidas">
+                </div>
+              </div>
+              <div class="row mb-3">
+                <label for="imagen" class="col-sm-3 col-form-label">Imagen</label>
+                <div class="col-sm-9">
+                  <input type="file" class="form-control" id="imagen" name="imagen" accept="image/*">
+                  <div class="text-center mt-2 w-50">
+                    <img src="" alt="Imagen del cliente" class="imagen-cliente" width="100%">
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="cancelar">Cancelar</button>
+            <button type="button" class="btn btn-primary" id="agregarProducto">Guardar</button>
+            <button type="button" class="btn btn-info" id="actualizarProducto">Actualizar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- ======= Clientes Section ======= -->
+    <section id="tabClientes" class="pricing">
+      <div class="container" data-aos="fade-up">
+        <div class="section-title">
+          <h2>Clientes</h2>
+          <!--  <p>Magnam dolores commodi suscipit. Necessitatibus eius consequatur ex aliquid fuga eum quidem. Sit sint
+            consectetur velit. Quisquam quos quisquam cupiditate. Et nemo qui impedit suscipit alias ea. Quia fugiat sit
+            in iste officiis commodi quidem hic quas.</p> -->
+        </div>
+        <div class="table-responsive">
+          <table id="clientes" class="table table-hover display" style="width: 100%;">
+            <thead class="text-uppercase">
+              <tr>
+                <th>Id</th>
+                <th>Nombre</th>
+                <th>Apellido</th>
+                <th>Sexo</th>
+                <th>Correo</th>
+                <th>Acción</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+    </section><!-- End Clientes Section -->
+
+    <!-- ======= Empleados Section ======= -->
+    <section id="tabEmpleados" class="pricing">
+      <div class="container" data-aos="fade-up">
+        <div class="section-title">
+          <h2>Empleados</h2>
+          <!--  <p>Magnam dolores commodi suscipit. Necessitatibus eius consequatur ex aliquid fuga eum quidem. Sit sint
+            consectetur velit. Quisquam quos quisquam cupiditate. Et nemo qui impedit suscipit alias ea. Quia fugiat sit
+            in iste officiis commodi quidem hic quas.</p> -->
+        </div>
+        <div class="table-responsive mt-4 p-3">
+          <table id="empleados" class="table table-sm table-hover display" style="width: 100%;">
+            <thead class="text-uppercase">
+              <tr>
+                <th>Id</th>
+                <th>Nombre</th>
+                <th>Apellidos</th>
+                <th>Rol</th>
+                <th>Contraseña</th>
+                <th>Acción</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+    </section><!-- End Empleados Section -->
 
     <!-- ======= Frequently Asked Questions Section ======= -->
     <section id="faq" class="faq section-bg">
@@ -811,6 +928,8 @@
   <script src="assets/js/lib/alertify.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.13.3/js/standalone/selectize.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.datatables.net/2.0.6/js/dataTables.min.js"></script>
+  <script src="https://cdn.datatables.net/2.0.6/js/dataTables.bootstrap5.min.js"></script>
   <script src="assets/js/main.js"></script>
 
 
