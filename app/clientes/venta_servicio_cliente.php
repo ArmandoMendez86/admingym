@@ -25,6 +25,7 @@ $servicio = [
     'fventa' => $data['fventa'],
     'fperso' => $data['fperso'],
     'finperso' => $data['finperso'],
+    'descuento' => $data['descuento'],
 ];
 
 $cliente->venderservicioAcliente($servicio);

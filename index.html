@@ -2,47 +2,44 @@
 <html lang="en">
 
 <head>
-  <meta charset="utf-8">
-  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta charset="utf-8" />
+  <meta content="width=device-width, initial-scale=1.0" name="viewport" />
 
   <title>Administración gimnasio</title>
-  <meta content="" name="description">
-  <meta content="" name="keywords">
+  <meta content="" name="description" />
+  <meta content="" name="keywords" />
 
   <!-- Favicons -->
-  <link href="assets/img/logo.jpg" rel="icon">
+  <link href="assets/img/logo.jpg" rel="icon" />
   <!-- <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon"> -->
 
   <!-- Google Fonts -->
   <link
     href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Jost:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i"
-    rel="stylesheet">
+    rel="stylesheet" />
 
   <!-- Vendor CSS Files -->
-  <link href="assets/vendor/aos/aos.css" rel="stylesheet">
-  <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-  <link href="assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
-  <link href="assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
-  <link href="assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
-  <link href="assets/vendor/remixicon/remixicon.css" rel="stylesheet">
-  <link href="assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
+  <link href="assets/vendor/aos/aos.css" rel="stylesheet" />
+  <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet" />
+  <link href="assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet" />
+  <link href="assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet" />
+  <link href="assets/vendor/remixicon/remixicon.css" rel="stylesheet" />
+  <link href="assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet" />
 
   <!-- Template Main CSS File -->
 
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.13.3/css/selectize.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.13.3/css/selectize.min.css" />
   <link rel="stylesheet" href="assets/css/themes/alertify.core.css" />
   <link rel="stylesheet" href="assets/css/themes/alertify.default.css" id="toggleCSS" />
-  <link rel="stylesheet" href="https://cdn.datatables.net/2.0.6/css/dataTables.bootstrap5.min.css">
-  <link href="assets/css/style.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.datatables.net/2.0.6/css/dataTables.bootstrap5.min.css" />
+  <link href="assets/css/style.css" rel="stylesheet" />
 </head>
 
 <body>
-
-
   <!-- ======= Header ======= -->
-  <header id="header" class="fixed-top ">
+  <header id="header" class="fixed-top">
     <div class="container d-flex align-items-center">
-
       <div class="logo me-auto">
         <!--   <a href="index.html">
           <img src="assets/img/log.png" alt="">
@@ -56,258 +53,64 @@
           <!-- <li><a class="nav-link scrollto active" href="#hero">Panel</a></li> -->
           <!-- <li><a class="nav-link scrollto" href="#about">Venta</a></li> -->
           <li><a class="nav-link scrollto" href="#services">Resumen</a></li>
-          <li><a class="nav-link scrollto" href="#portfolio" id="venta">Venta</a></li>
+          <li>
+            <a class="nav-link scrollto" href="#portfolio" id="venta">Venta</a>
+          </li>
           <!-- <li><a class="nav-link scrollto" href="#team">Team</a></li> -->
-          <li class="dropdown"><a href="#"><span>Clientes</span> <i class="bi bi-chevron-down"></i></a>
+          <li class="dropdown">
+            <a href="#"><span>Clientes</span> <i class="bi bi-chevron-down"></i></a>
             <ul>
-              <li><a class="nav-link scrollto" href="#contact">Registro</a></li>
-              <li><a class="nav-link scrollto" href="#">Asistencia</a></li>
-              <li><a class="nav-link scrollto" href="#team">Membresías</a></li>
+              <li>
+                <a class="nav-link scrollto" href="#team">Membresías</a>
+              </li>
+              <li>
+                <a class="nav-link scrollto" href="#contact">Registro</a>
+              </li>
+              <!--  <li>
+                <a class="nav-link scrollto" href="#">Asistencia</a>
+              </li> -->
             </ul>
           </li>
-          <li class="dropdown"><a href="#"><span>Administración</span> <i class="bi bi-chevron-down"></i></a>
+          <li class="dropdown">
+            <a href="#"><span>Administración</span> <i class="bi bi-chevron-down"></i></a>
             <ul>
-              <li><a class="nav-link scrollto" href="#productos">Productos</a></li>
-              <li><a class="nav-link scrollto" href="#tabClientes">Clientes</a></li>
-              <li><a class="nav-link scrollto" href="#tabEmpleados">Empleados</a></li>
+              <li>
+                <a class="nav-link scrollto" href="#productos">Productos</a>
+              </li>
+              <li>
+                <a class="nav-link scrollto" href="#tabClientes">Clientes</a>
+              </li>
+              <li>
+                <a class="nav-link scrollto" href="#tabEmpleados">Empleados</a>
+              </li>
             </ul>
           </li>
-          <li><a class="nav-link scrollto" href="#">Caja</a></li>
+          <li class="dropdown">
+            <a href="#"><span>Caja</span> <i class="bi bi-chevron-down"></i></a>
+            <ul>
+              <li>
+                <a class="nav-link scrollto" href="#cancelacionVenta">Cancelación venta</a>
+              </li>
+              <li>
+                <a class="nav-link scrollto" href="#caja">Corte de caja</a>
+              </li>
+            </ul>
+          </li>
           <li><a class="getstarted scrollto" href="#about">Salir</a></li>
         </ul>
         <i class="bi bi-list mobile-nav-toggle"></i>
-      </nav><!-- .navbar -->
-
+      </nav>
+      <!-- .navbar -->
     </div>
-  </header><!-- End Header -->
-
-  <!-- ======= Hero Section ======= -->
-  <!--  <section id="hero" class="d-flex align-items-center">
-
-    <div class="container">
-      <div class="row">
-        <div class="col-lg-6 d-flex flex-column justify-content-center pt-4 pt-lg-0 order-2 order-lg-1"
-          data-aos="fade-up" data-aos-delay="200">
-          <h1>Better Solutions For Your Business</h1>
-          <h2>We are team of talented designers making websites with Bootstrap</h2>
-          <div class="d-flex justify-content-center justify-content-lg-start">
-            <a href="#about" class="btn-get-started scrollto">Get Started</a>
-            <a href="https://www.youtube.com/watch?v=jDDaplaOz7Q" class="glightbox btn-watch-video"><i
-                class="bi bi-play-circle"></i><span>Watch Video</span></a>
-          </div>
-        </div>
-        <div class="col-lg-6 order-1 order-lg-2 hero-img" data-aos="zoom-in" data-aos-delay="200">
-          <img src="assets/img/hero-img.png" class="img-fluid animated" alt="">
-        </div>
-      </div>
-    </div>
-
-  </section> --><!-- End Hero -->
+  </header>
+  <!-- End Header -->
 
   <main id="main">
 
-    <!-- ======= Clients Section ======= -->
-    <!--   <section id="clients" class="clients section-bg">
-      <div class="container">
-
-        <div class="row" data-aos="zoom-in">
-
-          <div class="col-lg-2 col-md-4 col-6 d-flex align-items-center justify-content-center">
-            <img src="assets/img/clients/client-1.png" class="img-fluid" alt="">
-          </div>
-
-          <div class="col-lg-2 col-md-4 col-6 d-flex align-items-center justify-content-center">
-            <img src="assets/img/clients/client-2.png" class="img-fluid" alt="">
-          </div>
-
-          <div class="col-lg-2 col-md-4 col-6 d-flex align-items-center justify-content-center">
-            <img src="assets/img/clients/client-3.png" class="img-fluid" alt="">
-          </div>
-
-          <div class="col-lg-2 col-md-4 col-6 d-flex align-items-center justify-content-center">
-            <img src="assets/img/clients/client-4.png" class="img-fluid" alt="">
-          </div>
-
-          <div class="col-lg-2 col-md-4 col-6 d-flex align-items-center justify-content-center">
-            <img src="assets/img/clients/client-5.png" class="img-fluid" alt="">
-          </div>
-
-          <div class="col-lg-2 col-md-4 col-6 d-flex align-items-center justify-content-center">
-            <img src="assets/img/clients/client-6.png" class="img-fluid" alt="">
-          </div>
-
-        </div>
-
-      </div>
-    </section> --><!-- End Cliens Section -->
-
-    <!-- ======= About Us Section ======= -->
-    <!--   <section id="about" class="about">
-      <div class="container" data-aos="fade-up">
-
-        <div class="section-title">
-          <h2>About Us</h2>
-        </div>
-
-        <div class="row content">
-          <div class="col-lg-6">
-            <p>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
-              dolore
-              magna aliqua.
-            </p>
-            <ul>
-              <li><i class="ri-check-double-line"></i> Ullamco laboris nisi ut aliquip ex ea commodo consequat</li>
-              <li><i class="ri-check-double-line"></i> Duis aute irure dolor in reprehenderit in voluptate velit</li>
-              <li><i class="ri-check-double-line"></i> Ullamco laboris nisi ut aliquip ex ea commodo consequat</li>
-            </ul>
-          </div>
-          <div class="col-lg-6 pt-4 pt-lg-0">
-            <p>
-              Ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in
-              voluptate
-              velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
-              culpa qui officia deserunt mollit anim id est laborum.
-            </p>
-            <a href="#" class="btn-learn-more">Learn More</a>
-          </div>
-        </div>
-
-      </div>
-    </section> --><!-- End About Us Section -->
-
-    <!-- ======= Why Us Section ======= -->
-    <!--     <section id="why-us" class="why-us section-bg">
-      <div class="container-fluid" data-aos="fade-up">
-
-        <div class="row">
-
-          <div class="col-lg-7 d-flex flex-column justify-content-center align-items-stretch  order-2 order-lg-1">
-
-            <div class="content">
-              <h3>Eum ipsam laborum deleniti <strong>velit pariatur architecto aut nihil</strong></h3>
-              <p>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
-                dolore magna aliqua. Duis aute irure dolor in reprehenderit
-              </p>
-            </div>
-
-            <div class="accordion-list">
-              <ul>
-                <li>
-                  <a data-bs-toggle="collapse" class="collapse" data-bs-target="#accordion-list-1"><span>01</span> Non
-                    consectetur a erat nam at lectus urna duis? <i class="bx bx-chevron-down icon-show"></i><i
-                      class="bx bx-chevron-up icon-close"></i></a>
-                  <div id="accordion-list-1" class="collapse show" data-bs-parent=".accordion-list">
-                    <p>
-                      Feugiat pretium nibh ipsum consequat. Tempus iaculis urna id volutpat lacus laoreet non curabitur
-                      gravida. Venenatis lectus magna fringilla urna porttitor rhoncus dolor purus non.
-                    </p>
-                  </div>
-                </li>
-
-                <li>
-                  <a data-bs-toggle="collapse" data-bs-target="#accordion-list-2" class="collapsed"><span>02</span>
-                    Feugiat scelerisque varius morbi enim nunc? <i class="bx bx-chevron-down icon-show"></i><i
-                      class="bx bx-chevron-up icon-close"></i></a>
-                  <div id="accordion-list-2" class="collapse" data-bs-parent=".accordion-list">
-                    <p>
-                      Dolor sit amet consectetur adipiscing elit pellentesque habitant morbi. Id interdum velit laoreet
-                      id donec ultrices. Fringilla phasellus faucibus scelerisque eleifend donec pretium. Est
-                      pellentesque elit ullamcorper dignissim. Mauris ultrices eros in cursus turpis massa tincidunt
-                      dui.
-                    </p>
-                  </div>
-                </li>
-
-                <li>
-                  <a data-bs-toggle="collapse" data-bs-target="#accordion-list-3" class="collapsed"><span>03</span>
-                    Dolor sit amet consectetur adipiscing elit? <i class="bx bx-chevron-down icon-show"></i><i
-                      class="bx bx-chevron-up icon-close"></i></a>
-                  <div id="accordion-list-3" class="collapse" data-bs-parent=".accordion-list">
-                    <p>
-                      Eleifend mi in nulla posuere sollicitudin aliquam ultrices sagittis orci. Faucibus pulvinar
-                      elementum integer enim. Sem nulla pharetra diam sit amet nisl suscipit. Rutrum tellus pellentesque
-                      eu tincidunt. Lectus urna duis convallis convallis tellus. Urna molestie at elementum eu facilisis
-                      sed odio morbi quis
-                    </p>
-                  </div>
-                </li>
-
-              </ul>
-            </div>
-
-          </div>
-
-          <div class="col-lg-5 align-items-stretch order-1 order-lg-2 img"
-            style='background-image: url("assets/img/why-us.png");' data-aos="zoom-in" data-aos-delay="150">&nbsp;</div>
-        </div>
-
-      </div>
-    </section> --><!-- End Why Us Section -->
-
-    <!-- ======= Skills Section ======= -->
-    <!-- <section id="skills" class="skills">
-      <div class="container" data-aos="fade-up">
-
-        <div class="row">
-          <div class="col-lg-6 d-flex align-items-center" data-aos="fade-right" data-aos-delay="100">
-            <img src="assets/img/skills.png" class="img-fluid" alt="">
-          </div>
-          <div class="col-lg-6 pt-4 pt-lg-0 content" data-aos="fade-left" data-aos-delay="100">
-            <h3>Voluptatem dignissimos provident quasi corporis voluptates</h3>
-            <p class="fst-italic">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
-              dolore
-              magna aliqua.
-            </p>
-
-            <div class="skills-content">
-
-              <div class="progress">
-                <span class="skill">HTML <i class="val">100%</i></span>
-                <div class="progress-bar-wrap">
-                  <div class="progress-bar" role="progressbar" aria-valuenow="100" aria-valuemin="0"
-                    aria-valuemax="100"></div>
-                </div>
-              </div>
-
-              <div class="progress">
-                <span class="skill">CSS <i class="val">90%</i></span>
-                <div class="progress-bar-wrap">
-                  <div class="progress-bar" role="progressbar" aria-valuenow="90" aria-valuemin="0" aria-valuemax="100">
-                  </div>
-                </div>
-              </div>
-
-              <div class="progress">
-                <span class="skill">JavaScript <i class="val">75%</i></span>
-                <div class="progress-bar-wrap">
-                  <div class="progress-bar" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100">
-                  </div>
-                </div>
-              </div>
-
-              <div class="progress">
-                <span class="skill">Photoshop <i class="val">55%</i></span>
-                <div class="progress-bar-wrap">
-                  <div class="progress-bar" role="progressbar" aria-valuenow="55" aria-valuemin="0" aria-valuemax="100">
-                  </div>
-                </div>
-              </div>
-
-            </div>
-
-          </div>
-        </div>
-
-      </div>
-    </section> --><!-- End Skills Section -->
 
     <!-- ======= Services Section ======= -->
     <section id="services" class="services section-bg">
       <div class="container" data-aos="fade-up">
-
         <div class="section-title">
           <!-- <h2>Ventas del día</h2> -->
           <!-- <p>Vista resumida de los principales apartados de su sistema.</p> -->
@@ -320,34 +123,12 @@
           <canvas id="myChart" width="500" height="170"></canvas>
         </div>
       </div>
-
-
-    </section><!-- End Services Section -->
-
-
-    <!-- ======= Cta Section ======= -->
-    <!-- <section id="cta" class="cta">
-      <div class="container" data-aos="zoom-in">
-
-        <div class="row">
-          <div class="col-lg-9 text-center text-lg-start">
-            <h3>Call To Action</h3>
-            <p> Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
-              Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est
-              laborum.</p>
-          </div>
-          <div class="col-lg-3 cta-btn-container text-center">
-            <a class="cta-btn align-middle" href="#">Call To Action</a>
-          </div>
-        </div>
-
-      </div>
-    </section> --><!-- End Cta Section -->
+    </section>
+    <!-- End Services Section -->
 
     <!-- ======= Portfolio Section ======= -->
     <section id="portfolio" class="portfolio">
       <div class="container" data-aos="fade-up">
-
         <div class="section-title">
           <h2>Punto de venta</h2>
           <p>Filtra los productos por categorìa.</p>
@@ -357,28 +138,30 @@
           <div class="menu d-flex justify-content-center align-items-center">
             <label class="badge text-bg-light todos check"><span class="btn-menu p-3"
                 data-filter="todos">Todos</span></label>
-            <label class="badge text-bg-light "><span class="btn-menu p-3"
+            <label class="badge text-bg-light"><span class="btn-menu p-3"
                 data-filter="suplementos">Suplementos</span></label>
-            <label class="badge text-bg-light "><span class="btn-menu p-3"
+            <label class="badge text-bg-light"><span class="btn-menu p-3"
                 data-filter="accesorios">Accesorios</span></label>
-            <label class="badge text-bg-light "><span class="btn-menu p-3" data-filter="dulces">Dulces</span></label>
-            <label class="badge text-bg-light "><span class="btn-menu p-3" data-filter="bebidas">Bebidas</span></label>
+            <label class="badge text-bg-light"><span class="btn-menu p-3" data-filter="dulces">Dulces</span></label>
+            <label class="badge text-bg-light"><span class="btn-menu p-3" data-filter="bebidas">Bebidas</span></label>
           </div>
           <div class="galeria">
             <div id="catalogoProductos" class="d-flex flex-wrap justify-content-center"></div>
           </div>
         </div>
       </div>
-    </section><!-- End Portfolio Section -->
-
+    </section>
+    <!-- End Portfolio Section -->
 
     <!-- Lista de compras -->
 
     <div class="d-flex justify-content-end overflow-auto">
-      <div class="offcanvas offcanvas text-bg-dark  mh-100" data-bs-scroll="true" data-bs-backdrop="false" tabindex="-1"
+      <div class="offcanvas offcanvas text-bg-dark mh-100" data-bs-scroll="true" data-bs-backdrop="false" tabindex="-1"
         id="offcanvasScrolling" aria-labelledby="offcanvasScrollingLabel">
         <div class="offcanvas-header">
-          <h5 class="offcanvas-title" id="offcanvasScrollingLabel">Lista de venta</h5>
+          <h5 class="offcanvas-title" id="offcanvasScrollingLabel">
+            Lista de venta
+          </h5>
           <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas"
             aria-label="Close"></button>
         </div>
@@ -386,12 +169,10 @@
           <div class="mb-3 d-flex justify-content-between align-items-center">
             <div class="input-group input-group-sm w-50">
               <input type="number" min="1" class="form-control fs-5 text-center text-danger" aria-label="Descuento"
-                value="0" id="descuento">
+                value="0" id="descuento" />
               <span class="input-group-text">%</span>
             </div>
-            <button class="btn btn-sm btn-info" id="reset">
-              Resetear
-            </button>
+            <button class="btn btn-sm btn-info" id="reset">Resetear</button>
             <button class="btn btn-sm btn-danger" id="aplicarDescuento">
               Aplicar
             </button>
@@ -422,337 +203,47 @@
 
     <!-- Lista de compras finaliza-->
 
-
-    <!-- ======= Team Section ======= -->
+    <!-- Buscador de clientes -->
     <section id="team" class="team section-bg">
       <div class="container" data-aos="fade-up">
-
-        <div class="section-title"> <!-- Buscador de clientes -->
+        <div class="section-title">
           <h2>Membresías</h2>
           <form class="row g-3 justify-content-center">
             <div class="col-auto">
               <label for="staticEmail2" class="visually-hidden">Cliente</label>
-              <input type="text" readonly class="form-control-plaintext" id="staticEmail2" value="Nombre de cliente">
+              <input type="text" readonly class="form-control-plaintext" id="staticEmail2" value="Nombre de cliente" />
             </div>
             <div class="col-auto">
               <label for="buscarCliente" class="visually-hidden">Nombre de cliente</label>
-              <input type="text" class="form-control" id="nombreCliente" placeholder="Ingresa tu busqueda!">
+              <input type="text" class="form-control" id="nombreCliente" placeholder="Ingresa tu busqueda!" />
             </div>
             <div class="col-auto">
-              <button type="submit" class="btn btn-primary mb-3" id="btnBuscarCliente">Buscar</button>
+              <button type="submit" class="btn btn-primary mb-3" id="btnBuscarCliente">
+                Buscar
+              </button>
             </div>
           </form>
         </div>
 
-
         <!-- Tarjetas de clientes -->
         <div class="row" id="tarjetaClientes"></div>
-
       </div>
-    </section><!-- End Team Section -->
-
-    <!-- ======= Productos Section ======= -->
-    <section id="productos" class="pricing">
-      <div class="container" data-aos="fade-up">
-        <div class="section-title">
-          <h2>Productos y Servicios</h2>
-          <!--  <p>Magnam dolores commodi suscipit. Necessitatibus eius consequatur ex aliquid fuga eum quidem. Sit sint
-            consectetur velit. Quisquam quos quisquam cupiditate. Et nemo qui impedit suscipit alias ea. Quia fugiat sit
-            in iste officiis commodi quidem hic quas.</p> -->
-        </div>
-
-        <!--  <div class="btn_nuevo text-center">
-          <i id="abrirModal" class="bi bi-bag-plus fs-2" data-bs-toggle="modal" data-bs-target="#staticBackdrop"></i>
-        </div> -->
-
-        <!-- Button trigger modal -->
-        <div class="text-center">
-          <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop"
-            id="abrirModal">
-            <i class="bi bi-bag-plus-fill fs-2"></i>
-          </button>
-        </div>
-        <div class="table-responsive">
-          <table id="productosCat" class="table table-hover display" style="width: 100%;">
-            <thead class="text-uppercase">
-              <tr>
-                <th>Id</th>
-                <th>Codigo</th>
-                <th>Producto</th>
-                <th>Descripción</th>
-                <th>Unidad</th>
-                <th>Compra</th>
-                <th>Venta</th>
-                <th>Almacén</th>
-                <th>Categoria</th>
-                <th>Imagen</th>
-                <th>Acción</th>
-              </tr>
-            </thead>
-            <tbody class="align-middle"></tbody>
-          </table>
-        </div>
-      </div>
-    </section><!-- End Productos Section -->
+    </section>
 
 
-    <!-- Modal -->
-    <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-      aria-labelledby="staticBackdropLabel" aria-hidden="true">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h1 class="modal-title fs-5" id="staticBackdropLabel">Producto</h1>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-          </div>
-          <div class="modal-body">
-            <form id="formProductos">
-              <div class="row mb-3">
-                <label for="codigo" class="col-sm-3 col-form-label">Codigo</label>
-                <div class="col-sm-9">
-                  <input type="text" class="form-control" id="codigo" placeholder="Codigo">
-                </div>
-              </div>
-              <div class="row mb-3">
-                <label for="producto" class="col-sm-3 col-form-label">Producto</label>
-                <div class="col-sm-9">
-                  <input type="text" class="form-control" id="producto" placeholder="Producto">
-                </div>
-              </div>
-              <div class="row mb-3">
-                <label for="des" class="col-sm-3 col-form-label">Descripción</label>
-                <div class="col-sm-9">
-                  <input type="text" class="form-control" id="des" placeholder="Descripción del producto">
-                </div>
-              </div>
-              <div class="row mb-3">
-                <label for="unidad" class="col-sm-3 col-form-label">Unidad</label>
-                <div class="col-sm-9">
-                  <input type="text" class="form-control" id="unidad" placeholder="pza, lt, ml">
-                </div>
-              </div>
-              <div class="row mb-3">
-                <label for="compra" class="col-sm-3 col-form-label">Compra</label>
-                <div class="col-sm-9">
-                  <input type="number" class="form-control" id="compra" placeholder="Precio de compra">
-                </div>
-              </div>
-              <div class="row mb-3">
-                <label for="precio" class="col-sm-3 col-form-label">Venta</label>
-                <div class="col-sm-9">
-                  <input type="number" class="form-control" id="precio" placeholder="Precio de venta">
-                </div>
-              </div>
-              <div class="row mb-3">
-                <label for="cantidad" class="col-sm-3 col-form-label">Cantidad</label>
-                <div class="col-sm-9">
-                  <input type="number" class="form-control" id="cantidad" placeholder="cantidad en almacén" min="1">
-                </div>
-              </div>
-              <div class="row mb-3">
-                <label for="categoria" class="col-sm-3 col-form-label">Categoria</label>
-                <div class="col-sm-9">
-                  <input type="text" class="form-control" id="categoria" placeholder="Suplementos, Accesorios, Bebidas">
-                </div>
-              </div>
-              <div class="row mb-3">
-                <label for="imagen" class="col-sm-3 col-form-label">Imagen</label>
-                <div class="col-sm-9">
-                  <input type="file" class="form-control" id="imagen" name="imagen" accept="image/*">
-                  <div class="text-center mt-2 w-50">
-                    <img src="" alt="Imagen del cliente" class="imagen-cliente" width="100%">
-                  </div>
-                </div>
-              </div>
-            </form>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="cancelar">Cancelar</button>
-            <button type="button" class="btn btn-primary" id="agregarProducto">Guardar</button>
-            <button type="button" class="btn btn-info" id="actualizarProducto">Actualizar</button>
-          </div>
-        </div>
-      </div>
-    </div>
-
-
-    <!-- ======= Clientes Section ======= -->
-    <section id="tabClientes" class="pricing">
-      <div class="container" data-aos="fade-up">
-        <div class="section-title">
-          <h2>Clientes</h2>
-          <!--  <p>Magnam dolores commodi suscipit. Necessitatibus eius consequatur ex aliquid fuga eum quidem. Sit sint
-            consectetur velit. Quisquam quos quisquam cupiditate. Et nemo qui impedit suscipit alias ea. Quia fugiat sit
-            in iste officiis commodi quidem hic quas.</p> -->
-        </div>
-        <div class="table-responsive">
-          <table id="clientes" class="table table-hover display" style="width: 100%;">
-            <thead class="text-uppercase">
-              <tr>
-                <th>Id</th>
-                <th>Nombre</th>
-                <th>Apellido</th>
-                <th>Sexo</th>
-                <th>Correo</th>
-                <th>Acción</th>
-              </tr>
-            </thead>
-            <tbody></tbody>
-          </table>
-        </div>
-      </div>
-    </section><!-- End Clientes Section -->
-
-    <!-- ======= Empleados Section ======= -->
-    <section id="tabEmpleados" class="pricing">
-      <div class="container" data-aos="fade-up">
-        <div class="section-title">
-          <h2>Empleados</h2>
-          <!--  <p>Magnam dolores commodi suscipit. Necessitatibus eius consequatur ex aliquid fuga eum quidem. Sit sint
-            consectetur velit. Quisquam quos quisquam cupiditate. Et nemo qui impedit suscipit alias ea. Quia fugiat sit
-            in iste officiis commodi quidem hic quas.</p> -->
-        </div>
-        <div class="table-responsive mt-4 p-3">
-          <table id="empleados" class="table table-sm table-hover display" style="width: 100%;">
-            <thead class="text-uppercase">
-              <tr>
-                <th>Id</th>
-                <th>Nombre</th>
-                <th>Apellidos</th>
-                <th>Rol</th>
-                <th>Contraseña</th>
-                <th>Acción</th>
-              </tr>
-            </thead>
-            <tbody></tbody>
-          </table>
-        </div>
-      </div>
-    </section><!-- End Empleados Section -->
-
-    <!-- ======= Frequently Asked Questions Section ======= -->
-    <section id="faq" class="faq section-bg">
-      <div class="container" data-aos="fade-up">
-
-        <div class="section-title">
-          <h2>Frequently Asked Questions</h2>
-          <p>Magnam dolores commodi suscipit. Necessitatibus eius consequatur ex aliquid fuga eum quidem. Sit sint
-            consectetur velit. Quisquam quos quisquam cupiditate. Et nemo qui impedit suscipit alias ea. Quia fugiat sit
-            in iste officiis commodi quidem hic quas.</p>
-        </div>
-
-        <div class="faq-list">
-          <ul>
-            <li data-aos="fade-up" data-aos-delay="100">
-              <i class="bx bx-help-circle icon-help"></i> <a data-bs-toggle="collapse" class="collapse"
-                data-bs-target="#faq-list-1">Non consectetur a erat nam at lectus urna duis? <i
-                  class="bx bx-chevron-down icon-show"></i><i class="bx bx-chevron-up icon-close"></i></a>
-              <div id="faq-list-1" class="collapse show" data-bs-parent=".faq-list">
-                <p>
-                  Feugiat pretium nibh ipsum consequat. Tempus iaculis urna id volutpat lacus laoreet non curabitur
-                  gravida. Venenatis lectus magna fringilla urna porttitor rhoncus dolor purus non.
-                </p>
-              </div>
-            </li>
-
-            <li data-aos="fade-up" data-aos-delay="200">
-              <i class="bx bx-help-circle icon-help"></i> <a data-bs-toggle="collapse" data-bs-target="#faq-list-2"
-                class="collapsed">Feugiat scelerisque varius morbi enim nunc? <i
-                  class="bx bx-chevron-down icon-show"></i><i class="bx bx-chevron-up icon-close"></i></a>
-              <div id="faq-list-2" class="collapse" data-bs-parent=".faq-list">
-                <p>
-                  Dolor sit amet consectetur adipiscing elit pellentesque habitant morbi. Id interdum velit laoreet id
-                  donec ultrices. Fringilla phasellus faucibus scelerisque eleifend donec pretium. Est pellentesque elit
-                  ullamcorper dignissim. Mauris ultrices eros in cursus turpis massa tincidunt dui.
-                </p>
-              </div>
-            </li>
-
-            <li data-aos="fade-up" data-aos-delay="300">
-              <i class="bx bx-help-circle icon-help"></i> <a data-bs-toggle="collapse" data-bs-target="#faq-list-3"
-                class="collapsed">Dolor sit amet consectetur adipiscing elit? <i
-                  class="bx bx-chevron-down icon-show"></i><i class="bx bx-chevron-up icon-close"></i></a>
-              <div id="faq-list-3" class="collapse" data-bs-parent=".faq-list">
-                <p>
-                  Eleifend mi in nulla posuere sollicitudin aliquam ultrices sagittis orci. Faucibus pulvinar elementum
-                  integer enim. Sem nulla pharetra diam sit amet nisl suscipit. Rutrum tellus pellentesque eu tincidunt.
-                  Lectus urna duis convallis convallis tellus. Urna molestie at elementum eu facilisis sed odio morbi
-                  quis
-                </p>
-              </div>
-            </li>
-
-            <li data-aos="fade-up" data-aos-delay="400">
-              <i class="bx bx-help-circle icon-help"></i> <a data-bs-toggle="collapse" data-bs-target="#faq-list-4"
-                class="collapsed">Tempus quam pellentesque nec nam aliquam sem et tortor consequat? <i
-                  class="bx bx-chevron-down icon-show"></i><i class="bx bx-chevron-up icon-close"></i></a>
-              <div id="faq-list-4" class="collapse" data-bs-parent=".faq-list">
-                <p>
-                  Molestie a iaculis at erat pellentesque adipiscing commodo. Dignissim suspendisse in est ante in. Nunc
-                  vel risus commodo viverra maecenas accumsan. Sit amet nisl suscipit adipiscing bibendum est. Purus
-                  gravida quis blandit turpis cursus in.
-                </p>
-              </div>
-            </li>
-
-            <li data-aos="fade-up" data-aos-delay="500">
-              <i class="bx bx-help-circle icon-help"></i> <a data-bs-toggle="collapse" data-bs-target="#faq-list-5"
-                class="collapsed">Tortor vitae purus faucibus ornare. Varius vel pharetra vel turpis nunc eget lorem
-                dolor? <i class="bx bx-chevron-down icon-show"></i><i class="bx bx-chevron-up icon-close"></i></a>
-              <div id="faq-list-5" class="collapse" data-bs-parent=".faq-list">
-                <p>
-                  Laoreet sit amet cursus sit amet dictum sit amet justo. Mauris vitae ultricies leo integer malesuada
-                  nunc vel. Tincidunt eget nullam non nisi est sit amet. Turpis nunc eget lorem dolor sed. Ut venenatis
-                  tellus in metus vulputate eu scelerisque.
-                </p>
-              </div>
-            </li>
-
-          </ul>
-        </div>
-
-      </div>
-    </section><!-- End Frequently Asked Questions Section -->
-
-    <!-- ======= Contact Section ======= -->
+    <!-- ======= Registro de nueva membresía ======= -->
     <section id="contact" class="contact">
       <div class="container" data-aos="fade-up">
-
         <div class="section-title">
           <h2>Nueva membresía</h2>
-          <p>Ingresa los datos requeridos para dar de alta a un nuevo cliente, todos los datos son obligatorios.</p>
+          <p>
+            Ingresa los datos requeridos para dar de alta a un nuevo cliente,
+            todos los datos son obligatorios.
+          </p>
         </div>
 
         <div class="row">
-
-          <!--  <div class="col-lg-5 d-flex align-items-stretch">
-            <div class="info">
-              <div class="address">
-                <i class="bi bi-geo-alt"></i>
-                <h4>Location:</h4>
-                <p>A108 Adam Street, New York, NY 535022</p>
-              </div>
-
-              <div class="email">
-                <i class="bi bi-envelope"></i>
-                <h4>Email:</h4>
-                <p>info@example.com</p>
-              </div>
-
-              <div class="phone">
-                <i class="bi bi-phone"></i>
-                <h4>Call:</h4>
-                <p>+1 5589 55488 55s</p>
-              </div>
-
-              <iframe
-                src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d12097.433213460943!2d-74.0062269!3d40.7101282!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0xb89d1fe6bc499443!2sDowntown+Conference+Center!5e0!3m2!1smk!2sbg!4v1539943755621"
-                frameborder="0" style="border:0; width: 100%; height: 290px;" allowfullscreen></iframe>
-            </div>
-
-          </div> -->
-
-          <div class="col-lg-6 mt-5 mt-lg-0 d-flex align-items-stretch m-auto" style="position: relative;">
+          <div class="col-lg-6 mt-5 mt-lg-0 d-flex align-items-stretch m-auto" style="position: relative">
             <form action="#" method="post" role="form" class="php-email-form" id="formRegistrar">
               <div class="row align-items-center">
                 <div class="form-group col-md-6">
@@ -762,13 +253,13 @@
                 </div>
                 <div class="form-group col-md-6">
                   <label for="name">Nick</label>
-                  <input type="text" class="form-control" name="apellido" id="apellido" required>
+                  <input type="text" class="form-control" name="apellido" id="apellido" required />
                 </div>
               </div>
               <div class="row">
                 <div class="form-group col-md-6">
                   <label for="name">Correo</label>
-                  <input type="email" class="form-control" name="email" id="email" required>
+                  <input type="email" class="form-control" name="email" id="emailCliente" required />
                 </div>
                 <div class="form-group col-md-6">
                   <label for="name">Sexo</label>
@@ -794,46 +285,436 @@
                   <select class="form-control serviciosSelect" style="width: 100%" id="tipoMembresia" required></select>
                 </div>
               </div>
-
-              <!-- <div class="form-group">
-                <label for="name">Message</label>
-                <textarea class="form-control" name="message" rows="10" required></textarea>
-              </div> -->
+              <div class="row text-center justify-content-center">
+                <label for="">Descuento</label>
+                <div class="col-md-4 d-flex ">
+                  <input type="number" class="form-control text-danger text-center fs-5" value="0"
+                    aria-label="Descuento" id="descuentoCliente" placeholder="Descuento">
+                  <span class="input-group-text text-danger">%</span>
+                </div>
+              </div>
               <div class="my-3">
                 <div id="mensaje"></div>
                 <div class="loading">Loading</div>
                 <div class="error-message"></div>
-                <div class="sent-message">Your message has been sent. Thank you!</div>
+                <div class="sent-message">
+                  Your message has been sent. Thank you!
+                </div>
               </div>
               <div class="text-center">
                 <button type="submit" id="registrarCliente">Registrar</button>
               </div>
-              <!-- <div class="alert alert-success d-none" role="alert" id="registroExitoso">
-                Cliente registrado!
-              </div> -->
             </form>
-
-
           </div>
+        </div>
+      </div>
+    </section>
 
+
+
+    <!-- ======= Administración ======= -->
+
+    <section id="productos" class="pricing">
+      <div class="container" data-aos="fade-up">
+        <div class="section-title">
+          <h2 class="mb-0">Productos y Servicios</h2>
+          <!--  <p>Magnam dolores commodi suscipit. Necessitatibus eius consequatur ex aliquid fuga eum quidem. Sit sint
+            consectetur velit. Quisquam quos quisquam cupiditate. Et nemo qui impedit suscipit alias ea. Quia fugiat sit
+            in iste officiis commodi quidem hic quas.</p> -->
         </div>
 
-      </div>
-    </section><!-- End Contact Section -->
+        <!--  <div class="btn_nuevo text-center">
+          <i id="abrirModal" class="bi bi-bag-plus fs-2" data-bs-toggle="modal" data-bs-target="#staticBackdrop"></i>
+        </div> -->
 
-  </main><!-- End #main -->
+        <div class="text-center">
+          <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop"
+            id="abrirModal">
+            <i class="bi bi-bag-plus-fill fs-5"></i>
+          </button>
+        </div>
+        <div class="table-responsive">
+          <table id="productosCat" class="table table-sm display align-middle" style="width: 100%">
+            <thead class="text-uppercase">
+              <tr>
+                <th>Id</th>
+                <th>Codigo</th>
+                <th style="width: 180px;">Imagen</th>
+                <th>Producto</th>
+                <th style="width: 250px;">Descripción</th>
+                <th>Unidad</th>
+                <th>Compra</th>
+                <th>Venta</th>
+                <th>Almacén</th>
+                <th>Categoria</th>
+                <th>Acción</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- Modal de productos -->
+    <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+      aria-labelledby="staticBackdropLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5" id="staticBackdropLabel">
+              Producto
+            </h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <form id="formProductos">
+              <div class="row mb-3">
+                <label for="codigo" class="col-sm-3 col-form-label">Codigo</label>
+                <div class="col-sm-9">
+                  <input type="text" class="form-control" id="codigo" placeholder="Codigo" />
+                </div>
+              </div>
+              <div class="row mb-3">
+                <label for="producto" class="col-sm-3 col-form-label">Producto</label>
+                <div class="col-sm-9">
+                  <input type="text" class="form-control" id="producto" placeholder="Producto" />
+                </div>
+              </div>
+              <div class="row mb-3">
+                <label for="des" class="col-sm-3 col-form-label">Descripción</label>
+                <div class="col-sm-9">
+                  <input type="text" class="form-control" id="des" placeholder="Descripción del producto" />
+                </div>
+              </div>
+              <div class="row mb-3">
+                <label for="unidad" class="col-sm-3 col-form-label">Unidad</label>
+                <div class="col-sm-9">
+                  <input type="text" class="form-control" id="unidad" placeholder="pza, lt, ml" />
+                </div>
+              </div>
+              <div class="row mb-3">
+                <label for="compra" class="col-sm-3 col-form-label">Compra</label>
+                <div class="col-sm-9">
+                  <input type="number" class="form-control" id="compra" placeholder="Precio de compra" />
+                </div>
+              </div>
+              <div class="row mb-3">
+                <label for="precio" class="col-sm-3 col-form-label">Venta</label>
+                <div class="col-sm-9">
+                  <input type="number" class="form-control" id="precio" placeholder="Precio de venta" />
+                </div>
+              </div>
+              <div class="row mb-3">
+                <label for="cantidad" class="col-sm-3 col-form-label">Cantidad</label>
+                <div class="col-sm-9">
+                  <input type="number" class="form-control" id="cantidad" placeholder="cantidad en almacén" min="1" />
+                </div>
+              </div>
+              <div class="row mb-3">
+                <label for="categoria" class="col-sm-3 col-form-label">Categoria</label>
+                <div class="col-sm-9">
+                  <input type="text" class="form-control" id="categoria"
+                    placeholder="Suplementos, Accesorios, Bebidas" />
+                </div>
+              </div>
+              <div class="row mb-3">
+                <label for="imagen" class="col-sm-3 col-form-label">Imagen</label>
+                <div class="col-sm-9">
+                  <input type="file" class="form-control" id="imagen" name="imagen" accept="image/*" />
+                  <div class="text-center mt-2 w-50">
+                    <img src="" alt="Imagen del cliente" class="imagen-cliente" width="100%" />
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="cancelar">
+              Cancelar
+            </button>
+            <button type="button" class="btn btn-primary" id="agregarProducto">
+              Guardar
+            </button>
+            <button type="button" class="btn btn-info" id="actualizarProducto">
+              Actualizar
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ======= Clientes  ======= -->
+    <section id="tabClientes" class="pricing">
+      <div class="container" data-aos="fade-up">
+        <div class="section-title">
+          <h2 class="mb-0">Clientes</h2>
+          <!--  <p>Magnam dolores commodi suscipit. Necessitatibus eius consequatur ex aliquid fuga eum quidem. Sit sint
+            consectetur velit. Quisquam quos quisquam cupiditate. Et nemo qui impedit suscipit alias ea. Quia fugiat sit
+            in iste officiis commodi quidem hic quas.</p> -->
+        </div>
+        <div class="table-responsive">
+          <table id="clientes" class="table table-sm table-hover display align-middle" style="width: 100%">
+            <thead class="text-uppercase">
+              <tr>
+                <th>Id</th>
+                <th style="width: 150px;">Nombre</th>
+                <th>Apellido</th>
+                <th>Sexo</th>
+                <th>Correo</th>
+                <th>Foto</th>
+                <th>Acción</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- Modal clientes -->
+    <div class="modal fade" id="staticBackdropCliente" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+      aria-labelledby="staticBackdropLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="staticBackdropLabel">
+              Agregar Cliente
+            </h5>
+          </div>
+          <div class="modal-body">
+            <form id="formClientes" enctype="multipart/form-data">
+              <div class="form-group">
+                <label for="nombre">Nombre</label>
+                <input type="text" class="form-control" id="nameClient" placeholder="Nombre" />
+              </div>
+              <div class="form-group">
+                <label for="paterno">Apellido</label>
+                <input type="text" class="form-control" id="ap" placeholder="Apellido paterno" />
+              </div>
+              <div class="form-group">
+                <label for="sexo">Sexo</label>
+                <!-- <input type="text" class="form-control" id="ap" placeholder="Apellido paterno"> -->
+                <select name="sexo" id="sexo" class="form-control">
+                  <option value="H">HOMBRE</option>
+                  <option value="M">MUJER</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" class="form-control" id="email" placeholder="Email" />
+              </div>
+              <div class="form-group">
+                <label for="imagen">Foto</label>
+                <div class="d-flex align-items-center">
+                  <input type="file" class="form-control-file" id="imagen-cliente" accept="image/*" name="imagen" />
+                  <div class="text-center mt-2 w-25">
+                    <img src="" alt="Imagen del cliente" class="imagen-cliente rounded-circle" width="100%" />
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="cancelarCliente">
+              Cancelar
+            </button>
+            <button type="button" class="btn btn-primary" id="agregarCliente">
+              Guardar
+            </button>
+            <button type="button" class="btn btn-info" id="actualizarCliente">
+              Actualizar
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ======= Empleados ======= -->
+    <section id="tabEmpleados" class="pricing">
+      <div class="container" data-aos="fade-up">
+        <div class="section-title">
+          <h2 class="mb-0">Empleados</h2>
+          <!--  <p>Magnam dolores commodi suscipit. Necessitatibus eius consequatur ex aliquid fuga eum quidem. Sit sint
+            consectetur velit. Quisquam quos quisquam cupiditate. Et nemo qui impedit suscipit alias ea. Quia fugiat sit
+            in iste officiis commodi quidem hic quas.</p> -->
+        </div>
+        <div class="text-center">
+          <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdropEmpleado"
+            id="abrirModalEmpleado">
+            <i class="bi bi-person-add fs-5"></i>
+          </button>
+        </div>
+        <div class="table-responsive">
+          <table id="empleados" class="table table-sm table-hover display align-middle" style="width: 100%">
+            <thead class="text-uppercase">
+              <tr>
+                <th>Id</th>
+                <th>Nombre</th>
+                <th>Apellidos</th>
+                <th>Rol</th>
+                <th>Contraseña</th>
+                <th>Acción</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- Modal -->
+    <div class="modal fade" id="staticBackdropEmpleado" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+      aria-labelledby="staticBackdropLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="staticBackdropLabel">Alta de empleado</h5>
+          </div>
+          <div class="modal-body">
+            <form id="formEmpleados">
+              <div class="form-group">
+                <label for="nombreEmpleado">Nombre</label>
+                <input type="text" class="form-control" id="nombreEmpleado" placeholder="Nombre">
+              </div>
+              <div class="form-group">
+                <label for="apEmpleado">Apellidos</label>
+                <input type="text" class="form-control" id="apEmpleado" placeholder="Apellido paterno">
+              </div>
+              <div class="form-group">
+                <label for="pass">Contraseña</label>
+                <input type="password" class="form-control" id="pass" placeholder="Contraseña">
+              </div>
+              <div class="form-group">
+                <label for="rol">Rol</label>
+                <select class="form-control" id="rol">
+                  <option value="1">Aministrador</option>
+                  <option value="2">Recepción</option>
+                  <option value="3">Instructor</option>
+                </select>
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+              id="cancelarEmpleado">Cancelar</button>
+            <button type="button" class="btn btn-primary" id="agregarEmpleado">Guardar</button>
+            <button type="button" class="btn btn-info" id="actualizarEmpleado">Actualizar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- ======= Cancelación de venta de productos ======= -->
+    <section id="cancelacionVenta" class="pricing">
+      <div class="container" data-aos="fade-up">
+        <div class="section-title">
+          <h2 class="mb-0">Cancelación de venta</h2>
+          <!--  <p>Magnam dolores commodi suscipit. Necessitatibus eius consequatur ex aliquid fuga eum quidem. Sit sint
+            consectetur velit. Quisquam quos quisquam cupiditate. Et nemo qui impedit suscipit alias ea. Quia fugiat sit
+            in iste officiis commodi quidem hic quas.</p> -->
+        </div>
+        <!--   <div class="text-center">
+          <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdropEmpleado"
+            id="abrirModalEmpleado">
+            <i class="bi bi-person-add fs-2"></i>
+          </button>
+        </div> -->
+        <div class="table-responsive">
+          <table id="cancelacionVentaProducto" class="table table-sm table-hover display align-middle"
+            style="width: 100%;">
+            <thead>
+              <tr>
+                <th>id</th>
+                <th>p_s</th>
+                <th style="width: 180px;">Imagen</th>
+                <th style="width: 250px;">Producto</th>
+                <th>Unidad</th>
+                <th>Precio</th>
+                <th>Descuento</th>
+                <th>Cantidad</th>
+                <th>Vendió</th>
+                <th>Subtotal</th>
+                <th>Fecha</th>
+                <th>Acción</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+
+        </div>
+      </div>
+    </section>
+    <!-- ======= Corte de caja ======= -->
+    <section id="caja" class="pricing">
+      <div class="container" data-aos="fade-up">
+        <div class="section-title">
+          <h2 class="mb-0">Corte de caja</h2>
+          <!--  <p>Magnam dolores commodi suscipit. Necessitatibus eius consequatur ex aliquid fuga eum quidem. Sit sint
+            consectetur velit. Quisquam quos quisquam cupiditate. Et nemo qui impedit suscipit alias ea. Quia fugiat sit
+            in iste officiis commodi quidem hic quas.</p> -->
+        </div>
+        <!--   <div class="text-center">
+          <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdropEmpleado"
+            id="abrirModalEmpleado">
+            <i class="bi bi-person-add fs-2"></i>
+          </button>
+        </div> -->
+        <div class="table-responsive">
+          <table id="resumenVentasXdia" class="table table-sm table-hover display align-middle" style="width: 100%;">
+            <thead class="text-uppercase">
+              <tr>
+                <th>Imagen</th>
+                <th>Producto</th>
+                <th>Unidad</th>
+                <th>Compra</th>
+                <th>Precio</th>
+                <th>Descuento</th>
+                <th>Vendidos</th>
+                <th>Monto</th>
+                <th>Ganancia</th>
+                <th>Fecha</th>
+                <th>Empleado</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+            <tfoot>
+              <tr>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th style="font-size:1rem !important;"></th>
+                <th style="color: #fff;border:2px solid #fff;background-color:#34495E;"></th>
+                <th style="color: #fff;border:2px solid #fff;background-color:#17A589;"></th>
+              </tr>
+            </tfoot>
+          </table>
+
+        </div>
+      </div>
+    </section>
+
+
+
+  </main>
 
   <!-- ======= Footer ======= -->
-  <footer id="footer">
-
+  <!-- <footer id="footer">
     <div class="footer-newsletter">
       <div class="container">
         <div class="row justify-content-center">
           <div class="col-lg-6">
             <h4>Join Our Newsletter</h4>
-            <p>Tamen quem nulla quae legam multos aute sint culpa legam noster magna</p>
+            <p>
+              Tamen quem nulla quae legam multos aute sint culpa legam noster
+              magna
+            </p>
             <form action="" method="post">
-              <input type="email" name="email"><input type="submit" value="Subscribe">
+              <input type="email" name="email" /><input type="submit" value="Subscribe" />
             </form>
           </div>
         </div>
@@ -843,43 +724,70 @@
     <div class="footer-top">
       <div class="container">
         <div class="row">
-
           <div class="col-lg-3 col-md-6 footer-contact">
             <h3>Arsha</h3>
             <p>
-              A108 Adam Street <br>
-              New York, NY 535022<br>
-              United States <br><br>
-              <strong>Phone:</strong> +1 5589 55488 55<br>
-              <strong>Email:</strong> info@example.com<br>
+              A108 Adam Street <br />
+              New York, NY 535022<br />
+              United States <br /><br />
+              <strong>Phone:</strong> +1 5589 55488 55<br />
+              <strong>Email:</strong> info@example.com<br />
             </p>
           </div>
 
           <div class="col-lg-3 col-md-6 footer-links">
             <h4>Useful Links</h4>
             <ul>
-              <li><i class="bx bx-chevron-right"></i> <a href="#">Home</a></li>
-              <li><i class="bx bx-chevron-right"></i> <a href="#">About us</a></li>
-              <li><i class="bx bx-chevron-right"></i> <a href="#">Services</a></li>
-              <li><i class="bx bx-chevron-right"></i> <a href="#">Terms of service</a></li>
-              <li><i class="bx bx-chevron-right"></i> <a href="#">Privacy policy</a></li>
+              <li>
+                <i class="bx bx-chevron-right"></i> <a href="#">Home</a>
+              </li>
+              <li>
+                <i class="bx bx-chevron-right"></i> <a href="#">About us</a>
+              </li>
+              <li>
+                <i class="bx bx-chevron-right"></i> <a href="#">Services</a>
+              </li>
+              <li>
+                <i class="bx bx-chevron-right"></i>
+                <a href="#">Terms of service</a>
+              </li>
+              <li>
+                <i class="bx bx-chevron-right"></i>
+                <a href="#">Privacy policy</a>
+              </li>
             </ul>
           </div>
 
           <div class="col-lg-3 col-md-6 footer-links">
             <h4>Our Services</h4>
             <ul>
-              <li><i class="bx bx-chevron-right"></i> <a href="#">Web Design</a></li>
-              <li><i class="bx bx-chevron-right"></i> <a href="#">Web Development</a></li>
-              <li><i class="bx bx-chevron-right"></i> <a href="#">Product Management</a></li>
-              <li><i class="bx bx-chevron-right"></i> <a href="#">Marketing</a></li>
-              <li><i class="bx bx-chevron-right"></i> <a href="#">Graphic Design</a></li>
+              <li>
+                <i class="bx bx-chevron-right"></i> <a href="#">Web Design</a>
+              </li>
+              <li>
+                <i class="bx bx-chevron-right"></i>
+                <a href="#">Web Development</a>
+              </li>
+              <li>
+                <i class="bx bx-chevron-right"></i>
+                <a href="#">Product Management</a>
+              </li>
+              <li>
+                <i class="bx bx-chevron-right"></i> <a href="#">Marketing</a>
+              </li>
+              <li>
+                <i class="bx bx-chevron-right"></i>
+                <a href="#">Graphic Design</a>
+              </li>
             </ul>
           </div>
 
           <div class="col-lg-3 col-md-6 footer-links">
             <h4>Our Social Networks</h4>
-            <p>Cras fermentum odio eu feugiat lide par naso tierra videa magna derita valies</p>
+            <p>
+              Cras fermentum odio eu feugiat lide par naso tierra videa magna
+              derita valies
+            </p>
             <div class="social-links mt-3">
               <a href="#" class="twitter"><i class="bx bxl-twitter"></i></a>
               <a href="#" class="facebook"><i class="bx bxl-facebook"></i></a>
@@ -888,7 +796,6 @@
               <a href="#" class="linkedin"><i class="bx bxl-linkedin"></i></a>
             </div>
           </div>
-
         </div>
       </div>
     </div>
@@ -898,14 +805,11 @@
         &copy; Copyright <strong><span>Arsha</span></strong>. All Rights Reserved
       </div>
       <div class="credits">
-        <!-- All the links in the footer should remain intact. -->
-        <!-- You can delete the links only if you purchased the pro version. -->
-        <!-- Licensing information: https://bootstrapmade.com/license/ -->
-        <!-- Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/arsha-free-bootstrap-html-template-corporate/ -->
         Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
       </div>
     </div>
-  </footer><!-- End Footer -->
+  </footer> -->
+  <!-- End Footer -->
 
   <div id="preloader"></div>
   <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i
@@ -921,8 +825,6 @@
   <script src="assets/vendor/php-email-form/validate.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment-with-locales.min.js"></script>
 
-
-
   <!-- Template Main JS File -->
   <script src="assets/js/jquery-3.7.1.min.js"></script>
   <script src="assets/js/lib/alertify.js"></script>
@@ -931,11 +833,6 @@
   <script src="https://cdn.datatables.net/2.0.6/js/dataTables.min.js"></script>
   <script src="https://cdn.datatables.net/2.0.6/js/dataTables.bootstrap5.min.js"></script>
   <script src="assets/js/main.js"></script>
-
-
-
-
-
 </body>
 
 </html>

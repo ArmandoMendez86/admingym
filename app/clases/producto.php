@@ -140,10 +140,12 @@ class Producto extends Model
         }
     }
 
+
+    /* Valido */
     public function ventasProductosAll()
     {
-        $sql = "SELECT venta_producto.id, producto.pro_serv, producto.unidad, venta_producto.cantidad, empleado.nombre AS nombre_empleado, venta_producto.fecha,  
-        producto.precio * venta_producto.cantidad AS subtotal
+        $sql = "SELECT venta_producto.id, venta_producto.p_s, producto.img, producto.pro_serv, producto.unidad, producto.precio, venta_producto.descuento, venta_producto.cantidad, empleado.nombre AS nombre_empleado, venta_producto.fecha,  
+        (producto.precio * venta_producto.cantidad) * (1 - (venta_producto.descuento / 100)) AS subtotal
         FROM venta_producto
         INNER JOIN producto ON venta_producto.p_s = producto.id
         INNER JOIN empleado ON venta_producto.idempleado = empleado.id";
@@ -244,6 +246,8 @@ class Producto extends Model
             $stmt->close();
         }
     }
+
+    /* valido */
     public function eliminarVentaProducto($id)
     {
         $sql = "DELETE FROM venta_producto WHERE id = ?";
@@ -255,25 +259,42 @@ class Producto extends Model
         }
     }
 
+    /* valido */
+    public function restablecerAlmacen($data)
+    {
+        $sql = "UPDATE producto SET cantidad = cantidad + ? WHERE id = ?";
+        $stmt = $this->conection->prepare($sql);
+        $p_s = $data['p_s'];
+        $cantidad = $data['cantidad'];
+        $stmt->bind_param('ii', $cantidad, $p_s);
+        $stmt->execute();
+        $stmt->close();
+        return true;
+    }
+
+    /* valido */
     public function resumenVentasXdia()
     {
         $fechaHoy = date("Y-m-d");
         /* $fechaHoy = '2023-12-14'; */
-        $sql = " SELECT 
+        $sql = " SELECT
+        producto.img, 
         producto.pro_serv, 
         producto.unidad, 
         producto.compra, 
-        producto.p_d AS precio, 
+        producto.precio,
+        vp.descuento, 
         SUM(vp.cantidad) AS total_cantidad, 
-        SUM(producto.p_d * vp.cantidad) AS total_subtotal,
-        SUM((producto.p_d - producto.compra) * vp.cantidad) AS ganancia,
-        producto.cantidad, 
-        vp.fecha 
+        SUM(producto.precio * vp.cantidad) * (1 - (vp.descuento / 100)) AS total_subtotal,
+        SUM((producto.precio * vp.cantidad) * (1 - (vp.descuento / 100)) - producto.compra * vp.cantidad) AS ganancia,
+        vp.fecha,
+        empleado.nombre
         FROM ( 
-        SELECT p_s, cantidad, fecha FROM venta_producto 
-        UNION ALL SELECT p_s, cantidad, fventa FROM venta_servicio ) AS vp 
-        INNER JOIN producto ON vp.p_s = producto.id 
-        GROUP BY producto.pro_serv, producto.unidad, producto.p_d, DATE(vp.fecha)";
+        SELECT p_s, cantidad, fecha, descuento, idempleado FROM venta_producto 
+        UNION ALL SELECT p_s, cantidad, fecha, descuento, idempleado FROM venta_servicio ) AS vp 
+        INNER JOIN producto ON vp.p_s = producto.id
+        INNER JOIN empleado ON vp.idempleado = empleado.id
+        GROUP BY producto.pro_serv, producto.unidad, DATE(vp.fecha);";
         $stmt = $this->conection->prepare($sql);
         $stmt->execute();
         $results = $stmt->get_result();
@@ -318,6 +339,7 @@ class Producto extends Model
     }
 
 
+    /* valido */
     public function ventasXdiaGrafica()
     {
         $fechaHoy = date("Y-m-d");

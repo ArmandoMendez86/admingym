@@ -11,7 +11,7 @@ class Empleado extends Model
 
     public function listaEmpleados()
     {
-        $sql = "SELECT empleado.id, nombre, ap, empleado.password, rol.role FROM empleado
+        $sql = "SELECT empleado.id, nombre, ap, rol.role, empleado.password FROM empleado
         INNER JOIN rol ON rol.id = empleado.idrol";
         $stmt = $this->conection->prepare($sql);
         $stmt->execute();

@@ -1,6 +1,7 @@
 <?php
 require '../clases/producto.php';
 
-$id = $_POST['id'];
+$data = $_POST;
 $eliminarVentaProducto = new Producto;
-$eliminarVentaProducto->eliminarVentaProducto($id);
+$eliminarVentaProducto->eliminarVentaProducto($data['id']);
+$eliminarVentaProducto->restablecerAlmacen($data);

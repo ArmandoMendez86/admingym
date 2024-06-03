@@ -282,6 +282,28 @@
 
   /* ######################## AGREGADO POR MI ######################## */
 
+  //Tooltips cargar
+
+  // Array para almacenar las instancias de los tooltips
+  let tooltipList = [];
+
+  // Función para inicializar tooltips
+  function initializeTooltips() {
+    // Limpia los tooltips existentes
+    tooltipList.forEach((tooltip) => tooltip.dispose());
+    tooltipList = [];
+
+    // Encuentra todos los elementos que necesitan tooltips
+    const tooltipTriggerList = document.querySelectorAll(
+      '[data-bs-toggle="tooltip"]'
+    );
+
+    // Inicializa nuevos tooltips y almacena las instancias
+    tooltipList = [...tooltipTriggerList].map(
+      (tooltipTriggerEl) => new bootstrap.Tooltip(tooltipTriggerEl)
+    );
+  }
+
   async function realizarLlamadas() {
     try {
       // Lista de productos
@@ -437,10 +459,18 @@
       success: function (response) {
         let clientes = JSON.parse(response);
         let template = ``;
+
         clientes.forEach((element) => {
+          let mandarCredencial =
+            element.servicio == "VISITA" ||
+            element.servicio == "VISITA ESTUDIANTE"
+              ? ""
+              : '<a data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Enviar credencial" cardCliente">  <i class="bi bi-send-check"></i></a>';
+
           let inicia =
-            element.servicio == "VISITA"
-              ? "Hoy"
+            element.servicio == "VISITA" ||
+            element.servicio == "VISITA ESTUDIANTE"
+              ? ""
               : moment(element.fecha).format("D MMM YY");
           let termina =
             element.servicio == "VISITA"
@@ -481,7 +511,9 @@
           template += `
         <div class="col-lg-4 mt-3" data-aos="zoom-in" data-aos-delay="100">
           <div class="member d-flex align-items-start">
-            <div class="pic"><img src="assets/img/team/armando.jpg" class="img-fluid" alt=""></div>
+            <div class="pic"><img src="assets/img/team/${
+              element.imagen
+            }" class="img-fluid" alt=""></div>
             <div class="member-info">
               <h4>${element.nombre}</h4>
               <label>${email}</label>
@@ -511,6 +543,7 @@
                 }'><i class="ri-close-fill"></i></a>
                 <a data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="${iniciaPersonalizado} - ${finalizaPersonalizado}">${coach}</i></a>
                 <a data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="${validarServicio}" class="bg-${status} indicador"></a>
+                ${mandarCredencial}
               </div>
               <div class="d-flex justify-content-between gap-1">
                 <select class="form-select form-select-sm actualizarServicio mt-1 d-none"></select>
@@ -526,12 +559,9 @@
         });
 
         $("#tarjetaClientes").html(template);
-        const tooltipTriggerList = document.querySelectorAll(
-          '[data-bs-toggle="tooltip"]'
-        );
-        const tooltipList = [...tooltipTriggerList].map(
-          (tooltipTriggerEl) => new bootstrap.Tooltip(tooltipTriggerEl)
-        );
+
+        // Inicializa los tooltips por primera vez
+        initializeTooltips();
         cargarProductos();
       },
     });
@@ -628,13 +658,7 @@
         let busquedaCliente = JSON.parse(response);
         if (busquedaCliente.length > 0) {
           $("#tarjetaClientes").html(filtrarVentaServicios(busquedaCliente));
-          /* Usar los tooltips para indicar tipo de membresia o detalles de insignias */
-          const tooltipTriggerList = document.querySelectorAll(
-            '[data-bs-toggle="tooltip"]'
-          );
-          const tooltipList = [...tooltipTriggerList].map(
-            (tooltipTriggerEl) => new bootstrap.Tooltip(tooltipTriggerEl)
-          );
+          initializeTooltips();
         } else {
           alertify.error("No existe registro del usuario.");
         }
@@ -645,9 +669,13 @@
   function filtrarVentaServicios(clientes) {
     let template = ``;
     clientes.forEach((element) => {
+      let mandarCredencial =
+        element.servicio == "VISITA" || element.servicio == "VISITA ESTUDIANTE"
+          ? ""
+          : '<a data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Enviar credencial" cardCliente">  <i class="bi bi-send-check"></i></a>';
       let inicia =
-        element.servicio == "VISITA"
-          ? "Hoy"
+        element.servicio == "VISITA" || element.servicio == "VISITA ESTUDIANTE"
+          ? ""
           : moment(element.fecha).format("D MMM YY");
       let termina =
         element.servicio == "VISITA"
@@ -683,7 +711,9 @@
       template += `
     <div class="col-lg-4 mt-3" data-aos="zoom-in" data-aos-delay="100">
       <div class="member d-flex align-items-start">
-        <div class="pic"><img src="assets/img/team/team-1.jpg" class="img-fluid" alt=""></div>
+        <div class="pic"><img src="assets/img/team/${
+          element.imagen
+        }" class="img-fluid" alt=""></div>
         <div class="member-info">
           <h4>${element.nombre}</h4>
           <label>${email}</label>
@@ -713,6 +743,7 @@
             }'><i class="ri-close-fill"></i></a>
             <a data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="${iniciaPersonalizado} - ${finalizaPersonalizado}">${coach}</i></a>
             <a data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="${validarServicio}" class="bg-${status} indicador"></a>
+            ${mandarCredencial}
           </div>
           <div class="d-flex justify-content-between gap-1">
             <select class="form-select form-select-sm actualizarServicio mt-1 d-none"></select>
@@ -890,6 +921,9 @@
 
         alertify.success("Venta realizada.");
         cargarGrafica();
+        tablaResumen.ajax.reload(null, false);
+        cancelacionVentaProducto.ajax.reload(null, false);
+        tablaProductos.ajax.reload(null, false);
       },
     });
   });
@@ -925,10 +959,11 @@
     e.preventDefault();
     let nombre = $("#nombre").val();
     let apellido = $("#apellido").val();
-    let email = $("#email").val();
+    let email = $("#emailCliente").val();
     let gen = $("#genero").val();
     let tipoMembresia = $("#tipoMembresia").val();
     let coach = $("#coach").val();
+    let descuento = $("#descuentoCliente").val();
 
     if (
       nombre == "" ||
@@ -939,7 +974,7 @@
     )
       return;
 
-    const fechaActual = moment(); // Obtiene la fecha y hora actual
+    const fechaActual = moment();
     const fechaActualFormateada = fechaActual.format("YYYY-MM-DD H:mm:ss");
 
     let vence = "";
@@ -947,14 +982,6 @@
     let iniciaPersonalizadoFormat = "";
     let finPersonalizado = "";
     let finPersonalizadoFormat = "";
-    //let venceFormat = vence.format('YYYY-MM-DD H:mm:ss');
-    //console.log(fechaActual.format('L')); // Muestra la fecha con formato local (DD/MM/YYYY)
-
-    /* console.log(venceFormat)
-    return; */
-
-    /*   let agregandoDias = fechaActual.add(10, 'days');
-      console.log(agregandoDias.format('LL')) */
 
     if (
       tipoMembresia == 24 ||
@@ -994,6 +1021,7 @@
         email: email,
         gen: gen,
         p_s: tipoMembresia,
+        descuento: descuento,
         cantidad: 1,
         fecha: fechaActualFormateada,
         idempleado: 2,
@@ -1017,7 +1045,6 @@
   $(document).on("click", ".btnEdit", function (e) {
     e.preventDefault();
     const datosUsuario = $(this).data("info");
-    //console.log(datosUsuario)
     $(this).closest(".member-info").find(".btnEdit").toggleClass("d-none");
     $(this)
       .closest(".member-info")
@@ -1152,6 +1179,7 @@
 
     let idServicio = renovarUsuario.id;
     let mandarInicio = moment().format("YYYY-MM-DD H:mm:ss");
+
     let mandarFin = "";
 
     if (
@@ -1168,6 +1196,10 @@
         .closest(".member-info")
         .find(".indicador")
         .toggleClass("bg-warning");
+      $(this)
+        .closest(".member-info")
+        .find(".indicador")
+        .attr("data-bs-title", "Termina hoy");
     }
     if (tipoServicio.text() == "SEMANA") {
       fechaInicia.text(moment().format("D MMM YY"));
@@ -1181,6 +1213,10 @@
         .closest(".member-info")
         .find(".indicador")
         .toggleClass("bg-success");
+      $(this)
+        .closest(".member-info")
+        .find(".indicador")
+        .attr("data-bs-title", "Servicio activo");
     }
     if (tipoServicio.text() == "QUINCENA") {
       fechaInicia.text(moment().format("D MMM YY"));
@@ -1194,6 +1230,10 @@
         .closest(".member-info")
         .find(".indicador")
         .toggleClass("bg-success");
+      $(this)
+        .closest(".member-info")
+        .find(".indicador")
+        .attr("data-bs-title", "Servicio activo");
     }
     if (
       tipoServicio.text() == "MES" ||
@@ -1210,6 +1250,10 @@
         .closest(".member-info")
         .find(".indicador")
         .toggleClass("bg-success");
+      $(this)
+        .closest(".member-info")
+        .find(".indicador")
+        .attr("data-bs-title", "Servicio activo");
     }
 
     $.ajax({
@@ -1224,6 +1268,8 @@
 
       success: function (response) {
         alertify.success("Servicio renovado.");
+        // Inicializa los tooltips por primera vez
+        initializeTooltips();
       },
     });
   });
@@ -1255,6 +1301,8 @@
   let filaProducto = null;
   let idProducto = null;
   let tablaProductos = $("#productosCat").DataTable({
+    responsive: true,
+    autoWidth: false, // Añadir esta opción
     language: {
       decimal: ",",
       emptyTable: "No hay datos",
@@ -1290,27 +1338,6 @@
         data: "codigo",
       },
       {
-        data: "pro_serv",
-      },
-      {
-        data: "descripcion",
-      },
-      {
-        data: "unidad",
-      },
-      {
-        data: "compra",
-      },
-      {
-        data: "precio",
-      },
-      {
-        data: "cantidad",
-      },
-      {
-        data: "categoria",
-      },
-      {
         data: "img",
         render: function (data, type, row) {
           if (data == null) {
@@ -1321,17 +1348,55 @@
         },
       },
       {
+        data: "pro_serv",
+      },
+      {
+        data: "descripcion",
+      },
+      {
+        data: "unidad",
+        render: function (data, type, row) {
+          return `<label class="badge text-bg-dark">${data}</label>`;
+        },
+      },
+      {
+        data: "compra",
+        render: function (data, type, row) {
+          let formattedTotal = data.toLocaleString("es-MX", {
+            style: "currency",
+            currency: "MXN",
+          });
+          return formattedTotal;
+        },
+      },
+      {
+        data: "precio",
+        render: function (data, type, row) {
+          let formattedTotal = data.toLocaleString("es-MX", {
+            style: "currency",
+            currency: "MXN",
+          });
+          return formattedTotal;
+        },
+      },
+      {
+        data: "cantidad",
+      },
+      {
+        data: "categoria",
+      },
+      {
         defaultContent:
-          "<div class='d-flex'><button class='btnEditar btn'><i class='bi bi-pen'></i></button><button class='btnBorrar btn '><i class='bi bi-trash'></i></button></div>",
+          "<div class='d-flex'><button class='btnEditar btn'><i class='bi bi-pen fs-5'></i></button><button class='btnBorrar btn '><i class='bi bi-trash fs-5'></i></button></div>",
       },
     ],
     columnDefs: [
       {
-        targets: [0, 4, 5, 6, 7, 8],
+        targets: [2, 4, 5, 6, 7, 8],
         className: "text-center",
       },
       {
-        targets: [0],
+        targets: [0, 1],
         className: "ocultar-columna",
       },
     ],
@@ -1343,13 +1408,13 @@
       $($(row).find("td")[6]).css("font-weight", "500");
 
       if (data["cantidad"] <= 3 && data["categoria"] != "SERVICIO") {
-        $($(row).find("td")[7]).css("background-color", "#F5B7B1");
-        $($(row).find("td")[7]).css("color", "#B72949");
-        $($(row).find("td")[7]).css("font-weight", "500");
+        $($(row).find("td")[8]).css("background-color", "#F5B7B1");
+        $($(row).find("td")[8]).css("color", "#B72949");
+        $($(row).find("td")[8]).css("font-weight", "500");
       } else if (data["cantidad"] >= 4 && data["categoria"] != "SERVICIO") {
         //$($(row).find("td")[6]).css("background-color", "#D0ECE7");
-        $($(row).find("td")[7]).css("color", "#2980B9");
-        $($(row).find("td")[7]).css("font-weight", "500");
+        $($(row).find("td")[8]).css("color", "#2980B9");
+        $($(row).find("td")[8]).css("font-weight", "500");
       }
     },
   });
@@ -1482,31 +1547,32 @@
     filaProducto = $(this).closest("tr");
     idProducto = parseInt(filaProducto.find("td:eq(0)").text());
     let codigo = filaProducto.find("td:eq(1)").text();
-    let nombre = filaProducto.find("td:eq(2)").text();
-    let descripcion = filaProducto.find("td:eq(3)").text();
-    let unidad = filaProducto.find("td:eq(4)").text();
-    let compra = filaProducto.find("td:eq(5)").text();
-    let precio = filaProducto.find("td:eq(6)").text();
+    let nombre = filaProducto.find("td:eq(3)").text();
+    let descripcion = filaProducto.find("td:eq(4)").text();
+    let unidad = filaProducto.find("td:eq(5)").text();
+    let compra = filaProducto.find("td:eq(6)").text();
+    let precio = filaProducto.find("td:eq(7)").text();
     /* let ingreso = parseInt(filaProducto.find("td:eq(8)").text());
     let fechaIngreso = filaProducto.find("td:eq(9)").text(); 
     let almacen = parseInt(filaProducto.find("td:eq(10)").text());
     */
-    let cantidad = filaProducto.find("td:eq(7)").text();
-    let categoria = filaProducto.find("td:eq(8)").text();
-    /*  let precioNumber = parseInt(precio.replace(/[^\d.-]/g, ''));
- 
-     let fecha = moment(fechaIngreso, "DD/MM/YYYY");
+    let cantidad = filaProducto.find("td:eq(8)").text();
+    let categoria = filaProducto.find("td:eq(9)").text();
+    let precioNumber = parseInt(precio.replace(/[^\d.-]/g, ""));
+    let compraNumber = parseInt(compra.replace(/[^\d.-]/g, ""));
+
+    /*   let fecha = moment(fechaIngreso, "DD/MM/YYYY");
      let fechaFormateada = fecha.format("YYYY-MM-DD"); */
 
-    let imagen = filaProducto.find("td:eq(9) img");
+    let imagen = filaProducto.find("td:eq(2) img");
     let src = imagen.attr("src");
 
     $("#codigo").val(codigo);
     $("#producto").val(nombre);
     $("#des").val(descripcion);
     $("#unidad").val(unidad);
-    $("#compra").val(compra);
-    $("#precio").val(precio);
+    $("#compra").val(compraNumber);
+    $("#precio").val(precioNumber);
     $("#cantidad").val(cantidad);
     $("#categoria").val(categoria);
     $(".imagen-cliente").attr("src", src).css({
@@ -1613,6 +1679,8 @@
   });
 
   let tablaClientes = $("#clientes").DataTable({
+    responsive: true,
+    autoWidth: false, // Añadir esta opción
     language: {
       decimal: ",",
       emptyTable: "No hay datos",
@@ -1651,18 +1719,27 @@
       },
       {
         data: "gen",
+        render: function (data, type, row) {
+          return `<span class="badge text-bg-primary">${data}</span>`;
+        },
       },
       {
         data: "email",
       },
       {
+        data: "imagen",
+        render: function (data, type, row) {
+          return `<img src="assets/img/team/${data}" alt="Imagen" class="rounded-circle" width="60" height="60">`;
+        },
+      },
+      {
         defaultContent:
-          "<div class='d-flex justify-content-center'><button class='btnEditar btn'><i class='bi bi-pen'></i></button><button class='btnBorrar btn'><i class='bi bi-trash'></i></button><button class='btn enviarCredencial'><i class='bi bi-send-check'></i></button></div>",
+          "<div class='d-flex justify-content-center'><button class='btnEditarCliente btn'><i class='bi bi-pen fs-5'></i></button><button class='btnBorrarCliente btn'><i class='bi bi-trash fs-5'></i></button></div>",
       },
     ],
     columnDefs: [
       {
-        targets: [0, 3, 5],
+        targets: [3, 5, 6],
         className: "text-center",
       },
       {
@@ -1678,7 +1755,158 @@
     },
   });
 
+  // Controles para la tabla clientes
+
+  let filaCliente = null;
+  let idCliente = null;
+
+  document.querySelector("#cancelarCliente").addEventListener("click", () => {
+    idCliente = null;
+    filaCliente = null;
+    $("#formClientes").trigger("reset");
+  });
+
+  // Añadir evento change para cargar la imagen desde el input file
+  $("#imagen-cliente").change(function () {
+    const input = this;
+    if (input.files && input.files[0]) {
+      const reader = new FileReader();
+      reader.onload = function (e) {
+        $(".imagen-cliente").attr("src", e.target.result);
+      };
+      reader.readAsDataURL(input.files[0]);
+    }
+  });
+
+  $(document).on("click", ".btnEditarCliente", function () {
+    filaCliente = $(this).closest("tr");
+    idCliente = parseInt(filaCliente.find("td:eq(0)").text()); //capturo el ID
+    let nombre = filaCliente.find("td:eq(1)").text();
+    let ap = filaCliente.find("td:eq(2)").text();
+    let sexo = filaCliente.find("td:eq(3)").text();
+    let email = filaCliente.find("td:eq(4)").text();
+    let imagen = filaCliente.find("td:eq(5) img");
+    let src = imagen.attr("src");
+
+    $("#nameClient").val(nombre);
+    $("#ap").val(ap);
+    $("#sexo").val(sexo);
+    $("#email").val(email);
+
+    $(".imagen-cliente").attr("src", src).css({
+      width: "80",
+      height: "80",
+    });
+
+    $("#staticBackdropCliente").modal("show");
+    $("#actualizarCliente").removeClass("d-none");
+    $("#agregarCliente").addClass("d-none");
+  });
+
+  $("#actualizarCliente").click(function () {
+    let nombre = $("#nameClient").val().toUpperCase();
+    let ap = $("#ap").val().toUpperCase();
+    let sexo = $("#sexo").val();
+    let email = $("#email").val();
+    let imagenInput = document.getElementById("imagen-cliente");
+    let nuevaImagen = imagenInput.files[0];
+
+    let formData = new FormData();
+    formData.append("id", idCliente);
+    formData.append("nombre", nombre);
+    formData.append("ap", ap);
+    formData.append("gen", sexo);
+    formData.append("email", email);
+
+    if (nuevaImagen) {
+      compressImage(nuevaImagen, function (compressedImageBlob) {
+        let fileName = nuevaImagen.name;
+        formData.append("imagen", compressedImageBlob, fileName);
+
+        $.ajax({
+          url: "app/clientes/actualizar_cliente.php",
+          type: "POST",
+          data: formData,
+          contentType: false,
+          processData: false,
+          success: function (response) {
+            alertify.success("Datos actualizados!");
+            tablaClientes.ajax.reload(null, false);
+            $("#staticBackdropCliente").modal("hide");
+            $("#formClientes").trigger("reset");
+          },
+        });
+      });
+    } else {
+      $.ajax({
+        url: "app/clientes/actualizar_cliente.php",
+        type: "POST",
+        data: formData,
+        contentType: false,
+        processData: false,
+        success: function (response) {
+          alertify.success("Datos actualizados!");
+          tablaClientes.ajax.reload(null, false);
+          $("#staticBackdropCliente").modal("hide");
+          $("#formClientes").trigger("reset");
+        },
+      });
+    }
+  });
+
+  $(document).on("click", ".btnBorrarCliente", function () {
+    let fila = $(this).closest("tr");
+    let id = parseInt($(this).closest("tr").find("td:eq(0)").text());
+    $.ajax({
+      url: "app/clientes/eliminar_cliente.php",
+      type: "POST",
+      datatype: "json",
+      data: {
+        id: id,
+      },
+      success: function (response) {
+        tablaClientes.ajax.reload(null, false);
+        alertify.error("Cliente eliminado");
+      },
+    });
+  });
+
+  //Pasarla al apartado de membresías
+
+  /* $(document).on("click", ".enviarCredencial", function () {
+    filaCliente = $(this).closest("tr");
+    idCliente = parseInt(filaCliente.find("td:eq(0)").text());
+    let nombre = filaCliente.find("td:eq(1)").text();
+    let apellido = filaCliente.find("td:eq(2)").text();
+    let sexo = filaCliente.find("td:eq(3)").text();
+    let email = filaCliente.find("td:eq(4)").text();
+    let accion = filaCliente.find("td:eq(6)");
+
+    let controles = accion.find("div");
+    $(".enviarCredencial").addClass("d-none");
+    let spiner =
+      "<div class='spinner-border text-primary' ml-2 role='status'><span class='visually-hidden'>Loading...</span></div>";
+    controles.append(spiner);
+
+    $.ajax({
+      url: "app/clientes/card_digital.php",
+      type: "POST",
+      datatype: "json",
+      data: {
+        id: idCliente,
+        email: email,
+      },
+      success: function (response) {
+        alertify.success("Credencial enviada!.");
+        $(".enviarCredencial").removeClass("d-none");
+        controles.find(".spinner-border").remove();
+      },
+    });
+  }); */
+
   let tablaEmpleados = $("#empleados").DataTable({
+    responsive: true,
+    autoWidth: false, // Añadir esta opción
     language: {
       decimal: ",",
       emptyTable: "No hay datos",
@@ -1723,12 +1951,12 @@
       },
       {
         defaultContent:
-          "<div class='d-flex'><button class='btnEditar btn'><i class='bi bi-pen'></i></button><button class='btnBorrar btn '><i class='bi bi-trash'></i></button></div>",
+          "<div class='d-flex justify-content-center'><button class='btnEditarEmpleado btn'><i class='bi bi-pen fs-5'></i></button><button class='btnBorrarEmpleado btn '><i class='bi bi-trash fs-5'></i></button></div>",
       },
     ],
     columnDefs: [
       {
-        targets: [0, 5],
+        targets: [5],
         className: "text-center",
       },
       {
@@ -1736,5 +1964,458 @@
         className: "ocultar-columna",
       },
     ],
+  });
+
+  //Controles para tabla empleados
+  let idEmpleado = null;
+  let filaEmpleado = null;
+  $("#abrirModalEmpleado").click(function () {
+    $("#actualizarEmpleado").addClass("d-none");
+    $("#agregarEmpleado").removeClass("d-none");
+  });
+
+  document.querySelector("#cancelarEmpleado").addEventListener("click", () => {
+    idEmpleado = null;
+    filaEmpleado = null;
+    $("#formEmpleados").trigger("reset");
+  });
+
+  $("#agregarEmpleado").click(function (e) {
+    e.preventDefault();
+    let nombre = $.trim($("#nombreEmpleado").val()).toUpperCase();
+    let ap = $.trim($("#apEmpleado").val()).toUpperCase();
+    let rol = $("#rol").val();
+    let password = $.trim($("#pass").val());
+
+    $.ajax({
+      url: "app/empleados/agregar_empleado.php",
+      type: "POST",
+      datatype: "json",
+      data: {
+        nombre: nombre,
+        ap: ap,
+        idrol: rol,
+        password: password,
+      },
+      success: function () {
+        alertify.success("Empleado agregado!.");
+        tablaEmpleados.ajax.reload(null, false);
+        $("#staticBackdropEmpleado").modal("hide");
+        $("#formEmpleados").trigger("reset");
+      },
+    });
+  });
+
+  $(document).on("click", ".btnEditarEmpleado", function () {
+    filaEmpleado = $(this).closest("tr");
+    idEmpleado = parseInt(filaEmpleado.find("td:eq(0)").text()); //capturo el ID
+    let nombre = filaEmpleado.find("td:eq(1)").text();
+    let ap = filaEmpleado.find("td:eq(2)").text();
+    let rol = filaEmpleado.find("td:eq(3)").text();
+    let password = filaEmpleado.find("td:eq(4)").text();
+    $("#nombreEmpleado").val(nombre);
+    $("#apEmpleado").val(ap);
+
+    if (rol == "admin") {
+      $("#rol").val(1);
+    }
+    if (rol == "recepcion") {
+      $("#rol").val(2);
+    }
+    if (rol == "instructor") {
+      $("#rol").val(3);
+    }
+    $("#pass").val(password);
+    $("#staticBackdropEmpleado").modal("show");
+    $("#actualizarEmpleado").removeClass("d-none");
+    $("#agregarEmpleado").addClass("d-none");
+
+    $("#actualizarEmpleado").click(function () {
+      let nombre = $("#nombreEmpleado").val().toUpperCase();
+      let ap = $("#apEmpleado").val().toUpperCase();
+      let rol = $("#rol").val();
+      let password = $("#pass").val();
+      let datos = {
+        id: idEmpleado,
+        nombre: nombre,
+        ap: ap,
+        idrol: rol,
+        password: password,
+      };
+      $.ajax({
+        url: "app/empleados/actualizar_empleado.php",
+        type: "POST",
+        datatype: "json",
+        data: datos,
+        success: function (response) {
+          alertify.success("Datos actualizados!.");
+          tablaEmpleados.ajax.reload(null, false);
+          $("#staticBackdropEmpleado").modal("hide");
+          $("#formEmpleados").trigger("reset");
+        },
+      });
+    });
+  });
+
+  $(document).on("click", ".btnBorrarEmpleado", function () {
+    let fila = $(this).closest("tr");
+    let id = parseInt($(this).closest("tr").find("td:eq(0)").text());
+    $.ajax({
+      url: "app/empleados/eliminar_empleado.php",
+      type: "POST",
+      datatype: "json",
+      data: {
+        id: id,
+      },
+      success: function (response) {
+        alertify.error("Empleado eliminado!.");
+        tablaEmpleados.ajax.reload(null, false);
+      },
+    });
+  });
+
+  // Para cancelación de venta
+
+  /* PARA CANCELACIÓN DE VENTAS */
+
+  let cancelacionVentaProducto = $("#cancelacionVentaProducto").DataTable({
+    responsive: true,
+    autoWidth: false, // Añadir esta opción
+    language: {
+      decimal: ",",
+      emptyTable: "No hay datos",
+      info: "Mostrando _START_ a _END_ de _TOTAL_ registros",
+      infoEmpty: "Mostrando 0 a 0 de 0 registros",
+      infoFiltered: "(filtrado de un total de _MAX_ registros)",
+      lengthMenu: "Mostrar _MENU_ registros",
+      loadingRecords: "Cargando...",
+      paginate: {
+        first: "Primero",
+        last: "Último",
+        next: ">",
+        previous: "<",
+      },
+      processing: "Procesando...",
+      search: "Buscar:",
+    },
+    lengthMenu: [
+      [5, 10, 15, -1],
+      [5, 10, 15, "Todos"],
+    ],
+    ajax: {
+      url: "app/productos/ventas_productos_all.php",
+      method: "GET",
+      dataSrc: "",
+    },
+    columns: [
+      {
+        data: "id",
+      },
+      {
+        data: "p_s",
+      },
+      {
+        data: "img",
+        render: function (data, type, row) {
+          if (data == null) {
+            return `<div class="image-container"><img src="assets/img/nodis.png" alt="Imagen"></div>`;
+          } else {
+            return `<div class="image-container"><img src="assets/img/products/${data}" alt="Imagen"></div>`;
+          }
+        },
+      },
+      {
+        data: "pro_serv",
+      },
+      {
+        data: "unidad",
+        render: function (data, type, row) {
+          return `<label class="badge text-bg-dark">${data}</label>`;
+        },
+      },
+      {
+        data: "precio",
+        render: function (data, type, row) {
+          let formattedTotal = data.toLocaleString("es-MX", {
+            style: "currency",
+            currency: "MXN",
+          });
+          return formattedTotal;
+        },
+      },
+      {
+        data: "descuento",
+        render: function (data, type, row) {
+          if (data > 0) {
+            return `<label class="badge text-bg-danger">${data} %</label>`;
+          } else {
+            return `<label class="badge text-bg-secondary"></label>`;
+          }
+        },
+      },
+      {
+        data: "cantidad",
+      },
+      {
+        data: "nombre_empleado",
+        render: function (data, type, row) {
+          return `<label class="badge text-bg-primary">${data}</label>`;
+        },
+      },
+      {
+        data: "subtotal",
+        render: function (data, type, row) {
+          let formattedTotal = data.toLocaleString("es-MX", {
+            style: "currency",
+            currency: "MXN",
+          });
+          return formattedTotal;
+        },
+      },
+      {
+        data: "fecha",
+      },
+      {
+        defaultContent:
+          "<div class='text-center'><i class='bi bi-trash3 fs-5 eliminarVentaProducto' aria-hidden='true'></i>",
+      },
+    ],
+    columnDefs: [
+      {
+        targets: [2, 4, 5, 6, 7, 8, 9, 10],
+        className: "text-center",
+      },
+      /*  {
+             searchable: false,
+             targets: [1, 2, 3, 6]
+         }, */
+      {
+        targets: [0, 1],
+        className: "ocultar-columna",
+      },
+      {
+        targets: [10],
+        render: DataTable.render.date("DD/MM/YYYY HH:mm:ss"),
+      },
+    ],
+    order: [[10, "desc"]],
+
+    /* rowCallback: function (row, data) {
+      $($(row).find("td")[9]).css("font-weight", "bold");
+    }, */
+  });
+
+  $(document).on("click", ".eliminarVentaProducto", function () {
+    let id = parseInt($(this).closest("tr").find("td:eq(0)").text());
+    let p_s = parseInt($(this).closest("tr").find("td:eq(1)").text());
+    let cantidad = parseInt($(this).closest("tr").find("td:eq(7)").text());
+
+    /*  let data = {
+      id: id,
+      p_s: p_s,
+      cantidad: cantidad,
+    };
+    console.log(data);
+
+    return; */
+    $.ajax({
+      url: "app/productos/eliminar_venta_producto.php",
+      type: "POST",
+      datatype: "json",
+      data: {
+        id: id,
+        p_s: p_s,
+        cantidad: cantidad,
+      },
+      success: function () {
+        tablaProductos.ajax.reload(null, false);
+        tablaResumen.ajax.reload(null, false);
+        cancelacionVentaProducto.ajax.reload(null, false);
+        alertify.error("Venta cancelada!.");
+      },
+    });
+  });
+
+  // Corte de caja
+
+  let tablaResumen = $("#resumenVentasXdia").DataTable({
+    /*   dom: 'Bfrtip',
+      buttons: [{
+          extend: 'pdfHtml5',
+          text: '<i class="fa fa-file-pdf-o fa-2x" aria-hidden="true"></i>',
+          className: 'genpdf',
+          title: 'Resumen de ventas',
+          messageTop: 'Developer Web Ing. Armando',                    
+          download: 'open'
+      }], */
+    /* paging: false, */
+    responsive: true,
+    autoWidth: false, // Añadir esta opción
+    language: {
+      decimal: ",",
+      emptyTable: "No hay ventas",
+      info: "Mostrando _START_ a _END_ de _TOTAL_ registros",
+      infoEmpty: "Mostrando 0 a 0 de 0 registros",
+      infoFiltered: "(filtrado de un total de _MAX_ registros)",
+      lengthMenu: "Mostrar _MENU_ registros",
+      loadingRecords: "Cargando...",
+      paginate: {
+        first: "Primero",
+        last: "Último",
+        next: ">",
+        previous: "<",
+      },
+      processing: "Procesando...",
+      search: "Buscar:",
+    },
+    lengthMenu: [
+      [5, 10, 15, -1],
+      [5, 10, 15, , "Todos"],
+    ],
+    ajax: {
+      url: "app/productos/obtener_resumen_ventas.php",
+      method: "GET",
+      dataSrc: "",
+    },
+    columns: [
+      {
+        data: "img",
+        render: function (data, type, row) {
+          if (data == null) {
+            return `<div class="image-container"><img src="assets/img/nodis.png" alt="Imagen"></div>`;
+          } else {
+            return `<div class="image-container"><img src="assets/img/products/${data}" alt="Imagen"></div>`;
+          }
+        },
+      },
+      {
+        data: "pro_serv",
+      },
+      {
+        data: "unidad",
+      },
+      {
+        data: "compra",
+        render: function (data, type, row) {
+          let formattedTotal = data.toLocaleString("es-MX", {
+            style: "currency",
+            currency: "MXN",
+          });
+          return formattedTotal;
+        },
+      },
+      {
+        data: "precio",
+        render: function (data, type, row) {
+          let formattedTotal = data.toLocaleString("es-MX", {
+            style: "currency",
+            currency: "MXN",
+          });
+          return formattedTotal;
+        },
+      },
+      {
+        data: "descuento",
+        render: function (data, type, row) {
+          if (data > 0) {
+            return `<label class="badge text-bg-danger">${data} %</label>`;
+          } else {
+            return `<label class="badge text-bg-light"></label>`;
+          }
+        },
+      },
+      {
+        data: "total_cantidad",
+      },
+      {
+        data: "total_subtotal",
+        render: function (data, type, row) {
+          let formattedTotal = data.toLocaleString("es-MX", {
+            style: "currency",
+            currency: "MXN",
+          });
+          return formattedTotal;
+        },
+      },
+      {
+        data: "ganancia",
+        render: function (data, type, row) {
+          let formattedTotal = data.toLocaleString("es-MX", {
+            style: "currency",
+            currency: "MXN",
+          });
+          return formattedTotal;
+        },
+      },
+      {
+        data: "fecha",
+      },
+      {
+        data: "nombre",
+      },
+    ],
+    columnDefs: [
+      {
+        targets: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
+        className: "text-center",
+      },
+      /*  {
+             searchable: false,
+             targets: [1, 2, 3, 6]
+         }, */
+      {
+        targets: [9],
+        render: DataTable.render.date("DD/MM/YYYY"),
+      },
+    ],
+    order: [[9, "desc"]],
+
+    rowCallback: function (row, data) {
+      $($(row).find("td")[4]).css("color", "#D65F42");
+      $($(row).find("td")[4]).css("font-weight", "500");
+      $($(row).find("td")[7]).css("color", "#2980b9");
+      $($(row).find("td")[7]).css("font-weight", "500");
+    },
+
+    footerCallback: function (row, data, start, end, display) {
+      let api = this.api();
+      let total = api
+        .column(7, {
+          page: "current",
+        })
+        .data()
+        .reduce(function (a, b) {
+          return parseFloat(a) + parseFloat(b);
+        }, 0);
+      let formattedTotal = total.toLocaleString("es-MX", {
+        style: "currency",
+        currency: "MXN",
+      });
+      let api2 = this.api();
+      let total2 = api2
+        .column(8, {
+          page: "current",
+        })
+        .data()
+        .reduce(function (a, b) {
+          return parseFloat(a) + parseFloat(b);
+        }, 0);
+      let formattedTotal2 = total2.toLocaleString("es-MX", {
+        style: "currency",
+        currency: "MXN",
+      });
+
+      $(api.column(6).footer()).html("TOTALES");
+      $(api.column(7).footer()).html(
+        "<p style='width:7rem;margin:0 auto;font-size:1rem'><i class='fas fa-dollar-sign text-white mr-2' aria-hidden='true'></i>" +
+          formattedTotal +
+          "</p>"
+      );
+      $(api2.column(8).footer()).html(
+        "<p style='width:7rem;margin:0 auto;font-size:1rem'><i class='fas fa-dollar-sign text-white mr-2' aria-hidden='true'></i>" +
+          formattedTotal2 +
+          "</p>"
+      );
+    },
   });
 })();
