@@ -1,8 +1,13 @@
 <?php
 require '../clases/login.php';
 
-$usuario = trim($_POST['usuario']);
-$password = trim($_POST['password']);
+
+header('Content-Type: application/json');
+
+$datos = $_POST;
+
+$usuario = trim($datos['usuario']);
+$password = trim($datos['password']);
 
 $loguearse = new Login;
 $login = $loguearse->autenticar($usuario, $password);
@@ -10,15 +15,14 @@ $login = $loguearse->autenticar($usuario, $password);
 if ($login) {
     session_start();
     $_SESSION['usuario'] = $login['nombre'];
-    $_SESSION['rol'] = $login['rol'];
+    $_SESSION['idrol'] = $login['idrol'];
     $_SESSION['id'] = $login['id'];
     $_SESSION['login'] = true;
+    echo json_encode([
 
-    if ($_SESSION['rol'] == 1) {
-        header('Location: ../../vistas/panel.php');
-    } else {
-        header('Location: ../../vistas/venta.php');
-    }
+        'success' => true,
+
+    ]);
 } else {
-    header('Location: ../../index.php');
+    echo json_encode(['success' => false]);
 }

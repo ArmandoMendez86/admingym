@@ -1192,7 +1192,7 @@ section {
   background: #eff2f8;
 }
 
-.team .member .social a:nth-child(6) {
+.team .member .social a:last-child {
   width: 15px;
   height: 15px;
 }

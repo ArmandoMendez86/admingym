@@ -1,3 +1,8 @@
+<?php
+require 'app/config/auth.php';
+authFilter();
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -14,9 +19,7 @@
   <!-- <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon"> -->
 
   <!-- Google Fonts -->
-  <link
-    href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Jost:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i"
-    rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Jost:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet" />
 
   <!-- Vendor CSS Files -->
   <link href="assets/vendor/aos/aos.css" rel="stylesheet" />
@@ -44,15 +47,16 @@
         <!--   <a href="index.html">
           <img src="assets/img/log.png" alt="">
         </a> -->
+
       </div>
       <!-- Uncomment below if you prefer to use an image logo -->
       <!-- <a href="index.html" class="logo me-auto"><img src="assets/img/logo.png" alt="" class="img-fluid"></a>-->
-
       <nav id="navbar" class="navbar">
         <ul>
-          <!-- <li><a class="nav-link scrollto active" href="#hero">Panel</a></li> -->
-          <!-- <li><a class="nav-link scrollto" href="#about">Venta</a></li> -->
-          <li><a class="nav-link scrollto" href="#services">Resumen</a></li>
+          <li>
+            <span class="badge rounded-pill text-bg-danger"><?php echo $_SESSION['usuario']; ?></span>
+            <span hidden class="badge rounded-pill text-bg-danger" id="idrol"> <?php echo $_SESSION['id']; ?> </span>
+          </li>
           <li>
             <a class="nav-link scrollto" href="#portfolio" id="venta">Venta</a>
           </li>
@@ -71,32 +75,35 @@
               </li> -->
             </ul>
           </li>
-          <li class="dropdown">
-            <a href="#"><span>Administración</span> <i class="bi bi-chevron-down"></i></a>
-            <ul>
-              <li>
-                <a class="nav-link scrollto" href="#productos">Productos</a>
-              </li>
-              <li>
-                <a class="nav-link scrollto" href="#tabClientes">Clientes</a>
-              </li>
-              <li>
-                <a class="nav-link scrollto" href="#tabEmpleados">Empleados</a>
-              </li>
-            </ul>
-          </li>
-          <li class="dropdown">
-            <a href="#"><span>Caja</span> <i class="bi bi-chevron-down"></i></a>
-            <ul>
-              <li>
-                <a class="nav-link scrollto" href="#cancelacionVenta">Cancelación venta</a>
-              </li>
-              <li>
-                <a class="nav-link scrollto" href="#caja">Corte de caja</a>
-              </li>
-            </ul>
-          </li>
-          <li><a class="getstarted scrollto" href="#about">Salir</a></li>
+
+          <?php if ($_SESSION['idrol'] == 1) : ?>
+            <li class="dropdown">
+              <a href="#"><span>Administración</span> <i class="bi bi-chevron-down"></i></a>
+              <ul>
+                <li>
+                  <a class="nav-link scrollto" href="#productos">Productos</a>
+                </li>
+                <li>
+                  <a class="nav-link scrollto" href="#tabClientes">Clientes</a>
+                </li>
+                <li>
+                  <a class="nav-link scrollto" href="#tabEmpleados">Empleados</a>
+                </li>
+              </ul>
+            </li>
+            <li class="dropdown">
+              <a href="#"><span>Caja</span> <i class="bi bi-chevron-down"></i></a>
+              <ul>
+                <li>
+                  <a class="nav-link scrollto" href="#cancelacionVenta">Cancelación venta</a>
+                </li>
+                <li>
+                  <a class="nav-link scrollto" href="#caja">Corte de caja</a>
+                </li>
+              </ul>
+            </li>
+          <?php endif ?>
+          <li><a class="getstarted scrollto" href="app/login/cerrar_sesion.php">Salir</a></li>
         </ul>
         <i class="bi bi-list mobile-nav-toggle"></i>
       </nav>
@@ -109,25 +116,21 @@
 
 
     <!-- ======= Services Section ======= -->
-    <section id="services" class="services section-bg">
+    <!-- <section id="services" class="services section-bg">
       <div class="container" data-aos="fade-up">
         <div class="section-title">
-          <!-- <h2>Ventas del día</h2> -->
-          <!-- <p>Vista resumida de los principales apartados de su sistema.</p> -->
           <div id="sumaTotal" class="mt-5"></div>
         </div>
-
-        <!-- Grafica -->
 
         <div class="w-100 mx-auto">
           <canvas id="myChart" width="500" height="170"></canvas>
         </div>
       </div>
-    </section>
+    </section> -->
     <!-- End Services Section -->
 
     <!-- ======= Portfolio Section ======= -->
-    <section id="portfolio" class="portfolio">
+    <section id="portfolio" class="portfolio mt-5">
       <div class="container" data-aos="fade-up">
         <div class="section-title">
           <h2>Punto de venta</h2>
@@ -136,12 +139,9 @@
 
         <div class="container">
           <div class="menu d-flex justify-content-center align-items-center">
-            <label class="badge text-bg-light todos check"><span class="btn-menu p-3"
-                data-filter="todos">Todos</span></label>
-            <label class="badge text-bg-light"><span class="btn-menu p-3"
-                data-filter="suplementos">Suplementos</span></label>
-            <label class="badge text-bg-light"><span class="btn-menu p-3"
-                data-filter="accesorios">Accesorios</span></label>
+            <label class="badge text-bg-light todos check"><span class="btn-menu p-3" data-filter="todos">Todos</span></label>
+            <label class="badge text-bg-light"><span class="btn-menu p-3" data-filter="suplementos">Suplementos</span></label>
+            <label class="badge text-bg-light"><span class="btn-menu p-3" data-filter="accesorios">Accesorios</span></label>
             <label class="badge text-bg-light"><span class="btn-menu p-3" data-filter="dulces">Dulces</span></label>
             <label class="badge text-bg-light"><span class="btn-menu p-3" data-filter="bebidas">Bebidas</span></label>
           </div>
@@ -156,20 +156,17 @@
     <!-- Lista de compras -->
 
     <div class="d-flex justify-content-end overflow-auto">
-      <div class="offcanvas offcanvas text-bg-dark mh-100" data-bs-scroll="true" data-bs-backdrop="false" tabindex="-1"
-        id="offcanvasScrolling" aria-labelledby="offcanvasScrollingLabel">
+      <div class="offcanvas offcanvas text-bg-dark mh-100" data-bs-scroll="true" data-bs-backdrop="false" tabindex="-1" id="offcanvasScrolling" aria-labelledby="offcanvasScrollingLabel">
         <div class="offcanvas-header">
           <h5 class="offcanvas-title" id="offcanvasScrollingLabel">
             Lista de venta
           </h5>
-          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas"
-            aria-label="Close"></button>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
         </div>
         <div class="offcanvas-body" id="offcanvas-body">
           <div class="mb-3 d-flex justify-content-between align-items-center">
             <div class="input-group input-group-sm w-50">
-              <input type="number" min="1" class="form-control fs-5 text-center text-danger" aria-label="Descuento"
-                value="0" id="descuento" />
+              <input type="number" min="1" class="form-control fs-5 text-center text-danger" aria-label="Descuento" value="0" id="descuento" />
               <span class="input-group-text">%</span>
             </div>
             <button class="btn btn-sm btn-info" id="reset">Resetear</button>
@@ -265,8 +262,8 @@
                   <label for="name">Sexo</label>
                   <select class="form-control" style="width: 100%" id="genero" required>
                     <option selected value="">Tipo de sexo</option>
-                    <option value="h">Hombre</option>
-                    <option value="m">Mujer</option>
+                    <option value="H">Hombre</option>
+                    <option value="M">Mujer</option>
                   </select>
                 </div>
               </div>
@@ -288,8 +285,7 @@
               <div class="row text-center justify-content-center">
                 <label for="">Descuento</label>
                 <div class="col-md-4 d-flex ">
-                  <input type="number" class="form-control text-danger text-center fs-5" value="0"
-                    aria-label="Descuento" id="descuentoCliente" placeholder="Descuento">
+                  <input type="number" class="form-control text-danger text-center fs-5" value="0" aria-label="Descuento" id="descuentoCliente" placeholder="Descuento">
                   <span class="input-group-text text-danger">%</span>
                 </div>
               </div>
@@ -314,51 +310,52 @@
 
     <!-- ======= Administración ======= -->
 
-    <section id="productos" class="pricing">
-      <div class="container" data-aos="fade-up">
-        <div class="section-title">
-          <h2 class="mb-0">Productos y Servicios</h2>
-          <!--  <p>Magnam dolores commodi suscipit. Necessitatibus eius consequatur ex aliquid fuga eum quidem. Sit sint
+    <?php if ($_SESSION['idrol'] == 1) : ?>
+      <section id="productos" class="pricing">
+        <div class="container" data-aos="fade-up">
+          <div class="section-title">
+            <h2 class="mb-0">Productos y Servicios</h2>
+            <!--  <p>Magnam dolores commodi suscipit. Necessitatibus eius consequatur ex aliquid fuga eum quidem. Sit sint
             consectetur velit. Quisquam quos quisquam cupiditate. Et nemo qui impedit suscipit alias ea. Quia fugiat sit
             in iste officiis commodi quidem hic quas.</p> -->
-        </div>
+          </div>
 
-        <!--  <div class="btn_nuevo text-center">
+          <!--  <div class="btn_nuevo text-center">
           <i id="abrirModal" class="bi bi-bag-plus fs-2" data-bs-toggle="modal" data-bs-target="#staticBackdrop"></i>
         </div> -->
 
-        <div class="text-center">
-          <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop"
-            id="abrirModal">
-            <i class="bi bi-bag-plus-fill fs-5"></i>
-          </button>
+          <div class="text-center">
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop" id="abrirModal">
+              <i class="bi bi-bag-plus-fill fs-5"></i>
+            </button>
+          </div>
+          <div class="table-responsive">
+            <table id="productosCat" class="table table-sm display align-middle" style="width: 100%">
+              <thead class="text-uppercase">
+                <tr>
+                  <th>Id</th>
+                  <th>Codigo</th>
+                  <th style="width: 180px;">Imagen</th>
+                  <th>Producto</th>
+                  <th style="width: 250px;">Descripción</th>
+                  <th>Unidad</th>
+                  <th>Compra</th>
+                  <th>Venta</th>
+                  <th>Almacén</th>
+                  <th>Categoria</th>
+                  <th>Acción</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
         </div>
-        <div class="table-responsive">
-          <table id="productosCat" class="table table-sm display align-middle" style="width: 100%">
-            <thead class="text-uppercase">
-              <tr>
-                <th>Id</th>
-                <th>Codigo</th>
-                <th style="width: 180px;">Imagen</th>
-                <th>Producto</th>
-                <th style="width: 250px;">Descripción</th>
-                <th>Unidad</th>
-                <th>Compra</th>
-                <th>Venta</th>
-                <th>Almacén</th>
-                <th>Categoria</th>
-                <th>Acción</th>
-              </tr>
-            </thead>
-            <tbody></tbody>
-          </table>
-        </div>
-      </div>
-    </section>
+      </section>
+    <?php endif ?>
+
 
     <!-- Modal de productos -->
-    <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-      aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
@@ -414,8 +411,7 @@
               <div class="row mb-3">
                 <label for="categoria" class="col-sm-3 col-form-label">Categoria</label>
                 <div class="col-sm-9">
-                  <input type="text" class="form-control" id="categoria"
-                    placeholder="Suplementos, Accesorios, Bebidas" />
+                  <input type="text" class="form-control" id="categoria" placeholder="Suplementos, Accesorios, Bebidas" />
                 </div>
               </div>
               <div class="row mb-3">
@@ -445,36 +441,37 @@
     </div>
 
     <!-- ======= Clientes  ======= -->
-    <section id="tabClientes" class="pricing">
-      <div class="container" data-aos="fade-up">
-        <div class="section-title">
-          <h2 class="mb-0">Clientes</h2>
-          <!--  <p>Magnam dolores commodi suscipit. Necessitatibus eius consequatur ex aliquid fuga eum quidem. Sit sint
+    <?php if ($_SESSION['idrol'] == 1) : ?>
+      <section id="tabClientes" class="pricing">
+        <div class="container" data-aos="fade-up">
+          <div class="section-title">
+            <h2 class="mb-0">Clientes</h2>
+            <!--  <p>Magnam dolores commodi suscipit. Necessitatibus eius consequatur ex aliquid fuga eum quidem. Sit sint
             consectetur velit. Quisquam quos quisquam cupiditate. Et nemo qui impedit suscipit alias ea. Quia fugiat sit
             in iste officiis commodi quidem hic quas.</p> -->
+          </div>
+          <div class="table-responsive">
+            <table id="clientes" class="table table-sm table-hover display align-middle" style="width: 100%">
+              <thead class="text-uppercase">
+                <tr>
+                  <th>Id</th>
+                  <th style="width: 150px;">Nombre</th>
+                  <th>Apellido</th>
+                  <th>Sexo</th>
+                  <th>Correo</th>
+                  <th>Foto</th>
+                  <th>Acción</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
         </div>
-        <div class="table-responsive">
-          <table id="clientes" class="table table-sm table-hover display align-middle" style="width: 100%">
-            <thead class="text-uppercase">
-              <tr>
-                <th>Id</th>
-                <th style="width: 150px;">Nombre</th>
-                <th>Apellido</th>
-                <th>Sexo</th>
-                <th>Correo</th>
-                <th>Foto</th>
-                <th>Acción</th>
-              </tr>
-            </thead>
-            <tbody></tbody>
-          </table>
-        </div>
-      </div>
-    </section>
+      </section>
+    <?php endif ?>
 
     <!-- Modal clientes -->
-    <div class="modal fade" id="staticBackdropCliente" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-      aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal fade" id="staticBackdropCliente" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
@@ -531,41 +528,41 @@
     </div>
 
     <!-- ======= Empleados ======= -->
-    <section id="tabEmpleados" class="pricing">
-      <div class="container" data-aos="fade-up">
-        <div class="section-title">
-          <h2 class="mb-0">Empleados</h2>
-          <!--  <p>Magnam dolores commodi suscipit. Necessitatibus eius consequatur ex aliquid fuga eum quidem. Sit sint
+    <?php if ($_SESSION['idrol'] == 1) : ?>
+      <section id="tabEmpleados" class="pricing">
+        <div class="container" data-aos="fade-up">
+          <div class="section-title">
+            <h2 class="mb-0">Empleados</h2>
+            <!--  <p>Magnam dolores commodi suscipit. Necessitatibus eius consequatur ex aliquid fuga eum quidem. Sit sint
             consectetur velit. Quisquam quos quisquam cupiditate. Et nemo qui impedit suscipit alias ea. Quia fugiat sit
             in iste officiis commodi quidem hic quas.</p> -->
+          </div>
+          <div class="text-center">
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdropEmpleado" id="abrirModalEmpleado">
+              <i class="bi bi-person-add fs-5"></i>
+            </button>
+          </div>
+          <div class="table-responsive">
+            <table id="empleados" class="table table-sm table-hover display align-middle" style="width: 100%">
+              <thead class="text-uppercase">
+                <tr>
+                  <th>Id</th>
+                  <th>Nombre</th>
+                  <th>Apellidos</th>
+                  <th>Rol</th>
+                  <th>Contraseña</th>
+                  <th>Acción</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
         </div>
-        <div class="text-center">
-          <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdropEmpleado"
-            id="abrirModalEmpleado">
-            <i class="bi bi-person-add fs-5"></i>
-          </button>
-        </div>
-        <div class="table-responsive">
-          <table id="empleados" class="table table-sm table-hover display align-middle" style="width: 100%">
-            <thead class="text-uppercase">
-              <tr>
-                <th>Id</th>
-                <th>Nombre</th>
-                <th>Apellidos</th>
-                <th>Rol</th>
-                <th>Contraseña</th>
-                <th>Acción</th>
-              </tr>
-            </thead>
-            <tbody></tbody>
-          </table>
-        </div>
-      </div>
-    </section>
+      </section>
+    <?php endif ?>
 
     <!-- Modal -->
-    <div class="modal fade" id="staticBackdropEmpleado" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-      aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal fade" id="staticBackdropEmpleado" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
@@ -596,8 +593,7 @@
             </form>
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
-              id="cancelarEmpleado">Cancelar</button>
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="cancelarEmpleado">Cancelar</button>
             <button type="button" class="btn btn-primary" id="agregarEmpleado">Guardar</button>
             <button type="button" class="btn btn-info" id="actualizarEmpleado">Actualizar</button>
           </div>
@@ -607,98 +603,99 @@
 
 
     <!-- ======= Cancelación de venta de productos ======= -->
-    <section id="cancelacionVenta" class="pricing">
-      <div class="container" data-aos="fade-up">
-        <div class="section-title">
-          <h2 class="mb-0">Cancelación de venta</h2>
-          <!--  <p>Magnam dolores commodi suscipit. Necessitatibus eius consequatur ex aliquid fuga eum quidem. Sit sint
+    <?php if ($_SESSION['idrol'] == 1) : ?>
+      <section id="cancelacionVenta" class="pricing">
+        <div class="container" data-aos="fade-up">
+          <div class="section-title">
+            <h2 class="mb-0">Cancelación de venta</h2>
+            <!--  <p>Magnam dolores commodi suscipit. Necessitatibus eius consequatur ex aliquid fuga eum quidem. Sit sint
             consectetur velit. Quisquam quos quisquam cupiditate. Et nemo qui impedit suscipit alias ea. Quia fugiat sit
             in iste officiis commodi quidem hic quas.</p> -->
-        </div>
-        <!--   <div class="text-center">
+          </div>
+          <!--   <div class="text-center">
           <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdropEmpleado"
             id="abrirModalEmpleado">
             <i class="bi bi-person-add fs-2"></i>
           </button>
         </div> -->
-        <div class="table-responsive">
-          <table id="cancelacionVentaProducto" class="table table-sm table-hover display align-middle"
-            style="width: 100%;">
-            <thead>
-              <tr>
-                <th>id</th>
-                <th>p_s</th>
-                <th style="width: 180px;">Imagen</th>
-                <th style="width: 250px;">Producto</th>
-                <th>Unidad</th>
-                <th>Precio</th>
-                <th>Descuento</th>
-                <th>Cantidad</th>
-                <th>Vendió</th>
-                <th>Subtotal</th>
-                <th>Fecha</th>
-                <th>Acción</th>
-              </tr>
-            </thead>
-            <tbody></tbody>
-          </table>
+          <div class="table-responsive">
+            <table id="cancelacionVentaProducto" class="table table-sm table-hover display align-middle" style="width: 100%;">
+              <thead>
+                <tr>
+                  <th>id</th>
+                  <th>p_s</th>
+                  <th style="width: 180px;">Imagen</th>
+                  <th style="width: 250px;">Producto</th>
+                  <th>Unidad</th>
+                  <th>Precio</th>
+                  <th>Descuento</th>
+                  <th>Cantidad</th>
+                  <th>Vendió</th>
+                  <th>Subtotal</th>
+                  <th>Fecha</th>
+                  <th>Acción</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
 
+          </div>
         </div>
-      </div>
-    </section>
+      </section>
+    <?php endif ?>
     <!-- ======= Corte de caja ======= -->
-    <section id="caja" class="pricing">
-      <div class="container" data-aos="fade-up">
-        <div class="section-title">
-          <h2 class="mb-0">Corte de caja</h2>
-          <!--  <p>Magnam dolores commodi suscipit. Necessitatibus eius consequatur ex aliquid fuga eum quidem. Sit sint
+    <?php if ($_SESSION['idrol'] == 1) : ?>
+      <section id="caja" class="pricing">
+        <div class="container" data-aos="fade-up">
+          <div class="section-title">
+            <h2 class="mb-0">Corte de caja</h2>
+            <!--  <p>Magnam dolores commodi suscipit. Necessitatibus eius consequatur ex aliquid fuga eum quidem. Sit sint
             consectetur velit. Quisquam quos quisquam cupiditate. Et nemo qui impedit suscipit alias ea. Quia fugiat sit
             in iste officiis commodi quidem hic quas.</p> -->
-        </div>
-        <!--   <div class="text-center">
+          </div>
+          <!--   <div class="text-center">
           <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdropEmpleado"
             id="abrirModalEmpleado">
             <i class="bi bi-person-add fs-2"></i>
           </button>
         </div> -->
-        <div class="table-responsive">
-          <table id="resumenVentasXdia" class="table table-sm table-hover display align-middle" style="width: 100%;">
-            <thead class="text-uppercase">
-              <tr>
-                <th>Imagen</th>
-                <th>Producto</th>
-                <th>Unidad</th>
-                <th>Compra</th>
-                <th>Precio</th>
-                <th>Descuento</th>
-                <th>Vendidos</th>
-                <th>Monto</th>
-                <th>Ganancia</th>
-                <th>Fecha</th>
-                <th>Empleado</th>
-              </tr>
-            </thead>
-            <tbody></tbody>
-            <tfoot>
-              <tr>
-                <th></th>
-                <th></th>
-                <th></th>
-                <th></th>
-                <th></th>
-                <th></th>
-                <th style="font-size:1rem !important;"></th>
-                <th style="color: #fff;border:2px solid #fff;background-color:#34495E;"></th>
-                <th style="color: #fff;border:2px solid #fff;background-color:#17A589;"></th>
-              </tr>
-            </tfoot>
-          </table>
+          <div class="table-responsive">
+            <table id="resumenVentasXdia" class="table table-sm table-hover display align-middle" style="width: 100%;">
+              <thead class="text-uppercase">
+                <tr>
+                  <th>Imagen</th>
+                  <th>Producto</th>
+                  <th>Unidad</th>
+                  <th>Compra</th>
+                  <th>Precio</th>
+                  <th>Descuento</th>
+                  <th>Vendidos</th>
+                  <th>Monto</th>
+                  <th>Ganancia</th>
+                  <th>Fecha</th>
+                  <th>Empleado</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+              <tfoot>
+                <tr>
+                  <th></th>
+                  <th></th>
+                  <th></th>
+                  <th></th>
+                  <th></th>
+                  <th></th>
+                  <th style="font-size:1rem !important;"></th>
+                  <th style="color: #fff;border:2px solid #fff;background-color:#34495E;"></th>
+                  <th style="color: #fff;border:2px solid #fff;background-color:#17A589;"></th>
+                </tr>
+              </tfoot>
+            </table>
 
+          </div>
         </div>
-      </div>
-    </section>
-
-
+      </section>
+    <?php endif ?>
 
   </main>
 
@@ -812,8 +809,7 @@
   <!-- End Footer -->
 
   <div id="preloader"></div>
-  <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i
-      class="bi bi-arrow-up-short"></i></a>
+  <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
 
   <!-- Vendor JS Files -->
   <script src="assets/vendor/aos/aos.js"></script>

@@ -276,7 +276,7 @@
 
     cargarListaClientes();
     cargarVentaServicios();
-    cargarGrafica();
+    /* cargarGrafica(); */
     //realizarLlamadas();
   });
 
@@ -304,7 +304,7 @@
     );
   }
 
-  async function realizarLlamadas() {
+  /*  async function realizarLlamadas() {
     try {
       // Lista de productos
       const productos = await fetch("app/productos/obtener.php");
@@ -334,13 +334,13 @@
     } catch (error) {
       console.error("Error en la llamada AJAX:", error);
     }
-  }
+  } */
 
   //Cargando usuarios
 
-  let myChart;
+  /* let myChart; */
 
-  function cargarGrafica() {
+  /*  function cargarGrafica() {
     if (myChart) {
       myChart.destroy();
     }
@@ -411,7 +411,7 @@
         sumaTotalDiv.innerHTML = `Total: <span class="badge text-bg-dark p-1 fs-4">${sumaTotalFormateada}</span>`;
       },
     });
-  }
+  } */
 
   function cargarListaClientes() {
     $.ajax({
@@ -542,8 +542,8 @@
                   element.id
                 }'><i class="ri-close-fill"></i></a>
                 <a data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="${iniciaPersonalizado} - ${finalizaPersonalizado}">${coach}</i></a>
-                <a data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="${validarServicio}" class="bg-${status} indicador"></a>
                 ${mandarCredencial}
+                <a data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="${validarServicio}" class="bg-${status} indicador"></a>
               </div>
               <div class="d-flex justify-content-between gap-1">
                 <select class="form-select form-select-sm actualizarServicio mt-1 d-none"></select>
@@ -742,8 +742,8 @@
               element.id
             }'><i class="ri-close-fill"></i></a>
             <a data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="${iniciaPersonalizado} - ${finalizaPersonalizado}">${coach}</i></a>
-            <a data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="${validarServicio}" class="bg-${status} indicador"></a>
             ${mandarCredencial}
+            <a data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="${validarServicio}" class="bg-${status} indicador"></a>
           </div>
           <div class="d-flex justify-content-between gap-1">
             <select class="form-select form-select-sm actualizarServicio mt-1 d-none"></select>
@@ -894,13 +894,17 @@
         p_s: elemento,
         cantidad: 1,
         fecha: moment().format("YYYY-MM-DD H:mm:ss"),
-        idempleado: 2,
+        idempleado: $("#idrol").text().trim(),
         descuento: $("#descuento").val(),
       };
 
       // Agregar el producto al nuevo array
       productosArray.push(producto);
     });
+
+    /*  console.log(productosArray);
+
+    return; */
 
     $.ajax({
       url: "app/productos/venta_producto.php",
@@ -920,7 +924,7 @@
         }
 
         alertify.success("Venta realizada.");
-        cargarGrafica();
+
         tablaResumen.ajax.reload(null, false);
         cancelacionVentaProducto.ajax.reload(null, false);
         tablaProductos.ajax.reload(null, false);
@@ -1024,7 +1028,7 @@
         descuento: descuento,
         cantidad: 1,
         fecha: fechaActualFormateada,
-        idempleado: 2,
+        idempleado: $("#idrol").text().trim(),
         vence: venceFormat,
         couch: coach,
         fventa: fechaActualFormateada,
@@ -1037,6 +1041,7 @@
         alertify.success("Usuario registrado.");
         let selectize = $("#nombre")[0].selectize;
         selectize.clear();
+        tablaClientes.ajax.reload(null, false);
       },
     });
   });
@@ -1149,7 +1154,7 @@
         p_s: tipoMembresia,
         cantidad: 1,
         fecha: fechaActual,
-        idempleado: idEmplado,
+        idempleado: $("#idrol").text().trim(),
         vence: venceFormat,
         couch: coach,
         fperso: iniciaPersonalizadoFormat,
@@ -1401,7 +1406,7 @@
       },
     ],
 
-    rowCallback: function (row, data) {
+    /* rowCallback: function (row, data) {
       $($(row).find("td")[5]).css("color", "#DF3816");
       $($(row).find("td")[5]).css("font-weight", "500");
       $($(row).find("td")[6]).css("color", "#1BA354");
@@ -1416,7 +1421,7 @@
         $($(row).find("td")[8]).css("color", "#2980B9");
         $($(row).find("td")[8]).css("font-weight", "500");
       }
-    },
+    }, */
   });
 
   //Controles para productos
@@ -2159,7 +2164,7 @@
       {
         data: "nombre_empleado",
         render: function (data, type, row) {
-          return `<label class="badge text-bg-primary">${data}</label>`;
+          return `<label class="badge text-bg-secondary">${data}</label>`;
         },
       },
       {
@@ -2210,14 +2215,6 @@
     let p_s = parseInt($(this).closest("tr").find("td:eq(1)").text());
     let cantidad = parseInt($(this).closest("tr").find("td:eq(7)").text());
 
-    /*  let data = {
-      id: id,
-      p_s: p_s,
-      cantidad: cantidad,
-    };
-    console.log(data);
-
-    return; */
     $.ajax({
       url: "app/productos/eliminar_venta_producto.php",
       type: "POST",
@@ -2293,6 +2290,9 @@
       },
       {
         data: "unidad",
+        render: function (data, type, row) {
+          return `<label class="badge text-bg-dark">${data}</label>`;
+        },
       },
       {
         data: "compra",
@@ -2352,11 +2352,14 @@
       },
       {
         data: "nombre",
+        render: function (data, type, row) {
+          return `<label class="badge text-bg-secondary">${data}</label>`;
+        },
       },
     ],
     columnDefs: [
       {
-        targets: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
+        targets: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
         className: "text-center",
       },
       /*  {
@@ -2370,12 +2373,12 @@
     ],
     order: [[9, "desc"]],
 
-    rowCallback: function (row, data) {
+    /*  rowCallback: function (row, data) {
       $($(row).find("td")[4]).css("color", "#D65F42");
       $($(row).find("td")[4]).css("font-weight", "500");
       $($(row).find("td")[7]).css("color", "#2980b9");
       $($(row).find("td")[7]).css("font-weight", "500");
-    },
+    }, */
 
     footerCallback: function (row, data, start, end, display) {
       let api = this.api();
