@@ -288,7 +288,7 @@ class Producto extends Model
         SUM(producto.precio * vp.cantidad) * (1 - (vp.descuento / 100)) AS total_subtotal,
         SUM((producto.precio * vp.cantidad) * (1 - (vp.descuento / 100)) - producto.compra * vp.cantidad) AS ganancia,
         vp.fecha,
-        empleado.nombre
+        producto.categoria
         FROM ( 
         SELECT p_s, cantidad, fecha, descuento, idempleado FROM venta_producto 
         UNION ALL SELECT p_s, cantidad, fecha, descuento, idempleado FROM venta_servicio ) AS vp 

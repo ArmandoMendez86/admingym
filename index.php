@@ -330,7 +330,7 @@ authFilter();
             </button>
           </div>
           <div class="table-responsive">
-            <table id="productosCat" class="table table-sm display align-middle" style="width: 100%">
+            <table id="productosCat" class="table table-sm table-hover display align-middle" style="width: 100%">
               <thead class="text-uppercase">
                 <tr>
                   <th>Id</th>
@@ -673,7 +673,7 @@ authFilter();
                   <th>Monto</th>
                   <th>Ganancia</th>
                   <th>Fecha</th>
-                  <th>Empleado</th>
+                  <th>Categoría</th>
                 </tr>
               </thead>
               <tbody></tbody>

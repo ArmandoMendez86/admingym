@@ -515,7 +515,7 @@
               element.imagen
             }" class="img-fluid" alt=""></div>
             <div class="member-info">
-              <h4>${element.nombre}</h4>
+              <h4>${element.nombre} ${element.ap}</h4>
               <label>${email}</label>
               <div class="d-flex align-items-center gap-2 mt-1">
                 <label>Servicio:</label>
@@ -715,7 +715,7 @@
           element.imagen
         }" class="img-fluid" alt=""></div>
         <div class="member-info">
-          <h4>${element.nombre}</h4>
+          <h4>${element.nombre} ${element.ap}</h4>
           <label>${email}</label>
           <div class="d-flex align-items-center gap-2 mt-1">
             <label>Servicio:</label>
@@ -2351,7 +2351,7 @@
         data: "fecha",
       },
       {
-        data: "nombre",
+        data: "categoria",
         render: function (data, type, row) {
           return `<label class="badge text-bg-secondary">${data}</label>`;
         },
