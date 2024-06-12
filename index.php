@@ -174,6 +174,13 @@ authFilter();
               Aplicar
             </button>
           </div>
+          <div class="form-group col-md-6 mx-auto mb-3 text-center">
+            <label for="tipoVenta">Tipo de venta</label>
+            <select class="form-control" style="width: 100%" id="tipoVenta" required>
+              <option selected value="publico">Venta al publico</option>
+              <option value="regalia">Regalía</option>
+            </select>
+          </div>
           <table class="table table-sm">
             <thead>
               <tr>
@@ -282,21 +289,31 @@ authFilter();
                   <select class="form-control serviciosSelect" style="width: 100%" id="tipoMembresia" required></select>
                 </div>
               </div>
-              <div class="row text-center justify-content-center">
-                <label for="">Descuento</label>
-                <div class="col-md-4 d-flex ">
-                  <input type="number" class="form-control text-danger text-center fs-5" value="0" aria-label="Descuento" id="descuentoCliente" placeholder="Descuento">
-                  <span class="input-group-text text-danger">%</span>
+              <div class="row">
+                <div class="form-group col-md-6">
+                  <label for="">Descuento</label>
+                  <div class="d-flex">
+                    <input type="number" class="form-control text-danger text-center fs-5" value="0" aria-label="Descuento" id="descuentoCliente" placeholder="Descuento">
+                    <span class="input-group-text text-danger">%</span>
+                  </div>
+                </div>
+                <div class="form-group col-md-6">
+                  <label for="tipoVentaServicio">Tipo de venta</label>
+                  <select class="form-control" style="width: 100%" id="tipoVentaServicio" required>
+                    <option selected value="publico">Venta al publico</option>
+                    <option value="regalia">Regalía</option>
+                  </select>
                 </div>
               </div>
-              <div class="my-3">
+
+              <!--  <div class="my-3">
                 <div id="mensaje"></div>
                 <div class="loading">Loading</div>
                 <div class="error-message"></div>
                 <div class="sent-message">
                   Your message has been sent. Thank you!
                 </div>
-              </div>
+              </div> -->
               <div class="text-center">
                 <button type="submit" id="registrarCliente">Registrar</button>
               </div>
@@ -633,6 +650,7 @@ authFilter();
                   <th>Vendió</th>
                   <th>Subtotal</th>
                   <th>Fecha</th>
+                  <th>Venta</th>
                   <th>Acción</th>
                 </tr>
               </thead>
@@ -668,12 +686,14 @@ authFilter();
                   <th>Unidad</th>
                   <th>Compra</th>
                   <th>Precio</th>
-                  <th>Descuento</th>
+                  <th>Des(%)</th>
                   <th>Vendidos</th>
                   <th>Monto</th>
                   <th>Ganancia</th>
                   <th>Fecha</th>
                   <th>Categoría</th>
+                  <th>Tipo</th>
+                  <th>Venta</th>
                 </tr>
               </thead>
               <tbody></tbody>

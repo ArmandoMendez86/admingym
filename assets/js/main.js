@@ -607,7 +607,7 @@
         productos.forEach((element) => {
           let unidad = element.unidad != null ? element.unidad : "";
 
-          if (element.categoria != "servicios") {
+          if (element.categoria != "membresia") {
             templateProductos += `
             <div class="box-img ${element.categoria}" 
             data-producto='${JSON.stringify(element)}' 
@@ -896,6 +896,7 @@
         fecha: moment().format("YYYY-MM-DD H:mm:ss"),
         idempleado: $("#idrol").text().trim(),
         descuento: $("#descuento").val(),
+        tipo_venta: $("#tipoVenta").val(),
       };
 
       // Agregar el producto al nuevo array
@@ -917,10 +918,12 @@
         listaCompra = [];
         totalPrecio = 0;
 
-        $("#aplicarDescuento").attr("disabled", false);
-        $("#descuento").val(0);
         if (listaCompra.length == 0) {
           $("#offcanvasScrolling").offcanvas("hide");
+
+          $("#aplicarDescuento").attr("disabled", false);
+          $("#descuento").val(0);
+          $("#tipoVenta").val("publico");
         }
 
         alertify.success("Venta realizada.");
@@ -968,6 +971,7 @@
     let tipoMembresia = $("#tipoMembresia").val();
     let coach = $("#coach").val();
     let descuento = $("#descuentoCliente").val();
+    let tipoVenta = $("#tipoVentaServicio").val();
 
     if (
       nombre == "" ||
@@ -1034,6 +1038,7 @@
         fventa: fechaActualFormateada,
         fperso: iniciaPersonalizadoFormat,
         finperso: finPersonalizadoFormat,
+        tipo_venta: tipoVenta,
       },
 
       success: function (response) {
@@ -1275,6 +1280,7 @@
         alertify.success("Servicio renovado.");
         // Inicializa los tooltips por primera vez
         initializeTooltips();
+        tablaResumen.ajax.reload(null, false);
       },
     });
   });
@@ -2181,6 +2187,9 @@
         data: "fecha",
       },
       {
+        data: "tipo_venta",
+      },
+      {
         defaultContent:
           "<div class='text-center'><i class='bi bi-trash3 fs-5 eliminarVentaProducto' aria-hidden='true'></i>",
       },
@@ -2355,6 +2364,12 @@
         render: function (data, type, row) {
           return `<label class="badge text-bg-secondary">${data}</label>`;
         },
+      },
+      {
+        data: "tipo",
+      },
+      {
+        data: "tipo_venta",
       },
     ],
     columnDefs: [

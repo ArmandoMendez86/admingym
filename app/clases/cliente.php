@@ -136,6 +136,7 @@ class Cliente extends Model
         }, $data);
 
         $values = "'" . implode("', '", $escaped_values) . "'";
+
         $sql = "INSERT INTO venta_servicio ({$columns}) VALUES ({$values})";
         $this->conection->query($sql);
         return null;

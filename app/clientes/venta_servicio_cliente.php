@@ -3,6 +3,9 @@ require '../clases/cliente.php';
 
 $data = $_POST;
 //$data['imagen'] = $_FILES['imagen'];
+
+/* echo json_encode($data);
+return; */
 $usuario = [
     'nombre' => $data['nombre'],
     'ap' => $data['ap'],
@@ -22,10 +25,10 @@ $servicio = [
     'idempleado' => $data['idempleado'],
     'vence' => $data['vence'],
     'couch' => $data['couch'],
-    'fventa' => $data['fventa'],
     'fperso' => $data['fperso'],
     'finperso' => $data['finperso'],
     'descuento' => $data['descuento'],
+    'tipo_venta' => $data['tipo_venta']
 ];
 
 $cliente->venderservicioAcliente($servicio);
