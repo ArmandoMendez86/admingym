@@ -529,6 +529,11 @@
                 <label class="text-danger termina"> ${termina} </label>
               </div>
               <div class="social">
+                <div class="form-check form-switch">
+                  <input class="form-check-input" type="checkbox" role="switch" id="asistenciaZumba" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Zumba" data-info='${JSON.stringify(
+                    element
+                  )}'>
+                </div>
                 <a class="btnEdit" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Editar" data-info='${JSON.stringify(
                   element
                 )}'><i class="ri-edit-fill"></i></a>
@@ -1047,6 +1052,30 @@
         let selectize = $("#nombre")[0].selectize;
         selectize.clear();
         tablaClientes.ajax.reload(null, false);
+      },
+    });
+  });
+
+  //Registrar asistencia zumba
+  $(document).on("change", "#asistenciaZumba", function (e) {
+    e.preventDefault();
+    const datosUsuario = $(this).data("info");
+    const idCliente = datosUsuario.idcliente;
+    let isChecked = $(this).is(":checked");
+
+    $.ajax({
+      url: "app/clientes/zumba.php",
+      type: "POST",
+      datatype: "json",
+      data: {
+        idcliente: idCliente,
+        precio: 25,
+        des: 5,
+        fecha: moment().format("YYYY-MM-DD"),
+      },
+
+      success: function (response) {
+        console.log(response);
       },
     });
   });
@@ -2435,5 +2464,72 @@
           "</p>"
       );
     },
+  });
+
+  let tablaZumba = $("#tabZumba").DataTable({
+    responsive: true,
+    autoWidth: false, // Añadir esta opción
+    language: {
+      decimal: ",",
+      emptyTable: "No hay datos",
+      info: "Mostrando _START_ a _END_ de _TOTAL_ registros",
+      infoEmpty: "Mostrando 0 a 0 de 0 registros",
+      infoFiltered: "(filtrado de un total de _MAX_ registros)",
+      lengthMenu: "Mostrar _MENU_ registros",
+      loadingRecords: "Cargando...",
+      paginate: {
+        first: "Primero",
+        last: "Último",
+        next: ">",
+        previous: "<",
+      },
+      processing: "Procesando...",
+      search: "Buscar:",
+    },
+    lengthMenu: [
+      [5, 10, 15, -1],
+      [5, 10, 15, "Todos"],
+    ],
+    ajax: {
+      url: "app/clientes/lista_zumba.php",
+      method: "GET",
+      dataSrc: "",
+    },
+    columns: [
+      {
+        data: "id",
+      },
+      {
+        data: "nombre",
+      },
+      {
+        data: "ap",
+      },
+      {
+        data: "precio",
+      },
+      {
+        data: "des",
+      },
+      {
+        data: "fecha",
+      },
+    ],
+    columnDefs: [
+      {
+        targets: [3, 5],
+        className: "text-center",
+      },
+      {
+        targets: [0],
+        className: "ocultar-columna",
+      },
+    ],
+
+    /*  rowCallback: function (row, data) {
+      if (data["email"] == "") {
+        $($(row).find("td")[4]).css("background-color", "#F2D7D5");
+      }
+    }, */
   });
 })();

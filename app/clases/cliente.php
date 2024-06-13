@@ -6,36 +6,6 @@ class Cliente extends Model
 {
     protected $table = 'cliente';
 
-
-    /*  public function createUser($data)
-    {
-        if (isset($data['password'])) {
-            $hashed_password = password_hash($data['password'], PASSWORD_DEFAULT);
-            $data['password'] = $hashed_password;
-        }
-
-        // Manejar la subida de la imagen
-        $uploadDir = '../clientes/images/';
-        $uploadFile = $uploadDir . basename($data['imagen']['name']);
-        move_uploaded_file($data['imagen']['tmp_name'], $uploadFile);
-        //$data['imagen'] = $uploadFile; // Agregar la ruta de la imagen a los datos
-        $data['imagen'] = basename($data['imagen']['name']); // Agregar la ruta de la imagen a los datos
-
-        $columns = array_keys($data);
-        $columns = implode(', ', $columns);
-
-        $escaped_values = array_map(function ($value) {
-            return mysqli_real_escape_string($this->conection, $value);
-        }, $data);
-
-        $values = "'" . implode("', '", $escaped_values) . "'";
-        $sql = "INSERT INTO {$this->table} ({$columns}) VALUES ({$values})";
-        $this->conection->query($sql);
-
-          $ultimo = $this->conection->insert_id;
-        return $this->findById($ultimo); 
-    } */
-
     public function createUser($data)
     {
 
@@ -142,9 +112,10 @@ class Cliente extends Model
         return null;
     }
 
+    /* Valido */
     public function ventaDeServicios()
     {
-        $sql = "SELECT venta_servicio.id, venta_servicio.p_s AS p_s, producto.pro_serv AS servicio, cliente.nombre, cliente.ap, cliente.email, cliente.imagen, venta_servicio.fecha, venta_servicio.vence, venta_servicio.couch, venta_servicio.fperso, venta_servicio.finperso, empleado.nombre AS registro FROM venta_servicio
+        $sql = "SELECT venta_servicio.id, venta_servicio.p_s AS p_s, producto.pro_serv AS servicio, cliente.nombre, cliente.ap, cliente.email, cliente.imagen, venta_servicio.idcliente, venta_servicio.fecha, venta_servicio.vence, venta_servicio.couch, venta_servicio.fperso, venta_servicio.finperso, empleado.nombre AS registro FROM venta_servicio
         INNER JOIN producto ON producto.id = venta_servicio.p_s
         INNER JOIN cliente ON cliente.id = venta_servicio.idcliente
         INNER JOIN empleado ON empleado.id = venta_servicio.idempleado
@@ -155,16 +126,7 @@ class Cliente extends Model
         return $results->fetch_all(MYSQLI_ASSOC);
     }
 
-    /*  public function buscarCliente($buscar)
-    {
-        $buscar = "%$buscar%";
-        $sql = "SELECT * FROM {$this->table} WHERE nombre LIKE ? OR ap LIKE ? OR email LIKE ?";
-        $stmt = $this->conection->prepare($sql);
-        $stmt->bind_param('sss', $buscar, $buscar, $buscar);
-        $stmt->execute();
-        $results = $stmt->get_result();
-        return $results->fetch_all(MYSQLI_ASSOC);
-    } */
+  
     public function buscarCliente($buscar)
     {
         $buscar = "%$buscar%";
@@ -247,4 +209,49 @@ class Cliente extends Model
         $stmt->close();
         return true;
     }
+
+    public function registrarZumba($data)
+{
+    // Obtener el ID del cliente del array de datos
+    $cliente_id = $data['idcliente'];
+    
+    // Obtener la fecha actual
+    $fecha_actual = $data['fecha']; // Formato de fecha 'YYYY-MM-DD'
+    
+    // Verificar si el cliente ya está registrado en la fecha actual
+    $check_sql = "SELECT COUNT(*) as count FROM zumba WHERE idcliente = '" . mysqli_real_escape_string($this->conection, $cliente_id) . "' AND fecha = '" . mysqli_real_escape_string($this->conection, $fecha_actual) . "'";
+    $result = $this->conection->query($check_sql);
+    $row = $result->fetch_assoc();
+    
+    if ($row['count'] == 0) {
+        // Si el cliente no está registrado en la fecha actual, proceder con la inserción
+        $columns = array_keys($data);
+        $columns = implode(', ', $columns);
+    
+        $escaped_values = array_map(function ($value) {
+            return mysqli_real_escape_string($this->conection, $value);
+        }, $data);
+    
+        $values = "'" . implode("', '", $escaped_values) . "'";
+        $sql = "INSERT INTO zumba ({$columns}) VALUES ({$values})";
+        $this->conection->query($sql);
+        echo "Usuario registrado";
+    } else {
+        // Si el cliente ya está registrado en la fecha actual, manejarlo según sea necesario
+        echo "El cliente con ID {$cliente_id} ya está registrado en la clase de zumba para la fecha de hoy.";
+    }
+}
+
+public function listarZumba()
+{
+    $sql = "SELECT zumba.id, cliente.nombre, cliente.ap, zumba.precio, zumba.des, zumba.fecha FROM zumba
+    INNER JOIN cliente ON cliente.id = zumba.idcliente";
+    $stmt = $this->conection->prepare($sql);
+    $stmt->execute();
+    $results = $stmt->get_result();
+    return $results->fetch_all(MYSQLI_ASSOC);
+}
+
+    
+
 }
