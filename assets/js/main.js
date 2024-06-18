@@ -952,8 +952,8 @@
     return re.test(email);
   } */
 
-  $("#email").blur(function () {
-    let email = $("#email").val();
+  $("#emailCliente").blur(function () {
+    let email = $("#emailCliente").val();
     if (email == "") return;
     $.ajax({
       url: "app/clientes/buscarXemail.php",
@@ -1052,11 +1052,13 @@
       },
 
       success: function (response) {
+        
         $("#formRegistrar")[0].reset();
         alertify.success("Usuario registrado.");
         let selectize = $("#nombre")[0].selectize;
         selectize.clear();
         tablaClientes.ajax.reload(null, false);
+        tablaZumba.ajax.reload(null, false);
       },
     });
   });
