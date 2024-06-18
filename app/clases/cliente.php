@@ -126,11 +126,11 @@ class Cliente extends Model
         return $results->fetch_all(MYSQLI_ASSOC);
     }
 
-  
+    /* Valido */
     public function buscarCliente($buscar)
     {
         $buscar = "%$buscar%";
-        $sql = "SELECT venta_servicio.id, venta_servicio.p_s AS p_s, producto.pro_serv AS servicio, cliente.nombre, cliente.ap, cliente.email, cliente.imagen, venta_servicio.fecha, venta_servicio.vence, venta_servicio.couch, venta_servicio.fperso, venta_servicio.finperso, empleado.nombre AS registro FROM venta_servicio
+        $sql = "SELECT venta_servicio.id, venta_servicio.p_s AS p_s, producto.pro_serv AS servicio, cliente.nombre, cliente.ap, cliente.email, cliente.imagen, venta_servicio.idcliente, venta_servicio.fecha, venta_servicio.vence, venta_servicio.couch, venta_servicio.fperso, venta_servicio.finperso, empleado.nombre AS registro FROM venta_servicio
         INNER JOIN producto ON producto.id = venta_servicio.p_s
         INNER JOIN cliente ON cliente.id = venta_servicio.idcliente
         INNER JOIN empleado ON empleado.id = venta_servicio.idempleado
@@ -211,47 +211,44 @@ class Cliente extends Model
     }
 
     public function registrarZumba($data)
-{
-    // Obtener el ID del cliente del array de datos
-    $cliente_id = $data['idcliente'];
-    
-    // Obtener la fecha actual
-    $fecha_actual = $data['fecha']; // Formato de fecha 'YYYY-MM-DD'
-    
-    // Verificar si el cliente ya está registrado en la fecha actual
-    $check_sql = "SELECT COUNT(*) as count FROM zumba WHERE idcliente = '" . mysqli_real_escape_string($this->conection, $cliente_id) . "' AND fecha = '" . mysqli_real_escape_string($this->conection, $fecha_actual) . "'";
-    $result = $this->conection->query($check_sql);
-    $row = $result->fetch_assoc();
-    
-    if ($row['count'] == 0) {
-        // Si el cliente no está registrado en la fecha actual, proceder con la inserción
-        $columns = array_keys($data);
-        $columns = implode(', ', $columns);
-    
-        $escaped_values = array_map(function ($value) {
-            return mysqli_real_escape_string($this->conection, $value);
-        }, $data);
-    
-        $values = "'" . implode("', '", $escaped_values) . "'";
-        $sql = "INSERT INTO zumba ({$columns}) VALUES ({$values})";
-        $this->conection->query($sql);
-        echo "Usuario registrado";
-    } else {
-        // Si el cliente ya está registrado en la fecha actual, manejarlo según sea necesario
-        echo "El cliente con ID {$cliente_id} ya está registrado en la clase de zumba para la fecha de hoy.";
+    {
+        // Obtener el ID del cliente del array de datos
+        $cliente_id = $data['idcliente'];
+
+        // Obtener la fecha actual
+        $fecha_actual = $data['fecha']; // Formato de fecha 'YYYY-MM-DD'
+
+        // Verificar si el cliente ya está registrado en la fecha actual
+        $check_sql = "SELECT COUNT(*) as count FROM zumba WHERE idcliente = '" . mysqli_real_escape_string($this->conection, $cliente_id) . "' AND fecha = '" . mysqli_real_escape_string($this->conection, $fecha_actual) . "'";
+        $result = $this->conection->query($check_sql);
+        $row = $result->fetch_assoc();
+
+        if ($row['count'] == 0) {
+            // Si el cliente no está registrado en la fecha actual, proceder con la inserción
+            $columns = array_keys($data);
+            $columns = implode(', ', $columns);
+
+            $escaped_values = array_map(function ($value) {
+                return mysqli_real_escape_string($this->conection, $value);
+            }, $data);
+
+            $values = "'" . implode("', '", $escaped_values) . "'";
+            $sql = "INSERT INTO zumba ({$columns}) VALUES ({$values})";
+            $this->conection->query($sql);
+            echo "Usuario registrado a la clase";
+        } else {
+            // Si el cliente ya está registrado en la fecha actual, manejarlo según sea necesario
+            echo "El usuario ya se encuentra registrado a la clase cardio dance.";
+        }
     }
-}
 
-public function listarZumba()
-{
-    $sql = "SELECT zumba.id, cliente.nombre, cliente.ap, zumba.precio, zumba.des, zumba.fecha FROM zumba
+    public function listarZumba()
+    {
+        $sql = "SELECT zumba.id, cliente.nombre, cliente.ap, zumba.precio, zumba.des, zumba.fecha FROM zumba
     INNER JOIN cliente ON cliente.id = zumba.idcliente";
-    $stmt = $this->conection->prepare($sql);
-    $stmt->execute();
-    $results = $stmt->get_result();
-    return $results->fetch_all(MYSQLI_ASSOC);
-}
-
-    
-
+        $stmt = $this->conection->prepare($sql);
+        $stmt->execute();
+        $results = $stmt->get_result();
+        return $results->fetch_all(MYSQLI_ASSOC);
+    }
 }

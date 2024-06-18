@@ -734,6 +734,11 @@
             <label class="text-danger termina"> ${termina} </label>
           </div>
           <div class="social">
+            <div class="form-check form-switch">
+            <input class="form-check-input" type="checkbox" role="switch" id="asistenciaZumba" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Zumba" data-info='${JSON.stringify(
+              element
+            )}'>
+            </div>
             <a class="btnEdit" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Editar" data-info='${JSON.stringify(
               element
             )}'><i class="ri-edit-fill"></i></a>
@@ -1005,7 +1010,7 @@
     ) {
       vence = fechaActual.add(1, "months");
     }
-    if (tipoMembresia == 25 || tipoMembresia == 69) {
+    if (tipoMembresia == 25 || tipoMembresia == 69 || tipoMembresia == 84) {
       vence = fechaActual;
     }
     if (tipoMembresia == 26) {
@@ -1075,7 +1080,9 @@
       },
 
       success: function (response) {
-        console.log(response);
+        alertify.success(response);
+        tablaZumba.ajax.reload(null, false);
+        initializeTooltips();
       },
     });
   });
@@ -2507,9 +2514,23 @@
       },
       {
         data: "precio",
+        render: function (data, type, row) {
+          let formattedTotal = data.toLocaleString("es-MX", {
+            style: "currency",
+            currency: "MXN",
+          });
+          return formattedTotal;
+        },
       },
       {
         data: "des",
+        render: function (data, type, row) {
+          let formattedTotal = data.toLocaleString("es-MX", {
+            style: "currency",
+            currency: "MXN",
+          });
+          return formattedTotal;
+        },
       },
       {
         data: "fecha",
@@ -2517,14 +2538,60 @@
     ],
     columnDefs: [
       {
-        targets: [3, 5],
+        targets: [3, 4, 5],
         className: "text-center",
       },
       {
         targets: [0],
         className: "ocultar-columna",
       },
+      {
+        targets: [5],
+        render: DataTable.render.date("DD/MM/YYYY"),
+      },
     ],
+    order: [[5, "desc"]],
+
+    footerCallback: function (row, data, start, end, display) {
+      let api = this.api();
+      let total = api
+        .column(3, {
+          page: "current",
+        })
+        .data()
+        .reduce(function (a, b) {
+          return parseFloat(a) + parseFloat(b);
+        }, 0);
+      let formattedTotal = total.toLocaleString("es-MX", {
+        style: "currency",
+        currency: "MXN",
+      });
+      let api2 = this.api();
+      let total2 = api2
+        .column(4, {
+          page: "current",
+        })
+        .data()
+        .reduce(function (a, b) {
+          return parseFloat(a) + parseFloat(b);
+        }, 0);
+      let formattedTotal2 = total2.toLocaleString("es-MX", {
+        style: "currency",
+        currency: "MXN",
+      });
+
+      $(api.column(2).footer()).html("TOTALES");
+      $(api.column(3).footer()).html(
+        "<p style='width:7rem;margin:0 auto;font-size:1rem'><i class='fas fa-dollar-sign text-white mr-2' aria-hidden='true'></i>" +
+          formattedTotal +
+          "</p>"
+      );
+      $(api2.column(4).footer()).html(
+        "<p style='width:7rem;margin:0 auto;font-size:1rem'><i class='fas fa-dollar-sign text-white mr-2' aria-hidden='true'></i>" +
+          formattedTotal2 +
+          "</p>"
+      );
+    },
 
     /*  rowCallback: function (row, data) {
       if (data["email"] == "") {

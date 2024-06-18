@@ -70,6 +70,9 @@ authFilter();
               <li>
                 <a class="nav-link scrollto" href="#contact">Registro</a>
               </li>
+              <li>
+                <a class="nav-link scrollto" href="#zumba">Cardio-dance</a>
+              </li>
               <!--  <li>
                 <a class="nav-link scrollto" href="#">Asistencia</a>
               </li> -->
@@ -716,34 +719,44 @@ authFilter();
       </section>
     <?php endif ?>
 
-     <!-- ======= Clases de zumba  ======= -->
-     
-      <section id="zumba" class="pricing">
-        <div class="container" data-aos="fade-up">
-          <div class="section-title">
-            <h2 class="mb-0">Cardio Dance</h2>
-            <!--  <p>Magnam dolores commodi suscipit. Necessitatibus eius consequatur ex aliquid fuga eum quidem. Sit sint
+    <!-- ======= Clases de zumba  ======= -->
+
+    <section id="zumba" class="pricing">
+      <div class="container" data-aos="fade-up">
+        <div class="section-title">
+          <h2 class="mb-0">Cardio Dance</h2>
+          <!--  <p>Magnam dolores commodi suscipit. Necessitatibus eius consequatur ex aliquid fuga eum quidem. Sit sint
             consectetur velit. Quisquam quos quisquam cupiditate. Et nemo qui impedit suscipit alias ea. Quia fugiat sit
             in iste officiis commodi quidem hic quas.</p> -->
-          </div>
-          <div class="table-responsive">
-            <table id="tabZumba" class="table table-sm table-hover display align-middle" style="width: 100%">
-              <thead class="text-uppercase">
-                <tr>
-                  <th>Id</th>
-                  <th>Nombre</th>
-                  <th>Apellido</th>
-                  <th>Precio</th>
-                  <th>Comisión</th>
-                  <th>Fecha</th>
-                </tr>
-              </thead>
-              <tbody></tbody>
-            </table>
-          </div>
         </div>
-      </section>
-    
+        <div class="table-responsive">
+          <table id="tabZumba" class="table table-sm table-hover display align-middle" style="width: 100%">
+            <thead class="text-uppercase">
+              <tr>
+                <th>Id</th>
+                <th>Nombre</th>
+                <th>Apellido</th>
+                <th>Precio</th>
+                <th>Comisión</th>
+                <th>Fecha</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+            <tfoot>
+              <tr>
+                <th></th>
+                <th></th>
+                <th style="text-align: right;"></th>
+                <th style="color: #fff;border:2px solid #fff;background-color:#34495E;"></th>
+                <th style="color: #fff;border:2px solid #fff;background-color:#17A589;"></th>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+      </div>
+    </section>
+
+
 
   </main>
 
