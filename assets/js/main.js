@@ -1052,7 +1052,6 @@
       },
 
       success: function (response) {
-        
         $("#formRegistrar")[0].reset();
         alertify.success("Usuario registrado.");
         let selectize = $("#nombre")[0].selectize;
@@ -1118,6 +1117,11 @@
     // checar cuando asigno solo a instructor, tambien se modifica la fecha de la membresía
     e.preventDefault();
     const datosUsuario = $(this).data("info");
+    let fechaDeInicio = "";
+
+    /*   console.log(datosUsuario);
+    return; */
+
     $(this).closest(".member-info").find(".btnEdit").toggleClass("d-none");
     $(this)
       .closest(".member-info")
@@ -1145,12 +1149,15 @@
     if (datosUsuario.couch == coachActual && datosUsuario.p_s == servicioActual)
       return;
 
+    if (datosUsuario.p_s == servicioActual) {
+      fechaDeInicio = datosUsuario.fecha;
+    } else {
+      fechaDeInicio = moment().format("YYYY-MM-DD H:mm:ss");
+    }
+
     //Datos a mandar
 
-    let fechaActual = moment().format("YYYY-MM-DD H:mm:ss");
-
     let idServicioActual = datosUsuario.id;
-    let idEmplado = 2;
 
     let vence = "";
     let fechaPersonalizado = "";
@@ -1196,7 +1203,7 @@
         id: idServicioActual,
         p_s: tipoMembresia,
         cantidad: 1,
-        fecha: fechaActual,
+        fecha: fechaDeInicio,
         idempleado: $("#idrol").text().trim(),
         vence: venceFormat,
         couch: coach,
