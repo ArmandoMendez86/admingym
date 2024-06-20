@@ -28,11 +28,10 @@ $registroZumba = [
     'fecha' => $fecha_actual,
 ];
 
-if($data['p_s']==84){
+if ($data['p_s'] == 84) {
 
     $cliente->registrarZumba($registroZumba);
-
-}else{
+} else {
 
     $servicio = [
 
@@ -53,11 +52,3 @@ if($data['p_s']==84){
 
 
 //$data['imagen'] = $_FILES['imagen'];
-
-
-
-
-
-
-
-

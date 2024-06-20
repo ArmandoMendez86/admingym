@@ -77,6 +77,8 @@ class Cliente extends Model
         $results = $stmt->get_result();
         return $results->fetch_all(MYSQLI_ASSOC);
     }
+
+
     public function listaClientes()
     {
         $sql = "SELECT * FROM {$this->table}";
@@ -86,12 +88,13 @@ class Cliente extends Model
         return $results->fetch_all(MYSQLI_ASSOC);
     }
 
-    public function buscarXemail($email)
+    /* Modificado para buscar en venta_servicio */
+    public function buscarXidCliente($idCliente)
     {
 
-        $sql = "SELECT * FROM {$this->table} WHERE email = ?";
+        $sql = "SELECT * FROM venta_servicio WHERE idcliente = ?";
         $stmt = $this->conection->prepare($sql);
-        $stmt->bind_param('s', $email);
+        $stmt->bind_param('i', $idCliente);
         $stmt->execute();
         $results = $stmt->get_result();
         return $results->fetch_all(MYSQLI_ASSOC);
@@ -115,33 +118,39 @@ class Cliente extends Model
     /* Valido */
     public function ventaDeServicios()
     {
-        $sql = "SELECT venta_servicio.id, venta_servicio.p_s AS p_s, producto.pro_serv AS servicio, cliente.nombre, cliente.ap, cliente.email, cliente.imagen, venta_servicio.idcliente, venta_servicio.fecha, venta_servicio.vence, venta_servicio.couch, venta_servicio.fperso, venta_servicio.finperso, empleado.nombre AS registro FROM venta_servicio
-        INNER JOIN producto ON producto.id = venta_servicio.p_s
-        INNER JOIN cliente ON cliente.id = venta_servicio.idcliente
-        INNER JOIN empleado ON empleado.id = venta_servicio.idempleado
-        LIMIT 9;";
+        $sql = "SELECT venta_servicio.id, venta_servicio.p_s AS p_s, producto.pro_serv AS servicio, cliente.nombre, cliente.ap, cliente.email, cliente.imagen, venta_servicio.idcliente, venta_servicio.fecha, venta_servicio.vence, venta_servicio.couch, venta_servicio.fperso, venta_servicio.finperso, empleado.nombre AS registro 
+                FROM venta_servicio
+                INNER JOIN producto ON producto.id = venta_servicio.p_s
+                INNER JOIN cliente ON cliente.id = venta_servicio.idcliente
+                INNER JOIN empleado ON empleado.id = venta_servicio.idempleado
+                ORDER BY venta_servicio.fecha DESC LIMIT 15";
+
         $stmt = $this->conection->prepare($sql);
+        $stmt->execute();
+        $results = $stmt->get_result();
+        return $results->fetch_all(MYSQLI_ASSOC);
+    }
+
+
+    /* Valido, modificado para buscar por nombre o apellido */
+    public function buscarCliente($buscar)
+    {
+        $buscar = "%$buscar%";
+        $sql = "SELECT venta_servicio.id, venta_servicio.p_s AS p_s, producto.pro_serv AS servicio, cliente.nombre, cliente.ap, cliente.email, cliente.imagen, venta_servicio.idcliente, venta_servicio.fecha, venta_servicio.vence, venta_servicio.couch, venta_servicio.fperso, venta_servicio.finperso, empleado.nombre AS registro 
+                FROM venta_servicio
+                INNER JOIN producto ON producto.id = venta_servicio.p_s
+                INNER JOIN cliente ON cliente.id = venta_servicio.idcliente
+                INNER JOIN empleado ON empleado.id = venta_servicio.idempleado
+                WHERE cliente.nombre LIKE ? OR cliente.ap LIKE ?";
+
+        $stmt = $this->conection->prepare($sql);
+        $stmt->bind_param('ss', $buscar, $buscar); // 's' se usa dos veces porque estamos bindeando dos variables
         $stmt->execute();
         $results = $stmt->get_result();
         return $results->fetch_all(MYSQLI_ASSOC);
     }
 
     /* Valido */
-    public function buscarCliente($buscar)
-    {
-        $buscar = "%$buscar%";
-        $sql = "SELECT venta_servicio.id, venta_servicio.p_s AS p_s, producto.pro_serv AS servicio, cliente.nombre, cliente.ap, cliente.email, cliente.imagen, venta_servicio.idcliente, venta_servicio.fecha, venta_servicio.vence, venta_servicio.couch, venta_servicio.fperso, venta_servicio.finperso, empleado.nombre AS registro FROM venta_servicio
-        INNER JOIN producto ON producto.id = venta_servicio.p_s
-        INNER JOIN cliente ON cliente.id = venta_servicio.idcliente
-        INNER JOIN empleado ON empleado.id = venta_servicio.idempleado
-        WHERE cliente.nombre LIKE ?;";
-        $stmt = $this->conection->prepare($sql);
-        $stmt->bind_param('s', $buscar);
-        $stmt->execute();
-        $results = $stmt->get_result();
-        return $results->fetch_all(MYSQLI_ASSOC);
-    }
-
     public function actualizarCliente($data)
     {
 

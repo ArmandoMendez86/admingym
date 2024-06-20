@@ -211,7 +211,7 @@ authFilter();
     <!-- Lista de compras finaliza-->
 
     <!-- Buscador de clientes -->
-    <section id="team" class="team section-bg">
+    <section id="team" class="team section-bg tarjetasClientes">
       <div class="container" data-aos="fade-up">
         <div class="section-title">
           <h2>Membresías</h2>

@@ -2016,3 +2016,9 @@ section {
 .ocultar-columna {
   display: none;
 }
+
+/* .tarjetasClientes{
+  width: 100%;
+  height: 1000px;
+  overflow: auto;
+} */

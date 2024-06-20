@@ -519,7 +519,7 @@
               <label>${email}</label>
               <div class="d-flex align-items-center gap-2 mt-1">
                 <label>Servicio:</label>
-                <label class="badge text-bg-secondary text-white servicio">${
+                <label class="badge text-bg-primary text-white servicio">${
                   element.servicio
                 }</label>
               </div>
@@ -554,7 +554,7 @@
                 <select class="form-select form-select-sm actualizarServicio mt-1 d-none"></select>
                 <select class="form-select form-select-sm coach mt-1 d-none">
                 <option value="">Ninguno</option>
-                <option value="grecia">Grecia</option>
+                <option value="cinthya">Cinthya</option>
                 <option value="armando">Armando</option>
                 </select>
               </div>
@@ -649,17 +649,24 @@
      });
    }) */
 
-  //  Buscar clientes
+  /* ###################################################################### */
+
+  //  Buscar clientes --> LISTO
 
   $("#btnBuscarCliente").click(function (e) {
     e.preventDefault();
-    let nombreCliente = $("#nombreCliente").val();
+    let nombreCliente = $("#nombreCliente").val().trim();
+
+    /*    console.log(nombreCliente)
+    return; */
     if (nombreCliente == "") return;
     $.ajax({
       url: "app/clientes/buscarXnombre.php",
       type: "GET",
       data: { nombreCliente },
       success: function (response) {
+        /*   console.log(response);
+        return; */
         let busquedaCliente = JSON.parse(response);
         if (busquedaCliente.length > 0) {
           $("#tarjetaClientes").html(filtrarVentaServicios(busquedaCliente));
@@ -670,6 +677,8 @@
       },
     });
   });
+
+  /* ###################################################################### */
 
   function filtrarVentaServicios(clientes) {
     let template = ``;
@@ -724,7 +733,7 @@
           <label>${email}</label>
           <div class="d-flex align-items-center gap-2 mt-1">
             <label>Servicio:</label>
-            <label class="badge text-bg-secondary text-white servicio">${
+            <label class="badge text-bg-primary text-white servicio">${
               element.servicio
             }</label>
           </div>
@@ -759,7 +768,7 @@
             <select class="form-select form-select-sm actualizarServicio mt-1 d-none"></select>
             <select class="form-select form-select-sm coach mt-1 d-none">
             <option value="">Ninguno</option>
-            <option value="grecia">Grecia</option>
+            <option value="cinthya">Cinthya</option>
             <option value="armando">Armando</option>
             </select>
           </div>
@@ -952,17 +961,24 @@
     return re.test(email);
   } */
 
-  $("#emailCliente").blur(function () {
-    let email = $("#emailCliente").val();
-    if (email == "") return;
+  /* ###################################################################### */
+
+  /* Verificando si el usuario ya tiene una venta de servicio */
+
+  $("#nombre").change(function () {
+    let idCliente = $("#nombre").val();
+
+    if (idCliente == "" || isNaN(idCliente)) return;
+
     $.ajax({
-      url: "app/clientes/buscarXemail.php",
+      url: "app/clientes/buscarXidCliente.php",
       type: "GET",
-      data: { email },
+      data: { idCliente },
       success: function (response) {
-        let busquedaCliente = JSON.parse(response);
-        if (busquedaCliente.length > 0) {
-          alertify.error("El usuario ya esta registrado.");
+        let resultado = JSON.parse(response);
+
+        if (resultado.length > 0) {
+          alertify.error("El usuario ya tiene una membresía.");
           $("#registrarCliente").attr("disabled", true);
         } else {
           $("#registrarCliente").attr("disabled", false);
@@ -971,10 +987,11 @@
     });
   });
 
-  //Registrar cliente
+  //Registrar cliente --> LISTO
+
   $("#registrarCliente").click(function (e) {
     e.preventDefault();
-    let nombre = $("#nombre").val();
+    let nombre = $("#nombre").text();
     let apellido = $("#apellido").val();
     let email = $("#emailCliente").val();
     let gen = $("#genero").val();
@@ -1001,6 +1018,7 @@
     let finPersonalizado = "";
     let finPersonalizadoFormat = "";
 
+    /* Mes */
     if (
       tipoMembresia == 24 ||
       tipoMembresia == 70 ||
@@ -1010,12 +1028,15 @@
     ) {
       vence = fechaActual.add(1, "months");
     }
+    /* Visita */
     if (tipoMembresia == 25 || tipoMembresia == 69 || tipoMembresia == 84) {
       vence = fechaActual;
     }
+    /* Semana */
     if (tipoMembresia == 26) {
       vence = fechaActual.add(7, "days");
     }
+    /* Quincena */
     if (tipoMembresia == 27) {
       vence = fechaActual.add(15, "days");
     }
@@ -1028,6 +1049,28 @@
     }
 
     let venceFormat = vence.format("YYYY-MM-DD H:mm:ss");
+
+    /*  let data = {
+      nombre: nombre,
+      ap: apellido,
+      email: email,
+      gen: gen,
+      p_s: tipoMembresia,
+      descuento: descuento,
+      cantidad: 1,
+      fecha: fechaActualFormateada,
+      idempleado: $("#idrol").text().trim(),
+      vence: venceFormat,
+      couch: coach,
+      fventa: fechaActualFormateada,
+      fperso: iniciaPersonalizadoFormat,
+      finperso: finPersonalizadoFormat,
+      tipo_venta: tipoVenta,
+    };
+
+    console.log(data);
+
+    return; */
 
     $.ajax({
       url: "app/clientes/venta_servicio_cliente.php",
@@ -1062,6 +1105,8 @@
     });
   });
 
+  /* ###################################################################### */
+
   //Registrar asistencia zumba
   $(document).on("change", "#asistenciaZumba", function (e) {
     e.preventDefault();
@@ -1088,6 +1133,8 @@
     });
   });
 
+  /* ###################################################################### */
+
   //Editar servicio
   $(document).on("click", ".btnEdit", function (e) {
     e.preventDefault();
@@ -1104,6 +1151,10 @@
     $(this).closest(".member-info").find(".coach").toggleClass("d-none");
     $(this).closest(".member-info").find(".btnRenovar").toggleClass("d-none");
     $(this).closest(".member-info").find(".btnDelet").toggleClass("d-none");
+    $(this)
+      .closest(".member-info")
+      .find("#asistenciaZumba")
+      .toggleClass("d-none");
 
     $(this)
       .closest(".member-info")
@@ -1114,13 +1165,9 @@
 
   //Cambiar servicio
   $(document).on("click", ".cambiarServicio", function (e) {
-    // checar cuando asigno solo a instructor, tambien se modifica la fecha de la membresía
     e.preventDefault();
     const datosUsuario = $(this).data("info");
     let fechaDeInicio = "";
-
-    /*   console.log(datosUsuario);
-    return; */
 
     $(this).closest(".member-info").find(".btnEdit").toggleClass("d-none");
     $(this)
@@ -1134,6 +1181,10 @@
     $(this).closest(".member-info").find(".coach").toggleClass("d-none");
     $(this).closest(".member-info").find(".btnRenovar").toggleClass("d-none");
     $(this).closest(".member-info").find(".btnDelet").toggleClass("d-none");
+    $(this)
+      .closest(".member-info")
+      .find("#asistenciaZumba")
+      .toggleClass("d-none");
 
     let tipoMembresia = $(this)
       .closest(".member-info")
@@ -1148,12 +1199,6 @@
 
     if (datosUsuario.couch == coachActual && datosUsuario.p_s == servicioActual)
       return;
-
-    if (datosUsuario.p_s == servicioActual) {
-      fechaDeInicio = datosUsuario.fecha;
-    } else {
-      fechaDeInicio = moment().format("YYYY-MM-DD H:mm:ss");
-    }
 
     //Datos a mandar
 
@@ -1195,6 +1240,13 @@
     if ((vence == "" && coach == "") || (vence == "" && coach != "")) return;
     let venceFormat = vence.format("YYYY-MM-DD H:mm:ss");
 
+    if (datosUsuario.p_s == servicioActual) {
+      fechaDeInicio = datosUsuario.fecha;
+      venceFormat = datosUsuario.vence;
+    } else {
+      fechaDeInicio = moment().format("YYYY-MM-DD H:mm:ss");
+    }
+
     $.ajax({
       url: "app/clientes/cambiar_servicio.php",
       type: "POST",
@@ -1214,7 +1266,7 @@
       success: function (response) {
         if (response === true) {
           alertify.success("Servicio actualizado.");
-
+          tablaResumen.ajax.reload(null, false);
           setTimeout(() => {
             cargarVentaServicios();
           }, 1000);
@@ -1223,9 +1275,12 @@
     });
   });
 
+  /* ###################################################################### */
+
   //Renovar servicio  ========= Checar para refactorizar codigo
   $(document).on("click", ".btnRenovar", function (e) {
     e.preventDefault();
+
     const renovarUsuario = $(this).data("info");
 
     let fechaInicia = $(this).closest(".member-info").find(".inicia");
@@ -1243,72 +1298,27 @@
     ) {
       fechaTermina.text(moment().format("D MMM YY"));
       mandarFin = moment().format("YYYY-MM-DD H:mm:ss");
-      $(this)
-        .closest(".member-info")
-        .find(".indicador")
-        .toggleClass("bg-danger");
-      $(this)
-        .closest(".member-info")
-        .find(".indicador")
-        .toggleClass("bg-warning");
-      $(this)
-        .closest(".member-info")
-        .find(".indicador")
-        .attr("data-bs-title", "Termina hoy");
     }
     if (tipoServicio.text() == "SEMANA") {
       fechaInicia.text(moment().format("D MMM YY"));
       fechaTermina.text(moment().add(7, "days").format("D MMM YY"));
       mandarFin = moment().add(7, "days").format("YYYY-MM-DD H:mm:ss");
-      $(this)
-        .closest(".member-info")
-        .find(".indicador")
-        .toggleClass("bg-danger");
-      $(this)
-        .closest(".member-info")
-        .find(".indicador")
-        .toggleClass("bg-success");
-      $(this)
-        .closest(".member-info")
-        .find(".indicador")
-        .attr("data-bs-title", "Servicio activo");
     }
     if (tipoServicio.text() == "QUINCENA") {
       fechaInicia.text(moment().format("D MMM YY"));
       fechaTermina.text(moment().add(15, "days").format("D MMM YY"));
       mandarFin = moment().add(15, "days").format("YYYY-MM-DD H:mm:ss");
-      $(this)
-        .closest(".member-info")
-        .find(".indicador")
-        .toggleClass("bg-danger");
-      $(this)
-        .closest(".member-info")
-        .find(".indicador")
-        .toggleClass("bg-success");
-      $(this)
-        .closest(".member-info")
-        .find(".indicador")
-        .attr("data-bs-title", "Servicio activo");
     }
     if (
       tipoServicio.text() == "MES" ||
-      tipoServicio.text() == "MES ESTUDIANTE"
+      tipoServicio.text() == "MES ESTUDIANTE" ||
+      tipoServicio.text() == "MES Y CAMINADORA" ||
+      tipoServicio.text() == "MES Y CAMINADORA ESTUDIANTE" ||
+      tipoServicio.text() == "MES ESPECIAL"
     ) {
       fechaInicia.text(moment().format("D MMM YY"));
       fechaTermina.text(moment().add(1, "M").format("D MMM YY"));
       mandarFin = moment().add(1, "M").format("YYYY-MM-DD H:mm:ss");
-      $(this)
-        .closest(".member-info")
-        .find(".indicador")
-        .toggleClass("bg-danger");
-      $(this)
-        .closest(".member-info")
-        .find(".indicador")
-        .toggleClass("bg-success");
-      $(this)
-        .closest(".member-info")
-        .find(".indicador")
-        .attr("data-bs-title", "Servicio activo");
     }
 
     $.ajax({
@@ -1323,12 +1333,16 @@
 
       success: function (response) {
         alertify.success("Servicio renovado.");
-        // Inicializa los tooltips por primera vez
         initializeTooltips();
         tablaResumen.ajax.reload(null, false);
+        setTimeout(() => {
+          cargarVentaServicios();
+        }, 1000);
       },
     });
   });
+
+  /* ###################################################################### */
 
   //Eliminar servicio
 
@@ -1345,6 +1359,7 @@
 
       success: function (response) {
         alertify.error("Membresía eliminada.");
+        tablaResumen.ajax.reload(null, false);
         setTimeout(() => {
           cargarVentaServicios();
         }, 1000);
